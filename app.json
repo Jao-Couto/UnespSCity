@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "UnespSCity1",
+    "slug": "UnespSCity1",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
