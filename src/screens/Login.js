@@ -15,7 +15,8 @@ class Login extends Component {
         email: '',
         errorEmail: '',
         password: '',
-        errorPassword: ''
+        errorPassword: '',
+        phone: '18999999999'
     }
 
 

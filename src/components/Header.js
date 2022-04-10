@@ -2,24 +2,21 @@ import React, { Component } from "react";
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native'
 import commonStyle from "../commonStyle";
 import { Gravatar } from 'react-native-gravatar'
-import { Icon } from "react-native-elements";
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { connect } from 'react-redux'
-import { logout } from '../storage/actions/user'
+
 
 class Header extends Component {
-    logout = () => {
-        this.props.onLogout()
-    }
 
     render() {
         const options = { email: this.props.email, secure: true }
         return (
             <View style={styles.container} >
-                <Gravatar options={options} style={styles.avatar} />
+                <TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}>
+                    <Icon name='bars' color='#000' size={25} />
+                </TouchableOpacity> 
                 <Text style={styles.title}>UnespSCity</Text>
-                <TouchableOpacity onPress={this.logout}>
-                    <Icon name='logout' color='#f00' />
-                </TouchableOpacity>
+                <Gravatar options={options} style={styles.avatar} />  
             </View >
         )
     }
@@ -57,12 +54,7 @@ const mapStateToProps = ({ user }) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onLogout: () => dispatch(logout())
-    }
-}
 
 
 // export default Profile
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default connect(mapStateToProps)(Header)

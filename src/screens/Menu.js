@@ -25,7 +25,7 @@ class Menu extends Component {
     render() {
         return (
             <SafeAreaView style={styles.containerLogo} >
-                <Header></Header>
+                <Header {...this.props}></Header>
 
                 <View style={styles.container}>
                     <FlatList

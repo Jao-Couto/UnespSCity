@@ -8,6 +8,8 @@ import Menu from "./screens/Menu";
 import { connect } from "react-redux";
 import MenuItens from "./screens/MenuItem";
 import Solicitacao from "./screens/Solicitação";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import Profile from "./screens/Profile";
 
 function App(props) {
     const Stack = createStackNavigator();
@@ -20,15 +22,28 @@ function App(props) {
             </Stack.Navigator>
 
             :
-            <Stack.Navigator initialRouteName="Menu" screenOptions={{ headerShown: false }}>
+            <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Menu" component={Menu} />
                 <Stack.Screen name="MenuItens" component={MenuItens} />
                 <Stack.Screen name="Solicitacao" component={Solicitacao} />
+                <Stack.Screen name="Home" component={Home} />
             </Stack.Navigator>
 
 
 
     }
+
+    const Drawer = createDrawerNavigator();
+    
+function Home() {
+    return (
+      <Drawer.Navigator initialRouteName="Menu" screenOptions={{ headerShown: false }}>
+        <Drawer.Screen name="Profile" component={Profile} />
+        <Drawer.Screen name="Menu" component={Menu} />
+      </Drawer.Navigator>
+    );
+  }
+  
     return (
         <NavigationContainer>
             <MyStack />
