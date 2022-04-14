@@ -10,6 +10,8 @@ import MenuItens from "./screens/MenuItem";
 import Solicitacao from "./screens/Solicitação";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Profile from "./screens/Profile";
+import InfoCI from './screens/InfoCI'
+import About from "./screens/About";
 
 function App(props) {
     const Stack = createStackNavigator();
@@ -34,16 +36,18 @@ function App(props) {
     }
 
     const Drawer = createDrawerNavigator();
-    
-function Home() {
-    return (
-      <Drawer.Navigator initialRouteName="Menu" screenOptions={{ headerShown: false }}>
-        <Drawer.Screen name="Profile" component={Profile} />
-        <Drawer.Screen name="Menu" component={Menu} />
-      </Drawer.Navigator>
-    );
-  }
-  
+
+    function Home() {
+        return (
+            <Drawer.Navigator initialRouteName="Menu" screenOptions={{ headerShown: false }}>
+                <Drawer.Screen name="Perfil" component={Profile} />
+                <Drawer.Screen name="Menu" component={Menu} />
+                <Drawer.Screen name="Cidades Inteligentes" component={InfoCI} />
+                <Drawer.Screen name="Sobre" component={About} />
+            </Drawer.Navigator>
+        );
+    }
+
     return (
         <NavigationContainer>
             <MyStack />

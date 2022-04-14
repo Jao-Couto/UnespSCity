@@ -14,9 +14,11 @@ class Header extends Component {
             <View style={styles.container} >
                 <TouchableOpacity onPress={() => this.props.navigation.toggleDrawer()}>
                     <Icon name='bars' color='#000' size={25} />
-                </TouchableOpacity> 
+                </TouchableOpacity>
                 <Text style={styles.title}>UnespSCity</Text>
-                <Gravatar options={options} style={styles.avatar} />  
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Menu')} >
+                    <Gravatar options={options} style={styles.avatar} />
+                </TouchableOpacity>
             </View >
         )
     }

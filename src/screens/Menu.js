@@ -1,19 +1,27 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList, Dimensions } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import { Avatar, ListItem } from "react-native-elements";
 import options from "../data/options";
 import Header from "../components/Header";
+import TouchableScale from 'react-native-touchable-scale';
 
 class Menu extends Component {
 
     getOptionsItem = ({ item: opt }) => {
+        const spaceRight = opt.id % 3 !== 0 ? { marginRight: 5 } : {}
         return (
-            <ListItem onPress={() => this.props.navigation.navigate('MenuItens', opt)} containerStyle={styles.item} >
+            <ListItem
+                onPress={() => this.props.navigation.navigate('MenuItens', opt)}
+                containerStyle={[styles.item, spaceRight]}
+                Component={TouchableScale}
+                friction={90} //
+                tension={100} // These props are passed to the parent component (here TouchableScale)
+                activeScale={0.95} >
                 <Avatar title={opt.name} source={{ uri: opt.logo }} avatarStyle={styles.logo} />
-                <ListItem.Content>
+                <ListItem.Content >
                     <ListItem.Title style={styles.title}>{opt.name}</ListItem.Title>
                     <ListItem.Subtitle style={styles.subTitle}>{opt.subTitle}</ListItem.Subtitle>
                 </ListItem.Content>
@@ -21,6 +29,13 @@ class Menu extends Component {
             </ListItem>
         )
     }
+
+    // getOptionsItem = ({ item: opt }) => {
+    //     return (
+    //         <View style={styles.item}><Avatar title={opt.name} source={{ uri: opt.logo }} avatarStyle={styles.logo} /></View>
+    //     )
+    // }
+
 
     render() {
         return (
@@ -31,8 +46,9 @@ class Menu extends Component {
                     <FlatList
                         keyExtractor={option => option.id.toString()}
                         data={options}
+                        numColumns={3}
                         renderItem={this.getOptionsItem}
-                        style={styles.list} />
+                        contentContainerStyle={styles.list} />
                     <StatusBar style="auto" />
                 </View>
             </SafeAreaView>
@@ -58,20 +74,24 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     item: {
-        borderBottomWidth: 1,
-        borderColor: '#aaa',
-        backgroundColor: commonStyle.colors.itens
+        flexDirection: 'column',
+        width: Dimensions.get('window').width / 3 - 6,
+        height: Dimensions.get('window').height / 4,
+        backgroundColor: commonStyle.colors.itens,
+        marginBottom: 10
     },
     logo: {
         resizeMode: 'contain'
     },
     title: {
         fontFamily: commonStyle.fontFamily,
-        color: '#fff',
+        color: '#000',
+        fontSize: 15,
+        flexWrap: 'wrap'
     },
     subTitle: {
         fontFamily: commonStyle.fontFamily,
-        color: '#aaa',
+        color: '#555',
     },
     formContainer: {
         backgroundColor: commonStyle.colors.primary,

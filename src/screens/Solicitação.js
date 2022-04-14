@@ -7,6 +7,7 @@ import AuthInput from '../components/AuthInput'
 import { connect } from 'react-redux'
 import * as Location from 'expo-location';
 import axios from "axios";
+import Camera from "../components/AddPhoto";
 
 
 class Solicitacao extends Component {
@@ -35,7 +36,6 @@ class Solicitacao extends Component {
     getCep = () => {
         if (this.state.cep.length == 8)
             axios.get(`https://viacep.com.br/ws/${this.state.cep}/json/`).then((response) => {
-                console.log(response.data);
                 if (response.data.erro)
                     this.setState({ errorCep: 'CEP não encontrado' })
                 else
@@ -68,7 +68,6 @@ class Solicitacao extends Component {
             });
 
             for (let item of response) {
-                console.log(item);
                 this.setState({
                     cep: item.postalCode,
                     errorCep: '',
@@ -87,16 +86,12 @@ class Solicitacao extends Component {
         }
     }
 
-    getAddressLocation = async () => {
-        let { latitude, longitude } = await Location.geocodeAsync('Rua kenji sato miura, 324, parque cedral - Presidente Prudente - SP')
-        console.log(latitude, longitude);
-    }
-
     render() {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView contentContainerStyle={styles.formContainer}>
-                    <Text style={styles.subTitle}>Manutenção de {this.props.route.params.name}</Text>
+                    <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                    <Camera></Camera>
                     <TouchableOpacity style={[styles.button]} onPress={this.getCurrentLocation}>
                         <Text style={styles.buttonText}>
                             Usar localização atual

@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     subTitle: {
         fontFamily: commonStyle.fontFamily,
         fontSize: 20,
-        color: '#fff',
+        color: '#000',
         textAlign: 'center',
         marginBottom: 10
     },
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontFamily: commonStyle.fontFamily,
-        color: '#000',
+        color: '#fff',
         fontSize: 20
     },
     image: {

@@ -1,16 +1,22 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, View, Image, FlatList, Text } from 'react-native'
+import { StyleSheet, FlatList, Text } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
-import LogoUnesp from '../../assets/UnespLogo.png'
-import { Avatar, Button, Icon, ListItem } from "react-native-elements";
+import { Avatar, ListItem } from "react-native-elements";
+import TouchableScale from 'react-native-touchable-scale';
 
 class MenuItens extends Component {
 
     getOptionsItem = ({ item: opt }) => {
         return (
-            <ListItem onPress={() => this.props.navigation.navigate('Solicitacao', opt)} containerStyle={styles.item} >
+            <ListItem
+                onPress={() => this.props.navigation.navigate('Solicitacao', opt)}
+                containerStyle={styles.item}
+                Component={TouchableScale}
+                friction={90} //
+                tension={100} // These props are passed to the parent component (here TouchableScale)
+                activeScale={0.95}  >
                 <Avatar title={opt.name} source={{ uri: opt.logo }} avatarStyle={styles.logo} />
                 <ListItem.Content>
                     <ListItem.Title style={styles.titleItens}>{opt.name}</ListItem.Title>
@@ -57,7 +63,8 @@ const styles = StyleSheet.create({
     item: {
         borderBottomWidth: 1,
         borderColor: '#aaa',
-        backgroundColor: commonStyle.colors.itens
+        backgroundColor: commonStyle.colors.itens,
+        marginBottom: 10
     },
     logo: {
         resizeMode: 'contain',
@@ -65,13 +72,14 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: commonStyle.fontFamily,
-        fontSize: 50,
+        fontSize: 40,
         color: commonStyle.colors.secundary,
-        marginBottom: 10
+        marginBottom: 10,
+        textAlign: 'center'
     },
     titleItens: {
         fontFamily: commonStyle.fontFamily,
-        color: '#fff',
+        color: '#000',
     },
     formContainer: {
         backgroundColor: commonStyle.colors.primary,

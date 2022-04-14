@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity, Image, Platform, KeyboardAvoidingView } from 'react-native'
 import { showError, showSuccess } from "../common";
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
@@ -47,7 +47,7 @@ class Login extends Component {
 
                 <View style={styles.container}>
                     <Text style={styles.title}>UnespSCity</Text>
-                    <View style={styles.formContainer}>
+                    <KeyboardAvoidingView style={styles.formContainer} behavior={Platform.OS === 'ios' ? "padding" : "height"}>
                         <Text style={styles.subTitle}>Informe seu login</Text>
                         <AuthInput
                             icon='at'
@@ -73,7 +73,7 @@ class Login extends Component {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                    </View>
+                    </KeyboardAvoidingView>
                     <TouchableOpacity style={{ padding: 10 }}
                         onPress={() => { this.props.navigation.navigate('Register') }}>
                         <Text style={styles.subTitle}>Ainda não possui conta?</Text>
