@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         width: Dimensions.get('window').width / 3 - 6,
         height: Dimensions.get('window').height / 4,
-        backgroundColor: commonStyle.colors.itens,
+        backgroundColor: 'rgba(0,0,0,0)',
         marginBottom: 10
     },
     logo: {
@@ -87,11 +87,12 @@ const styles = StyleSheet.create({
         fontFamily: commonStyle.fontFamily,
         color: '#000',
         fontSize: 15,
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        textAlign: 'center'
     },
     subTitle: {
         fontFamily: commonStyle.fontFamily,
-        color: '#555',
+        color: '#555'
     },
     formContainer: {
         backgroundColor: commonStyle.colors.primary,
