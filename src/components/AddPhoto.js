@@ -6,8 +6,7 @@ import {
     TouchableOpacity,
     Image,
     Dimensions,
-    ScrollView,
-    Alert
+    ScrollView
 } from 'react-native'
 import commonStyle from '../commonStyle'
 import * as ImagePicker from 'expo-image-picker';
@@ -55,7 +54,7 @@ class AddPhoto extends Component {
                 <View style={styles.container}>
                     <Text style={styles.title}>Adicione uma Foto</Text>
                     <View style={styles.imageContainer}>
-                        <Image source={{ uri: this.state.image.uri }} style={styles.image} />
+                        <Image source={{ uri: this.state.image.uri || 'https://cdn.pixabay.com/photo/2017/01/31/20/34/photo-camera-2027073_960_720.png' }} style={this.state.image.uri ? styles.image : styles.imagePadrao} />
                     </View>
                     <View style={styles.choicesContainer}>
                         <Text style={styles.buttomText}>Escolha uma foto</Text>
@@ -97,11 +96,19 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height / 2,
         backgroundColor: '#eee',
         marginTop: 10,
-        resizeMode: 'contain'
+        resizeMode: 'contain',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     image: {
         width: '100%',
         height: Dimensions.get('window').height / 2,
+        resizeMode: 'contain'
+    },
+    imagePadrao: {
+        width: 50,
+        height: 50,
+        resizeMode: 'contain'
     },
     buttom: {
         alignItems: 'center'

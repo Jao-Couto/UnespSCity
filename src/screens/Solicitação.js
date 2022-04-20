@@ -192,10 +192,9 @@ const styles = StyleSheet.create({
     },
     formContainer: {
         backgroundColor: commonStyle.colors.primary,
-        padding: 20,
         width: '100%',
         margin: 0,
-        padding: 0
+        paddingBottom: 5
     },
     input: {
         marginTop: 10,

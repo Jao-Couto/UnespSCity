@@ -21,11 +21,10 @@ class Menu extends Component {
                 tension={100} // These props are passed to the parent component (here TouchableScale)
                 activeScale={0.95} >
                 <Avatar title={opt.name} source={{ uri: opt.logo }} avatarStyle={styles.logo} />
-                <ListItem.Content >
+                <ListItem.Content style={styles.itemContent}>
                     <ListItem.Title style={styles.title}>{opt.name}</ListItem.Title>
                     <ListItem.Subtitle style={styles.subTitle}>{opt.subTitle}</ListItem.Subtitle>
                 </ListItem.Content>
-                <ListItem.Chevron />
             </ListItem>
         )
     }
@@ -71,14 +70,26 @@ const styles = StyleSheet.create({
         backgroundColor: commonStyle.colors.primary
     },
     list: {
-        width: '100%'
+        width: '100%',
+        padding: 2
     },
     item: {
         flexDirection: 'column',
         width: Dimensions.get('window').width / 3 - 6,
-        height: Dimensions.get('window').height / 4,
-        backgroundColor: 'rgba(0,0,0,0)',
-        marginBottom: 10
+        height: 150,
+        marginBottom: 10,
+        backgroundColor: commonStyle.colors.primary,
+        shadowOffset: {
+            width: 10,
+            height: -10
+        },
+        elevation: 15,
+        borderRadius: 10
+    },
+    itemContent: {
+        width: '100%',
+        justifyContent: 'space-around',
+        alignItems: 'center'
     },
     logo: {
         resizeMode: 'contain'

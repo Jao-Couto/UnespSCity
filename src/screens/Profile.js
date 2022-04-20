@@ -7,7 +7,6 @@ import Header from "../components/Header";
 import { connect } from 'react-redux'
 import { Gravatar } from 'react-native-gravatar'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { logout } from '../storage/actions/user'
 import AuthInput from '../components/AuthInput'
 
 class Profile extends Component {
@@ -17,10 +16,6 @@ class Profile extends Component {
         errorName: '',
         phone: this.props.phone,
         errorPhone: ''
-    }
-
-    logout = () => {
-        this.props.onLogout()
     }
 
     editToggle = () => {
@@ -33,9 +28,13 @@ class Profile extends Component {
                 <Header {...this.props}></Header>
                 <Gravatar options={{
                     email: this.props.email,
-                    secure: true
+                    secure: true,
+                    parameters: { "size": "200", "d": "mm" },
                 }} style={styles.avatar} />
-                <Text style={styles.title}>{this.props.email}</Text>
+                <Text minimumFontScale={0.5} adjustsFontSizeToFit numberOfLines={1} style={styles.title}>{this.props.email}</Text>
+                <TouchableOpacity onPress={this.editToggle}>
+                    <Icon name='account-edit' size={30} color='#000'></Icon>
+                </TouchableOpacity>
                 <View style={styles.container}>
 
                     {this.state.edit ?
@@ -105,7 +104,7 @@ class Profile extends Component {
                                     onChangeText={phone => { this.setState({ phone, errorPhone: '' }) }}
                                     error={this.state.errorPhone}
                                 />
-                                <TouchableOpacity style={styles.buttonModify}>
+                                <TouchableOpacity style={styles.buttonModify} onPress={() => this.setState({ edit: false })}>
                                     <Text style={styles.buttonText}>
                                         Salvar
                                     </Text>
@@ -113,6 +112,7 @@ class Profile extends Component {
                             </ScrollView>
                         </KeyboardAvoidingView>
                         :
+
                         <View>
                             <Text style={styles.subTitle}> Nome: {this.props.name}</Text>
                             <Text style={styles.subTitle}> Telefone: {this.props.phone}</Text>
@@ -124,14 +124,6 @@ class Profile extends Component {
                             <Text style={styles.subTitle}> Nascimento: {this.props.phone}</Text>
 
                         </View>}
-                    <View style={styles.button}>
-                        <TouchableOpacity onPress={this.editToggle}>
-                            <Icon name='account-edit' size={30} color='#000'></Icon>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={this.logout}>
-                            <Icon name='logout' size={30} color='#f00'></Icon>
-                        </TouchableOpacity>
-                    </View>
                     <StatusBar style="auto" />
                 </View>
             </SafeAreaView >
@@ -150,14 +142,14 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         backgroundColor: commonStyle.colors.primary
     },
     title: {
         fontFamily: commonStyle.fontFamily,
         color: '#000',
-        fontSize: 30,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 30
     },
     subTitle: {
         fontFamily: commonStyle.fontFamily,
@@ -207,11 +199,5 @@ const mapStateToProps = ({ user }) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onLogout: () => dispatch(logout())
-    }
-}
-
 // export default Profile
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default connect(mapStateToProps)(Profile)
