@@ -22,6 +22,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Gravatar } from "react-native-gravatar";
 import commonStyle from "./commonStyle";
 import Starred from "./screens/Starred";
+import MapMenu from "./screens/MapMenu";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { logout } from "./storage/actions/user";
 
@@ -36,7 +37,18 @@ function App(props) {
 
     function MyTabs() {
         return (
-            <Tab.Navigator initialRouteName="Favoritos" screenOptions={{ headerShown: false }}>
+            <Tab.Navigator initialRouteName="Mapa" screenOptions={{ headerShown: false }}>
+                <Tab.Screen
+                    name="Mapa"
+                    component={MapMenu}
+                    options={{
+                        tabBarIcon: ({ focused }) => {
+                            return (
+                                <Icon name="map-marker" size={20} color={focused ? '#000' : '#aaa'}></Icon>
+                            );
+                        },
+                    }}
+                />
                 <Tab.Screen
                     name="Favoritos"
                     component={Starred}

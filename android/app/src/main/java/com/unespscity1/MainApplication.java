@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.geolocation.GeolocationPackage;
+import com.arttitude360.reactnative.rngoogleplaces.RNGooglePlacesPackage;
+import com.reactnativeleaflet.LeafletPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
