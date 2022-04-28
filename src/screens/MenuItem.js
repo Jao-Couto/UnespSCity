@@ -1,12 +1,35 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, FlatList, Text } from 'react-native'
+import { StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import { Avatar, ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
+import Icon from "react-native-vector-icons/FontAwesome";
 
 class MenuItens extends Component {
+    state = {
+        starred: []
+    }
+
+    componentDidMount = () => {
+        let inicial = []
+        let starred = this.props.route.params.itens.reduce(
+            (previousValue, currentValue) => [...previousValue, false], inicial
+        )
+        console.log(starred);
+        this.setState({
+            starred
+        })
+    }
+
+    setStarred = (id) => {
+        let starred = this.state.starred
+        starred[id - 1] = !starred[id - 1]
+        this.setState({
+            starred
+        })
+    }
 
     getOptionsItem = ({ item: opt }) => {
         return (
@@ -21,7 +44,9 @@ class MenuItens extends Component {
                 <ListItem.Content>
                     <ListItem.Title style={styles.titleItens}>{opt.name}</ListItem.Title>
                 </ListItem.Content>
-                <ListItem.Chevron />
+                <TouchableOpacity onPress={() => this.setStarred(opt.id)}>
+                    <Icon name="star" color={this.state.starred[opt.id - 1] ? 'orange' : 'black'} size={15}></Icon>
+                </TouchableOpacity>
             </ListItem >
         )
     }

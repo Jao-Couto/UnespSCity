@@ -5,9 +5,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import CarouselCards from "../components/CarouselCard";
 import Header from "../components/Header";
+
 class Starred extends Component {
 
     render() {
+
+
         return (
             <SafeAreaView style={styles.containerLogo} >
                 <StatusBar style="auto" />

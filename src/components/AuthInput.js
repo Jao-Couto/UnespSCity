@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
     error: {
         fontFamily: commonStyle.fontFamily,
-        color: 'yellow',
+        color: '#f00',
         fontSize: 15,
         marginTop: 5,
         padding: 2,

@@ -1,6 +1,5 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Button, ScrollView } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity, Dimensions, ScrollView, Modal, Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import AuthInput from '../components/AuthInput'
@@ -8,48 +7,51 @@ import { connect } from 'react-redux'
 import * as Location from 'expo-location';
 import axios from "axios";
 import Camera from "../components/AddPhoto";
+import Map from "../components/Map";
 
 
 class Solicitacao extends Component {
     state = {
-        location: '',
+        location: {},
         errorLocation: '',
         description: '',
         errorDescription: '',
 
         cep: '',
-        errorCep: '',
         street: '',
-        errorStreet: '',
         number: '',
-        errorNumber: '',
         district: '',
-        errorDistric: '',
         city: '',
-        errorCity: '',
         uf: '',
-        errorUf: ''
+
+        photo: {},
+
+        modalMap: false,
+        modalCamera: false
 
 
     }
 
-    getCep = () => {
-        if (this.state.cep.length == 8)
-            axios.get(`https://viacep.com.br/ws/${this.state.cep}/json/`).then((response) => {
-                if (response.data.erro)
-                    this.setState({ errorCep: 'CEP não encontrado' })
-                else
-                    this.setState({
-                        street: response.data.logradouro,
-                        errorStreet: '',
-                        district: response.data.bairro,
-                        errorDistric: '',
-                        city: response.data.localidade,
-                        errorCity: '',
-                        uf: response.data.uf,
-                        errorUf: ''
-                    })
-            }).catch(err => console.log(err));
+
+    getReverseGeocode = async () => {
+        const { latitude, longitude } = this.state.location;
+        let response = await Location.reverseGeocodeAsync({
+            latitude,
+            longitude
+        });
+
+        console.log(response);
+        for (let item of response) {
+            this.setState({
+                cep: item.postalCode,
+                street: item.street,
+                number: item.streetNumber,
+                district: item.district,
+                city: item.subregion,
+                uf: item.region,
+            })
+        }
+
     }
 
     getCurrentLocation = async () => {
@@ -62,92 +64,88 @@ class Solicitacao extends Component {
         let { coords } = await Location.getCurrentPositionAsync({});
         if (coords) {
             const { latitude, longitude } = coords;
-            let response = await Location.reverseGeocodeAsync({
-                latitude,
-                longitude
-            });
-
-            for (let item of response) {
-                this.setState({
-                    cep: item.postalCode,
-                    errorCep: '',
-                    street: item.street,
-                    errorStreet: '',
-                    number: item.streetNumber,
-                    errorNumber: '',
-                    district: item.district,
-                    errorDistric: '',
-                    city: item.city,
-                    errorCity: '',
-                    uf: item.region,
-                    errorUf: ''
-                })
-            }
+            this.setState({ location: { latitude, longitude } }, this.getReverseGeocode)
         }
+        this.toggleModalMap()
+    }
+
+    toggleModalMap = () => {
+        this.setState({ modalMap: !this.state.modalMap, errorLocation: '' })
+        if (Object.keys(this.state.location).length > 0)
+            this.getReverseGeocode()
+    }
+
+    toggleModalCamera = () => {
+        this.setState({ modalCamera: !this.state.modalCamera })
+    }
+
+    solicit = () => {
+        const { description, cep } = this.state
+        let error = false
+        if (cep == '') {
+            this.setState({ errorLocation: 'Localização Obrigatória' })
+            error = true
+        }
+        if (description == '') {
+            this.setState({ errorDescription: 'Descrição Obrigatória' })
+            error = true
+        }
+
+        if (!error)
+            console.log('Sucesso enviar');
+        else
+            console.log('Erro enviar');
     }
 
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <ScrollView contentContainerStyle={styles.formContainer}>
-                    <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
-                    <Camera></Camera>
-                    <TouchableOpacity style={[styles.button]} onPress={this.getCurrentLocation}>
+                <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                <ScrollView style={{ width: '95%' }}>
+
+                    <TouchableOpacity style={[styles.button]} onPress={this.toggleModalMap}>
                         <Text style={styles.buttonText}>
-                            Usar localização atual
+                            Adicionar Localização
                         </Text>
                     </TouchableOpacity>
-                    <AuthInput
-                        icon='location-arrow'
-                        placeholder='CEP'
-                        value={this.state.cep}
-                        style={styles.input}
-                        keyboardType='number-pad'
-                        maxLength={8}
-                        onChangeText={cep => { this.setState({ cep, errorCep: '' }, this.getCep) }}
-                        error={this.state.errorCep}
-                    />
-                    <AuthInput
-                        icon='location-arrow'
-                        placeholder='Rua'
-                        value={this.state.street}
-                        style={styles.input}
-                        onChangeText={street => { this.setState({ street, errorStreet: '' }) }}
-                        error={this.state.errorStreet}
-                    />
-                    <AuthInput
-                        icon='location-arrow'
-                        placeholder='Número'
-                        value={this.state.number}
-                        style={styles.input}
-                        keyboardType='number-pad'
-                        onChangeText={number => { this.setState({ number, errorNumber: '' }) }}
-                        error={this.state.errorNumber}
-                    />
-                    <AuthInput
-                        icon='location-arrow'
-                        placeholder='Bairro'
-                        value={this.state.district}
-                        style={styles.input}
-                        onChangeText={district => { this.setState({ district, errorDistrict: '' }) }}
-                        error={this.state.errorDistrict}
-                    />
-                    <AuthInput
-                        icon='location-arrow'
-                        placeholder='Cidade'
-                        value={this.state.city}
-                        style={styles.input}
-                        onChangeText={city => { this.setState({ city, errorCity: '' }) }}
-                        error={this.state.errorCity}
-                    />
-                    <AuthInput
-                        icon='file-text'
-                        placeholder='Estado'
-                        value={this.state.uf}
-                        style={styles.input}
-                        onChangeText={uf => { this.setState({ uf, errorUf: '' }) }}
-                        error={this.state.errorUf}
-                    />
+                    {this.state.errorLocation !== '' ? <Text style={styles.textError}>{this.state.errorLocation}</Text> : null}
+                    {this.state.cep != '' &&
+                        <Text style={styles.text}>{this.state.street}, {this.state.number} - {this.state.district}, {this.state.city} - {this.state.uf}</Text>
+                    }
+
+                    <TouchableOpacity style={[styles.button]} onPress={this.toggleModalCamera}>
+                        <Text style={styles.buttonText}>
+                            Adicionar Foto
+                        </Text>
+                    </TouchableOpacity>
+                    {this.state.photo.uri && <View style={styles.imageContainer}>
+                        <Image source={{ uri: this.state.photo.uri }} style={styles.image} />
+                    </View>}
+
+                    <Modal visible={this.state.modalMap}>
+                        <Map setLocation={(location) => this.setState({ location })}></Map>
+                        <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.getCurrentLocation}>
+                            <Text style={styles.buttonText}>
+                                Usar localização atual
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0 }]} onPress={this.toggleModalMap}>
+                            <Text style={styles.buttonText}>
+                                Confirmar
+                            </Text>
+                        </TouchableOpacity>
+
+                    </Modal>
+
+                    <Modal visible={this.state.modalCamera}>
+                        <Camera setPhoto={(photo) => this.setState({ photo })}></Camera>
+                        <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.toggleModalCamera}>
+                            <Text style={styles.buttonText}>
+                                Confirmar
+                            </Text>
+                        </TouchableOpacity>
+                    </Modal>
+
                     <AuthInput
                         icon='file-text'
                         placeholder='Descrição'
@@ -161,14 +159,12 @@ class Solicitacao extends Component {
                         error={this.state.errorDescription}
                     />
 
-                    <TouchableOpacity style={[styles.button]} onPress={() => console.log(this.props.email)}>
+                    <TouchableOpacity style={[styles.button]} onPress={this.solicit}>
                         <Text style={styles.buttonText}>
                             Solicitar
                         </Text>
                     </TouchableOpacity>
-                    <StatusBar style="auto" />
                 </ScrollView>
-
             </SafeAreaView>
 
         )
@@ -190,6 +186,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10
     },
+    text: {
+        fontFamily: commonStyle.fontFamily,
+        fontSize: 20,
+        color: commonStyle.colors.title,
+        textAlign: 'center',
+        marginBottom: 10
+    },
     formContainer: {
         backgroundColor: commonStyle.colors.primary,
         width: '100%',
@@ -206,12 +209,36 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 8
     },
     buttonText: {
         fontFamily: commonStyle.fontFamily,
         color: '#fff',
         fontSize: 20
+    },
+    imageContainer: {
+        width: '100%',
+        height: Dimensions.get('window').height / 2,
+        backgroundColor: '#eee',
+        marginTop: 10,
+        resizeMode: 'contain',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        width: '100%',
+        height: Dimensions.get('window').height / 2,
+        resizeMode: 'contain',
+        backgroundColor: commonStyle.colors.primary
+    },
+    textError: {
+        width: '100%',
+        textAlign: 'center',
+        fontFamily: commonStyle.fontFamily,
+        color: '#f00',
+        fontSize: 15,
+        marginTop: 5,
+        padding: 2,
+        borderRadius: 5
     }
 })
 
