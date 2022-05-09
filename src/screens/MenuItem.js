@@ -32,9 +32,10 @@ class MenuItens extends Component {
     }
 
     getOptionsItem = ({ item: opt }) => {
+        console.log(opt.type);
         return (
             <ListItem
-                onPress={() => this.props.navigation.navigate('Solicitacao', opt)}
+                onPress={() => this.props.navigation.navigate(opt.type, opt)}
                 containerStyle={styles.item}
                 Component={TouchableScale}
                 friction={90} //

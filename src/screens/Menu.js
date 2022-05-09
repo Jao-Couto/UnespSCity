@@ -29,12 +29,6 @@ class Menu extends Component {
         )
     }
 
-    // getOptionsItem = ({ item: opt }) => {
-    //     return (
-    //         <View style={styles.item}><Avatar title={opt.name} source={{ uri: opt.logo }} avatarStyle={styles.logo} /></View>
-    //     )
-    // }
-
 
     render() {
         return (

@@ -8,22 +8,27 @@ export default [
             id: 1,
             name: 'Iluminação pública',
             logo: 'https://cdn.pixabay.com/photo/2016/03/31/18/24/screwdriver-1294338_960_720.png',
+            type: "Solicitacao",
         }, {
             id: 2,
             name: 'Pavimentação',
             logo: 'https://cdn.pixabay.com/photo/2016/03/31/18/24/screwdriver-1294338_960_720.png',
+            type: "Solicitacao",
         }, {
             id: 3,
             name: 'Fiscalização de Instalações',
             logo: 'https://cdn.pixabay.com/photo/2016/03/31/18/24/screwdriver-1294338_960_720.png',
+            type: "Solicitacao",
         }, {
             id: 4,
             name: 'Monumentos e Chafarizes',
             logo: 'https://cdn.pixabay.com/photo/2016/03/31/18/24/screwdriver-1294338_960_720.png',
+            type: "Solicitacao",
         }, {
             id: 5,
             name: 'Vias Públicas',
             logo: 'https://cdn.pixabay.com/photo/2016/03/31/18/24/screwdriver-1294338_960_720.png',
+            type: "Solicitacao",
         }]
     },
     {
@@ -35,14 +40,17 @@ export default [
             id: 1,
             name: 'Pontes em Estradas Rurais',
             logo: 'https://cdn.pixabay.com/photo/2017/09/26/17/56/first-aid-2789562_960_720.png',
+            type: "Solicitacao",
         }, {
             id: 2,
             name: 'Parques',
             logo: 'https://cdn.pixabay.com/photo/2017/09/26/17/56/first-aid-2789562_960_720.png',
+            type: "Solicitacao",
         }, {
             id: 3,
             name: 'Praças',
             logo: 'https://cdn.pixabay.com/photo/2017/09/26/17/56/first-aid-2789562_960_720.png',
+            type: "Solicitacao",
         }]
     },
     {
@@ -54,10 +62,12 @@ export default [
             id: 1,
             name: 'Resíduos Sólidos',
             logo: 'https://cdn.pixabay.com/photo/2017/09/26/17/56/first-aid-2789562_960_720.png',
+            type: "Solicitacao",
         }, {
             id: 2,
             name: 'Animais Mortos',
             logo: 'https://cdn.pixabay.com/photo/2017/09/26/17/56/first-aid-2789562_960_720.png',
+            type: "Solicitacao",
         }]
     },
     {
@@ -69,6 +79,7 @@ export default [
             id: 1,
             name: 'Limpeza de Terreno',
             logo: 'https://cdn.pixabay.com/photo/2017/09/26/17/56/first-aid-2789562_960_720.png',
+            type: "Solicitacao",
         }, {
             id: 2,
             name: 'Limpeza de Piscina',
@@ -111,18 +122,23 @@ export default [
             id: 1,
             name: 'Animais abandonado',
             logo: 'https://cdn.pixabay.com/photo/2012/04/01/12/24/scorpion-23158_960_720.png',
+            type: 'LostAnimals',
         }, {
             id: 2,
             name: 'Animais sinantrópicos',
             logo: 'https://cdn.pixabay.com/photo/2012/04/01/12/24/scorpion-23158_960_720.png',
+            type: "Solicitacao",
+
         }, {
             id: 3,
             name: 'Captura de animais de grande porte',
             logo: 'https://cdn.pixabay.com/photo/2012/04/01/12/24/scorpion-23158_960_720.png',
+            type: "Solicitacao",
         }, {
             id: 4,
             name: 'Animais Perdidos',
             logo: 'https://cdn.pixabay.com/photo/2012/04/01/12/24/scorpion-23158_960_720.png',
+            type: 'LostAnimals',
         }, {
             id: 5,
             name: 'Adoção de animais',

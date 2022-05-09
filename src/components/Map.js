@@ -21,8 +21,7 @@ class Map extends Component {
         if (status !== 'granted') {
             return;
         }
-
-        let { coords } = await Location.getCurrentPositionAsync({});
+        let { coords } = await Location.getCurrentPositionAsync();
         if (coords) {
             console.log(coords);
             const { latitude, longitude } = coords;
@@ -35,6 +34,7 @@ class Map extends Component {
                 },
                 ready: true
             })
+            console.log(this.state.ready);
         }
     }
 
