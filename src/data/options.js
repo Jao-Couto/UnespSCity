@@ -143,10 +143,12 @@ export default [
             id: 5,
             name: 'Adoção de animais',
             logo: 'https://cdn.pixabay.com/photo/2012/04/01/12/24/scorpion-23158_960_720.png',
+            type: 'LostAnimals',
         }, {
             id: 6,
             name: 'Denúncia de maus tratos de animais',
             logo: 'https://cdn.pixabay.com/photo/2012/04/01/12/24/scorpion-23158_960_720.png',
+            type: "Solicitacao",
         }]
     },
     {
