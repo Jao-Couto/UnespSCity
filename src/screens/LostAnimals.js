@@ -2,12 +2,8 @@ import React, { Component } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Dimensions, ScrollView, Modal, Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
-import AuthInput from '../components/AuthInput'
 import { connect } from 'react-redux'
 import * as Location from 'expo-location';
-import axios from "axios";
-import Camera from "../components/AddPhoto";
-import Map from "../components/Map";
 import ListAnimals from "../components/ListAnimals";
 
 
@@ -101,13 +97,13 @@ class LostAnimals extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
-                    <ListAnimals></ListAnimals>
-                    <TouchableOpacity style={styles.addAnimal}
-                        onPress={() => this.props.navigation.navigate('SolicitAnimals')}
-                    >
-                        <Text style={styles.addAnimalText}>+</Text>
-                    </TouchableOpacity>
-                
+                <ListAnimals {...this.props}></ListAnimals>
+                <TouchableOpacity style={styles.addAnimal}
+                    onPress={() => this.props.navigation.navigate('SolicitAnimals')}
+                >
+                    <Text style={styles.addAnimalText}>+</Text>
+                </TouchableOpacity>
+
             </SafeAreaView>
 
         )
@@ -183,7 +179,7 @@ const styles = StyleSheet.create({
         padding: 2,
         borderRadius: 5
     },
-    addAnimal:{
+    addAnimal: {
         position: 'absolute',
         bottom: 20,
         right: 10,
@@ -194,7 +190,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    addAnimalText:{
+    addAnimalText: {
         fontFamily: commonStyle.fontFamily,
         fontSize: 30,
         color: 'white'

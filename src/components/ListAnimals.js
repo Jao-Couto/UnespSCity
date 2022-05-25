@@ -1,26 +1,26 @@
 import React, { Component } from "react";
 import { StyleSheet, FlatList, Text, TouchableOpacity, View, Image } from 'react-native'
 import commonStyle from "../commonStyle";
-import { Avatar, ListItem } from "react-native-elements";
+import { ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
 import animals from "../data/animals";
 
 class ListAnimals extends Component {
 
     getOptionsItem = ({ item: animal }) => {
-        const breed = animal.breed == ''? '': animal.breed+" - "
+        const breed = animal.breed == '' ? '' : animal.breed + " - "
         return (
             <ListItem
-                onPress={() => console.log("info")}
+                onPress={() => this.props.navigation.navigate('InfoAnimal', animal)}
                 containerStyle={styles.item}
                 Component={TouchableScale}
                 friction={90} //
                 tension={100} // These props are passed to the parent component (here TouchableScale)
                 activeScale={0.95}  >
-                    <Image source={{ uri: animal.image } } style={styles.logo} ></Image>
+                <Image source={{ uri: animal.image }} style={styles.logo} ></Image>
                 <ListItem.Content style={styles.content}>
                     <ListItem.Title style={styles.titleItens}>{animal.name}</ListItem.Title>
-                    <ListItem.Subtitle style={styles.subtitleItens}>{breed+animal.gender}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{breed + animal.gender}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.subtitleItens}>{animal.description}</ListItem.Subtitle>
                 </ListItem.Content>
             </ListItem >
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         color: '#555',
         fontSize: 15
     },
-    content:{
+    content: {
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',

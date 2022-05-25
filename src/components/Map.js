@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Dimensions } from 'react-native'
 import commonStyle from "../commonStyle";
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import AutoCompleteAdress from '../components/AutoCompleteAdress'
 let { width, height } = Dimensions.get('window')
@@ -21,9 +21,9 @@ class Map extends Component {
         if (status !== 'granted') {
             return;
         }
-        let { coords } = await Location.getCurrentPositionAsync();
+        let coords = this.props.coords || (await Location.getCurrentPositionAsync()).coords
+
         if (coords) {
-            console.log(coords);
             const { latitude, longitude } = coords;
             this.setState({
                 region: {
@@ -34,39 +34,50 @@ class Map extends Component {
                 },
                 ready: true
             })
-            console.log(this.state.ready);
+        }
+
+        if (this.props.coords) {
+
+            this.setState({
+                marker: { latlng: coords }
+            })
+        }
+    }
+
+    addMarker = (e) => {
+        if (this.props.enableAddMarker) {
+            this.setState({
+                marker: { latlng: e.nativeEvent.coordinate }, region: {
+                    latitude: e.nativeEvent.coordinate.latitude,
+                    longitude: e.nativeEvent.coordinate.longitude,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA,
+                },
+            })
+            this.props.setLocation({ latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
         }
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <AutoCompleteAdress
-                    setRegion={(region) => this.setState({ region })}
-                    setMarker={(marker) => this.setState({ marker })}
-                    inMap
-                />
+                {this.props.showAutoComplte &&
+                    <AutoCompleteAdress
+                        setRegion={(region) => this.setState({ region })}
+                        setMarker={(marker) => this.setState({ marker })}
+                        inMap
+                    />
+                }
                 {this.state.ready ?
                     <MapView
                         region={this.state.region}
-                        style={styles.map}
-                        onPress={(e) => {
-                            console.log(e.nativeEvent.coordinate);
-                            this.setState({
-                                marker: { latlng: e.nativeEvent.coordinate }, region: {
-                                    latitude: e.nativeEvent.coordinate.latitude,
-                                    longitude: e.nativeEvent.coordinate.longitude,
-                                    latitudeDelta: LATITUDE_DELTA,
-                                    longitudeDelta: LONGITUDE_DELTA,
-                                },
-                            })
-                            this.props.setLocation({ latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
-                        }}
+                        style={[styles.map, this.props.size]}
+                        onPress={(e) => this.addMarker(e)}
                         showsUserLocation
                         provider="google">
                         {
                             Object.keys(this.state.marker).length !== 0 ?
-                                <MapView.Marker coordinate={this.state.marker.latlng} title={'teste'} description={'marker.description'} >
+                                <MapView.Marker coordinate={this.state.marker.latlng} title={this.props.markerName}>
                                 </MapView.Marker>
                                 : null
                         }

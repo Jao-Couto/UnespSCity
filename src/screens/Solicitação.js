@@ -123,7 +123,7 @@ class Solicitacao extends Component {
                     </View>}
 
                     <Modal visible={this.state.modalMap}>
-                        <Map setLocation={(location) => this.setState({ location })}></Map>
+                        <Map setLocation={(location) => this.setState({ location })} enableAddMarker></Map>
                         <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.getCurrentLocation}>
                             <Text style={styles.buttonText}>
                                 Usar localização atual

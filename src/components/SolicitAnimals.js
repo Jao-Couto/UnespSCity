@@ -22,6 +22,7 @@ class SolicitAnimals extends Component {
         errorColor: '',
         gender: '',
         errorGender: '',
+        celphone: '',
 
         cep: '',
         street: '',
@@ -142,7 +143,7 @@ class SolicitAnimals extends Component {
                     </View>}
 
                     <Modal visible={this.state.modalMap}>
-                        <Map setLocation={(location) => this.setState({ location })}></Map>
+                        <Map setLocation={(location) => this.setState({ location })} enableAddMarker></Map>
                         <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.getCurrentLocation}>
                             <Text style={styles.buttonText}>
                                 Usar localização atual
@@ -169,7 +170,7 @@ class SolicitAnimals extends Component {
                         icon='pencil'
                         placeholder='Nome'
                         value={this.state.name}
-                        style={[styles.input, {marginTop: 40}]}
+                        style={[styles.input, { marginTop: 40 }]}
                         editable
                         onChangeText={name => { this.setState({ name, errorName: '' }) }}
                         error={this.state.errorName}
@@ -181,7 +182,7 @@ class SolicitAnimals extends Component {
                         value={this.state.breed}
                         style={[styles.input]}
                         editable
-                        onChangeText={breed => { this.setState({ breed}) }}
+                        onChangeText={breed => { this.setState({ breed }) }}
                     />
 
                     <AuthInput
@@ -202,6 +203,15 @@ class SolicitAnimals extends Component {
                         editable
                         onChangeText={gender => { this.setState({ gender, errorGender: '' }) }}
                         error={this.state.errorGender}
+                    />
+
+                    <AuthInput
+                        icon='mobile'
+                        placeholder='Contato'
+                        value={this.state.celphone}
+                        style={[styles.input]}
+                        editable
+                        onChangeText={celphone => { this.setState({ celphone }) }}
                     />
 
                     <AuthInput

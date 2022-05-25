@@ -41,7 +41,7 @@ class MenuItens extends Component {
                 friction={90} //
                 tension={100} // These props are passed to the parent component (here TouchableScale)
                 activeScale={0.95}  >
-                <Avatar title={opt.name} source={{ uri: opt.logo }} avatarStyle={styles.logo} />
+                <Avatar title={opt.name} source={opt.logo} avatarStyle={styles.logo} />
                 <ListItem.Content>
                     <ListItem.Title style={styles.titleItens}>{opt.name}</ListItem.Title>
                 </ListItem.Content>

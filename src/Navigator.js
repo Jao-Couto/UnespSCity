@@ -27,6 +27,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { logout } from "./storage/actions/user";
 import LostAnimals from "./screens/LostAnimals";
 import SolicitAnimals from "./components/SolicitAnimals";
+import InfoAnimal from "./components/InfoAnimal";
 
 function App(props) {
 
@@ -85,7 +86,7 @@ function App(props) {
                 <Stack.Screen name="Solicitacao" component={Solicitacao} />
                 <Stack.Screen name="LostAnimals" component={LostAnimals} />
                 <Stack.Screen name="SolicitAnimals" component={SolicitAnimals} />
-                
+                <Stack.Screen name="InfoAnimal" component={InfoAnimal} />
             </Stack.Navigator>
         )
     }
