@@ -4,12 +4,16 @@ import commonStyle from "../commonStyle";
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import AutoCompleteAdress from '../components/AutoCompleteAdress'
+import MapViewDirections from 'react-native-maps-directions';
+import { GOOGLE_API_KEY } from '../config';
+
 let { width, height } = Dimensions.get('window')
 const ASPECT_RATIO = width / height
 const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
 class Map extends Component {
+
     state = {
         region: {},
         marker: {},
@@ -58,7 +62,12 @@ class Map extends Component {
         }
     }
 
+
     render() {
+
+        const origin = { latitude: 37.3318456, longitude: -122.0296002 };
+        const destination = { latitude: 37.771707, longitude: -122.4053769 };
+
         return (
             <View style={styles.container}>
                 {this.props.showAutoComplte &&
@@ -81,6 +90,15 @@ class Map extends Component {
                                 </MapView.Marker>
                                 : null
                         }
+                        {this.props.origin && this.props.destination &&
+                            <MapViewDirections
+                                origin={this.props.origin}
+                                destination={this.props.destination}
+                                apikey={GOOGLE_API_KEY}
+                            />}
+                        {this.props.area &&
+                            <MapView.Circle center={{ latitude: this.state.region.latitude, longitude: this.state.region.longitude }} radius={900} strokeColor="#f00" fillColor={"rgba(150,0,0,0.1)"}>
+                            </MapView.Circle>}
 
                     </MapView>
                     :

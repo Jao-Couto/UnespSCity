@@ -34,7 +34,8 @@ class Login extends Component {
 
         if (!error)
             try {
-                this.props.onLogin({ ...this.state })
+                const user = { name: this.state.name, email: this.state.email, phone: this.state.phone }
+                this.props.onLogin({ ...user })
             } catch (e) {
                 showError(e)
             }

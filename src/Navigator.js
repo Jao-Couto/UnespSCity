@@ -23,11 +23,15 @@ import { Gravatar } from "react-native-gravatar";
 import commonStyle from "./commonStyle";
 import Starred from "./screens/Starred";
 import MapMenu from "./screens/MapMenu";
+import PublicAreas from "./screens/PublicAreas";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { logout } from "./storage/actions/user";
 import LostAnimals from "./screens/LostAnimals";
+import MapColetaLixo from "./screens/MapColetaLixo";
 import SolicitAnimals from "./components/SolicitAnimals";
 import InfoAnimal from "./components/InfoAnimal";
+import Radar from "./screens/Radar";
+import Dedetizacao from "./screens/Dedetizacao";
 
 function App(props) {
 
@@ -86,7 +90,13 @@ function App(props) {
                 <Stack.Screen name="Solicitacao" component={Solicitacao} />
                 <Stack.Screen name="LostAnimals" component={LostAnimals} />
                 <Stack.Screen name="SolicitAnimals" component={SolicitAnimals} />
+                <Stack.Screen name="PublicAreas" component={PublicAreas} />
                 <Stack.Screen name="InfoAnimal" component={InfoAnimal} />
+                <Stack.Screen name="MapColetaLixo" component={MapColetaLixo} />
+                <Stack.Screen name="RadarDengue" component={Radar} />
+                <Stack.Screen name="RadarLeishmaniose" component={Radar} />
+                <Stack.Screen name="RadarEscorpiao" component={Radar} />
+                <Stack.Screen name="Dedetizacao" component={Dedetizacao} />
             </Stack.Navigator>
         )
     }

@@ -88,6 +88,7 @@ export default [
             id: 3,
             name: 'Restaurantes e Ambientes',
             logo: require('../../assets/Icones/home_vigilancia_sanitaria.png'),
+            type: "Solicitacao",
         }]
     },
     {
@@ -99,18 +100,23 @@ export default [
             id: 1,
             name: 'Radar da Dengue',
             logo: require('../../assets/Icones/home_controle_pragas.png'),
+            type: "RadarDengue"
         }, {
             id: 2,
             name: 'Foco de Escorpião',
             logo: require('../../assets/Icones/home_controle_pragas.png'),
+            type: "RadarEscorpiao"
         }, {
             id: 3,
             name: 'Leishmaniose',
             logo: require('../../assets/Icones/home_controle_pragas.png'),
+            type: "RadarLeishmaniose"
         }, {
             id: 4,
             name: 'Insetos, roedores, etc...',
             logo: require('../../assets/Icones/home_controle_pragas.png'),
+            type: "Dedetizacao"
+
         }]
     },
     {
@@ -160,6 +166,7 @@ export default [
             id: 1,
             name: 'Adoção de Áreas públicas',
             logo: require('../../assets/Icones/home_meio_ambiente.png'),
+            type: "PublicAreas"
         }, {
             id: 2,
             name: 'Indicadores de poluição',
@@ -168,6 +175,7 @@ export default [
             id: 3,
             name: 'Coleta de Lixo / Coleta seletiva',
             logo: require('../../assets/Icones/home_meio_ambiente.png'),
+            type: "MapColetaLixo"
         }]
     },
     {
