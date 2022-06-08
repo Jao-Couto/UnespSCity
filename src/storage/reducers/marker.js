@@ -1,17 +1,19 @@
 import {
-    GET_PHOTO
+    MARKERS
 } from '../actions/actionType'
 
 const initialState = {
-    photo: null
+    markers: [],
 }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_PHOTO:
+        case MARKERS:
+            console.log("a");
+            console.log();
             return {
                 ...state,
-                photo: action.payload.photo,
+                markers: [...state.markers, action.payload]
             }
         default:
             return state

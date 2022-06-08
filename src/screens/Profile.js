@@ -199,5 +199,4 @@ const mapStateToProps = ({ user }) => {
     }
 }
 
-// export default Profile
 export default connect(mapStateToProps)(Profile)

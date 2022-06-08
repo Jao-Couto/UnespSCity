@@ -3,9 +3,11 @@ import {
     combineReducers,
 } from 'redux'
 import userReducer from './reducers/user'
+import markerReducer from './reducers/marker'
 
 const reducers = combineReducers({
-    user: userReducer
+    user: userReducer,
+    marker: markerReducer
 })
 
 const storeConfig = () => {

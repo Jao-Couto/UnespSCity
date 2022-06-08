@@ -5,9 +5,10 @@ import commonStyle from "../commonStyle";
 import AuthInput from '../components/AuthInput'
 import { connect } from 'react-redux'
 import * as Location from 'expo-location';
-import axios from "axios";
 import Camera from "../components/AddPhoto";
 import Map from "../components/Map";
+import { addMarker } from "../storage/actions/marker";
+import { StackActions } from '@react-navigation/native';
 
 
 class Solicitacao extends Component {
@@ -75,6 +76,10 @@ class Solicitacao extends Component {
             this.getReverseGeocode()
     }
 
+    toggleModalMapCancel = () => {
+        this.setState({ modalMap: !this.state.modalMap })
+    }
+
     toggleModalCamera = () => {
         this.setState({ modalCamera: !this.state.modalCamera })
     }
@@ -91,8 +96,12 @@ class Solicitacao extends Component {
             error = true
         }
 
-        if (!error)
+        if (!error) {
             console.log('Sucesso enviar');
+            this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name })
+            this.props.navigation.dispatch(StackActions.popToTop());
+            this.props.navigation.navigate('Mapa')
+        }
         else
             console.log('Erro enviar');
     }
@@ -129,11 +138,19 @@ class Solicitacao extends Component {
                                 Usar localização atual
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0 }]} onPress={this.toggleModalMap}>
-                            <Text style={styles.buttonText}>
-                                Confirmar
-                            </Text>
-                        </TouchableOpacity>
+                        <View style={styles.buttonGroup}>
+                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'red', flex: 1 }]} onPress={this.toggleModalMapCancel}>
+                                <Text style={styles.buttonText}>
+                                    Cancelar
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'green', flex: 1 }]} onPress={this.toggleModalMap}>
+                                <Text style={styles.buttonText}>
+                                    Confirmar
+                                </Text>
+                            </TouchableOpacity>
+
+                        </View>
 
                     </Modal>
 
@@ -215,6 +232,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 20
     },
+    buttonGroup: {
+        flexDirection: 'row'
+    },
     imageContainer: {
         width: '100%',
         height: Dimensions.get('window').height / 2,
@@ -251,5 +271,10 @@ const mapStateToProps = ({ user }) => {
 }
 
 
-// export default Profile
-export default connect(mapStateToProps)(Solicitacao)
+const mapDispatchToProps = dispatch => {
+    return {
+        addMarker: marker => dispatch(addMarker(marker))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Solicitacao)

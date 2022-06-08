@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Dimensions } from 'react-native'
 import commonStyle from "../commonStyle";
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import * as Location from 'expo-location';
 import AutoCompleteAdress from '../components/AutoCompleteAdress'
 import MapViewDirections from 'react-native-maps-directions';
@@ -39,13 +39,12 @@ class Map extends Component {
                 ready: true
             })
         }
-
         if (this.props.coords) {
-
             this.setState({
                 marker: { latlng: coords }
             })
         }
+
     }
 
     addMarker = (e) => {
@@ -62,11 +61,27 @@ class Map extends Component {
         }
     }
 
+    routeTruck = () => {
+        if (this.props.origin && this.props.destination)
+            return (
+                <>
+                    <MapView.Marker key={1} coordinate={this.props.origin} title={"Saída"}>
+                    </MapView.Marker>
+                    <MapView.Marker key={2} coordinate={this.props.destination} title={"Chegada"}>
+                    </MapView.Marker>
+                    <MapViewDirections
+                        origin={this.props.origin}
+                        destination={this.props.destination}
+                        apikey={GOOGLE_API_KEY}
+                        strokeColor="#048831"
+                        strokeWidth={5}
+                    />
+                </>
+            )
+
+    }
 
     render() {
-
-        const origin = { latitude: 37.3318456, longitude: -122.0296002 };
-        const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
         return (
             <View style={styles.container}>
@@ -84,18 +99,18 @@ class Map extends Component {
                         onPress={(e) => this.addMarker(e)}
                         showsUserLocation
                         provider="google">
-                        {
-                            Object.keys(this.state.marker).length !== 0 ?
-                                <MapView.Marker coordinate={this.state.marker.latlng} title={this.props.markerName}>
-                                </MapView.Marker>
-                                : null
+                        {Object.keys(this.state.marker).length !== 0 ?
+                            <MapView.Marker coordinate={this.state.marker.latlng}>
+                            </MapView.Marker> : null
                         }
-                        {this.props.origin && this.props.destination &&
-                            <MapViewDirections
-                                origin={this.props.origin}
-                                destination={this.props.destination}
-                                apikey={GOOGLE_API_KEY}
-                            />}
+                        {this.props.marker &&
+                            this.props.marker.map((mark, i) => {
+                                console.log(mark.latlng);
+                                return <MapView.Marker key={i} coordinate={mark.latlng} title={mark.name}>
+                                </MapView.Marker>
+                            })
+                        }
+                        {this.routeTruck()}
                         {this.props.area &&
                             <MapView.Circle center={{ latitude: this.state.region.latitude, longitude: this.state.region.longitude }} radius={900} strokeColor="#f00" fillColor={"rgba(150,0,0,0.1)"}>
                             </MapView.Circle>}

@@ -16,7 +16,7 @@ class Starred extends Component {
                 <StatusBar style="auto" />
                 <Header {...this.props}></Header>
                 <View style={styles.container}>
-                    <Text style={styles.title}>Notícias</Text>
+                    <Text style={styles.title}>Favoritos</Text>
                 </View>
             </SafeAreaView >
 

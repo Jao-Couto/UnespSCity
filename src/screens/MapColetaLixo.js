@@ -1,18 +1,24 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
-import Header from "../components/Header";
 import Map from "../components/Map";
 
 class MapMenu extends Component {
 
     render() {
+        const origin = {
+            "latitude": -22.120774060358524,
+            "longitude": -51.42607357352972
+        }
+        const destination = {
+            "latitude": -22.121274431519986,
+            "longitude": -51.425361447036266
+        }
         return (
             <SafeAreaView style={styles.containerLogo} >
                 <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
-                <Map origin={{ latitude: -22.1201, longitude: -51.4265 }} destination={{ latitude: -22.1210, longitude: -51.4280 }}></Map>
+                <Map origin={origin} destination={destination} ></Map>
             </SafeAreaView >
 
         )
