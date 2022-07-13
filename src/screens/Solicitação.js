@@ -84,6 +84,10 @@ class Solicitacao extends Component {
         this.setState({ modalCamera: !this.state.modalCamera })
     }
 
+    toggleModalCameraCancel = () => {
+        this.setState({ modalCamera: !this.state.modalCamera, photo: {} })
+    }
+
     solicit = () => {
         const { description, cep } = this.state
         let error = false
@@ -156,11 +160,20 @@ class Solicitacao extends Component {
 
                     <Modal visible={this.state.modalCamera}>
                         <Camera setPhoto={(photo) => this.setState({ photo })}></Camera>
-                        <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.toggleModalCamera}>
-                            <Text style={styles.buttonText}>
-                                Confirmar
-                            </Text>
-                        </TouchableOpacity>
+
+                        <View style={styles.buttonGroup}>
+                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'red', flex: 1 }]} onPress={this.toggleModalCameraCancel}>
+                                <Text style={styles.buttonText}>
+                                    Cancelar
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'green', flex: 1 }]} onPress={this.toggleModalCamera}>
+                                <Text style={styles.buttonText}>
+                                    Confirmar
+                                </Text>
+                            </TouchableOpacity>
+
+                        </View>
                     </Modal>
 
                     <AuthInput

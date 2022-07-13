@@ -9,8 +9,6 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case MARKERS:
-            console.log("a");
-            console.log();
             return {
                 ...state,
                 markers: [...state.markers, action.payload]

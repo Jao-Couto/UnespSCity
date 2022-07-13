@@ -6,33 +6,19 @@ import commonStyle from "../commonStyle";
 import { Avatar, ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
 import Icon from "react-native-vector-icons/FontAwesome";
+import { connect } from "react-redux";
+import { addStar } from "../storage/actions/starred";
 
 class MenuItens extends Component {
-    state = {
-        starred: []
-    }
 
-    componentDidMount = () => {
-        let inicial = []
-        let starred = this.props.route.params.itens.reduce(
-            (previousValue, currentValue) => [...previousValue, false], inicial
-        )
-        console.log(starred);
-        this.setState({
-            starred
-        })
-    }
-
-    setStarred = (id) => {
-        let starred = this.state.starred
-        starred[id - 1] = !starred[id - 1]
-        this.setState({
-            starred
-        })
+    filterStarred = (id) => {
+        const res = this.props.starred.filter(item => {
+            return item == id
+        }, false)
+        return res.length > 0 ? true : false
     }
 
     getOptionsItem = ({ item: opt }) => {
-        console.log(opt.type);
         return (
             <ListItem
                 onPress={() => this.props.navigation.navigate(opt.type, opt)}
@@ -45,8 +31,10 @@ class MenuItens extends Component {
                 <ListItem.Content>
                     <ListItem.Title style={styles.titleItens}>{opt.name}</ListItem.Title>
                 </ListItem.Content>
-                <TouchableOpacity onPress={() => this.setStarred(opt.id)}>
-                    <Icon name="star" color={this.state.starred[opt.id - 1] ? 'orange' : 'black'} size={15}></Icon>
+                <TouchableOpacity onPress={() => this.props.addStarred(opt.id)}>
+
+                    {this.filterStarred(opt.id) ? <Icon name="star" color={'orange'} size={15}></Icon> : <Icon name="star-o" color={'black'} size={15}></Icon>}
+
                 </TouchableOpacity>
             </ListItem >
         )
@@ -136,4 +124,16 @@ const styles = StyleSheet.create({
     }
 })
 
-export default MenuItens
+const mapStateToProps = ({ starred }) => {
+    return {
+        starred: starred.starred
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addStarred: item => dispatch(addStar(item))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuItens)

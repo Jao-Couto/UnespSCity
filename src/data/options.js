@@ -37,17 +37,17 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_conservacao_rural.png'),
         itens: [{
-            id: 1,
+            id: 6,
             name: 'Pontes em Estradas Rurais',
             logo: require('../../assets/Icones/home_conservacao_rural.png'),
             type: "Solicitacao",
         }, {
-            id: 2,
+            id: 7,
             name: 'Parques',
             logo: require('../../assets/Icones/home_conservacao_rural.png'),
             type: "Solicitacao",
         }, {
-            id: 3,
+            id: 8,
             name: 'Praças',
             logo: require('../../assets/Icones/home_conservacao_rural.png'),
             type: "Solicitacao",
@@ -59,12 +59,12 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_remocao_detritos.png'),
         itens: [{
-            id: 1,
+            id: 9,
             name: 'Resíduos Sólidos',
             logo: require('../../assets/Icones/home_remocao_detritos.png'),
             type: "Solicitacao",
         }, {
-            id: 2,
+            id: 10,
             name: 'Animais Mortos',
             logo: require('../../assets/Icones/home_remocao_detritos.png'),
             type: "Solicitacao",
@@ -76,16 +76,16 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_vigilancia_sanitaria.png'),
         itens: [{
-            id: 1,
+            id: 11,
             name: 'Limpeza de Terreno',
             logo: require('../../assets/Icones/home_vigilancia_sanitaria.png'),
             type: "Solicitacao",
         }, {
-            id: 2,
+            id: 12,
             name: 'Limpeza de Piscina',
             logo: require('../../assets/Icones/home_vigilancia_sanitaria.png'),
         }, {
-            id: 3,
+            id: 13,
             name: 'Restaurantes e Ambientes',
             logo: require('../../assets/Icones/home_vigilancia_sanitaria.png'),
             type: "Solicitacao",
@@ -97,22 +97,22 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_controle_pragas.png'),
         itens: [{
-            id: 1,
+            id: 14,
             name: 'Radar da Dengue',
             logo: require('../../assets/Icones/home_controle_pragas.png'),
             type: "RadarDengue"
         }, {
-            id: 2,
+            id: 15,
             name: 'Foco de Escorpião',
             logo: require('../../assets/Icones/home_controle_pragas.png'),
             type: "RadarEscorpiao"
         }, {
-            id: 3,
+            id: 16,
             name: 'Leishmaniose',
             logo: require('../../assets/Icones/home_controle_pragas.png'),
             type: "RadarLeishmaniose"
         }, {
-            id: 4,
+            id: 17,
             name: 'Insetos, roedores, etc...',
             logo: require('../../assets/Icones/home_controle_pragas.png'),
             type: "Dedetizacao"
@@ -125,33 +125,33 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_animais_domesticos.png'),
         itens: [{
-            id: 1,
+            id: 18,
             name: 'Animais abandonado',
             logo: require('../../assets/Icones/home_animais_domesticos.png'),
             type: 'LostAnimals',
         }, {
-            id: 2,
+            id: 19,
             name: 'Animais sinantrópicos',
             logo: require('../../assets/Icones/home_animais_domesticos.png'),
             type: "Solicitacao",
 
         }, {
-            id: 3,
+            id: 20,
             name: 'Captura de animais de grande porte',
             logo: require('../../assets/Icones/home_animais_domesticos.png'),
             type: "Solicitacao",
         }, {
-            id: 4,
+            id: 21,
             name: 'Animais Perdidos',
             logo: require('../../assets/Icones/home_animais_domesticos.png'),
             type: 'LostAnimals',
         }, {
-            id: 5,
+            id: 22,
             name: 'Adoção de animais',
             logo: require('../../assets/Icones/home_animais_domesticos.png'),
             type: 'LostAnimals',
         }, {
-            id: 6,
+            id: 23,
             name: 'Denúncia de maus tratos de animais',
             logo: require('../../assets/Icones/home_animais_domesticos.png'),
             type: "Solicitacao",
@@ -163,16 +163,16 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_meio_ambiente.png'),
         itens: [{
-            id: 1,
+            id: 24,
             name: 'Adoção de Áreas públicas',
             logo: require('../../assets/Icones/home_meio_ambiente.png'),
             type: "PublicAreas"
         }, {
-            id: 2,
+            id: 25,
             name: 'Indicadores de poluição',
             logo: require('../../assets/Icones/home_meio_ambiente.png'),
         }, {
-            id: 3,
+            id: 26,
             name: 'Coleta de Lixo / Coleta seletiva',
             logo: require('../../assets/Icones/home_meio_ambiente.png'),
             type: "MapColetaLixo"
@@ -184,17 +184,20 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_fauna_flora.png'),
         itens: [{
-            id: 1,
+            id: 27,
             name: 'Animais Silvestres',
             logo: require('../../assets/Icones/home_fauna_flora.png'),
+            type: "Solicitacao",
         }, {
-            id: 2,
+            id: 28,
             name: 'Danos à Fauna',
             logo: require('../../assets/Icones/home_fauna_flora.png'),
+            type: "Solicitacao",
         }, {
-            id: 3,
+            id: 29,
             name: 'Cadastro de árvores',
             logo: require('../../assets/Icones/home_fauna_flora.png'),
+            type: "Solicitacao",
         }]
     },
     {
@@ -203,21 +206,25 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_assistencia_social.png'),
         itens: [{
-            id: 1,
+            id: 30,
             name: 'Locais úteis ao cidadão',
             logo: require('../../assets/Icones/home_assistencia_social.png'),
+            type: "PublicAreas"
         }, {
-            id: 2,
+            id: 31,
             name: 'Telefones Úteis',
             logo: require('../../assets/Icones/home_assistencia_social.png'),
+            type: "PublicAreas"
         }, {
-            id: 3,
+            id: 32,
             name: 'Programação Cultural',
             logo: require('../../assets/Icones/home_assistencia_social.png'),
+            type: "PublicAreas"
         }, {
-            id: 4,
+            id: 33,
             name: 'Túmulos de falecidos',
             logo: require('../../assets/Icones/home_assistencia_social.png'),
+            type: "PublicAreas"
         }]
     },
     {
@@ -226,17 +233,18 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_familias_carentes.png'),
         itens: [{
-            id: 1,
+            id: 34,
             name: 'Moradores de Rua',
             logo: require('../../assets/Icones/home_familias_carentes.png'),
         }, {
-            id: 2,
+            id: 35,
             name: 'Cadastro',
             logo: require('../../assets/Icones/home_familias_carentes.png'),
         }, {
-            id: 3,
+            id: 36,
             name: 'Descarte Solidário',
             logo: require('../../assets/Icones/home_familias_carentes.png'),
+            type: "PublicAreas"
         }]
     },
     {
@@ -245,11 +253,12 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_assistencia_social.png'),
         itens: [{
-            id: 7,
+            id: 37,
             name: 'Feiras Livres',
             logo: require('../../assets/Icones/home_assistencia_social.png'),
+            type: "PublicAreas"
         }, {
-            id: 8,
+            id: 38,
             name: 'Cadastro de Diaristas',
             logo: require('../../assets/Icones/home_assistencia_social.png'),
         }]
@@ -260,15 +269,15 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_seguranca_defesa_civil.png'),
         itens: [{
-            id: 1,
+            id: 39,
             name: 'Denúncia de violência doméstica',
             logo: require('../../assets/Icones/home_seguranca_defesa_civil.png'),
         }, {
-            id: 2,
+            id: 40,
             name: 'Ocorrência de Acidentes',
             logo: require('../../assets/Icones/home_seguranca_defesa_civil.png'),
         }, {
-            id: 3,
+            id: 41,
             name: 'Ocorrência de Furtos/Roubos',
             logo: require('../../assets/Icones/home_seguranca_defesa_civil.png'),
         }]
@@ -279,11 +288,11 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_botao_panico.png'),
         itens: [{
-            id: 1,
+            id: 42,
             name: 'Mulheres',
             logo: require('../../assets/Icones/home_botao_panico.png'),
         }, {
-            id: 2,
+            id: 43,
             name: 'Idosos',
             logo: require('../../assets/Icones/home_botao_panico.png'),
         }]
@@ -294,15 +303,17 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_administracao_publica.png'),
         itens: [{
-            id: 1,
+            id: 44,
             name: 'Conheça os Gestores',
             logo: require('../../assets/Icones/home_administracao_publica.png'),
+            type: "PublicAreas"
         }, {
-            id: 2,
+            id: 45,
             name: 'Consultar Propostas',
             logo: require('../../assets/Icones/home_administracao_publica.png'),
+            type: "PublicAreas"
         }, {
-            id: 3,
+            id: 46,
             name: 'Central Anticorrupção',
             logo: require('../../assets/Icones/home_administracao_publica.png'),
         }]
@@ -313,15 +324,16 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_notificacao_comunicacao.png'),
         itens: [{
-            id: 1,
+            id: 47,
             name: 'Notícias',
             logo: require('../../assets/Icones/home_notificacao_comunicacao.png'),
+            type: "PublicAreas"
         }, {
-            id: 2,
+            id: 48,
             name: 'Sugestões',
             logo: require('../../assets/Icones/home_notificacao_comunicacao.png'),
         }, {
-            id: 3,
+            id: 49,
             name: 'Central Anticorrupção',
             logo: require('../../assets/Icones/home_notificacao_comunicacao.png'),
         }]
@@ -332,17 +344,20 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_sensoriamento_movel_participativo.png'),
         itens: [{
-            id: 1,
+            id: 50,
             name: 'Rotas dos guardas',
             logo: require('../../assets/Icones/home_sensoriamento_movel_participativo.png'),
+            type: "MapColetaLixo"
         }, {
-            id: 2,
+            id: 51,
             name: 'Trânsito',
             logo: require('../../assets/Icones/home_sensoriamento_movel_participativo.png'),
+
         }, {
-            id: 3,
+            id: 52,
             name: 'Rota de Veículos',
             logo: require('../../assets/Icones/home_sensoriamento_movel_participativo.png'),
+            type: "MapColetaLixo"
         }]
     },
     {
@@ -351,13 +366,14 @@ export default [
         subTitle: 'Itens',
         logo: require('../../assets/Icones/home_assossiacao_comercial.png'),
         itens: [{
-            id: 1,
+            id: 53,
             name: 'Cartão fidelidade',
             logo: require('../../assets/Icones/home_assossiacao_comercial.png'),
         }, {
-            id: 2,
+            id: 54,
             name: 'Ofertas Locais',
             logo: require('../../assets/Icones/home_assossiacao_comercial.png'),
+            type: "PublicAreas"
         }]
     }
 ]

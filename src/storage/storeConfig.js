@@ -4,10 +4,12 @@ import {
 } from 'redux'
 import userReducer from './reducers/user'
 import markerReducer from './reducers/marker'
+import starredReducer from './reducers/starred'
 
 const reducers = combineReducers({
     user: userReducer,
-    marker: markerReducer
+    marker: markerReducer,
+    starred: starredReducer
 })
 
 const storeConfig = () => {

@@ -58,6 +58,7 @@ class AddPhoto extends Component {
                 <View style={styles.imageContainer}>
                     <Image source={{ uri: this.state.image.uri || 'https://cdn.pixabay.com/photo/2017/01/31/20/34/photo-camera-2027073_960_720.png' }} style={this.state.image.uri ? styles.image : styles.imagePadrao} />
                 </View>
+
                 <View style={styles.choicesContainer}>
                     <Text style={styles.buttomText}>Escolha uma foto</Text>
                     <View style={styles.buttonsContainer}>
