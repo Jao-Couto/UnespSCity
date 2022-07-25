@@ -3,15 +3,15 @@ import {
 } from '../actions/actionType'
 
 const initialState = {
-    starred: [1],
+    starred: [],
 }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case STARRED:
-            const existe = state.starred.indexOf(action.payload) >= 0
+            const existe = state.starred.filter((obj) => { return obj.id == action.payload.id; });
             let star = [...state.starred]
-            if (existe) {
+            if (existe.length > 0) {
                 star.pop(action.payload)
                 // return
             } else {

@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Text, StyleSheet, View, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native'
 import { showError, showSuccess } from "../common";
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import AuthInput from '../components/AuthInput'
 import LogoUnesp from '../../assets/UnespLogo.png'
+import ModalSelector from "react-native-modal-selector-searchable";
+import cidadeService from "../services/cidadeService";
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 export default class Register extends Component {
     state = {
@@ -18,8 +21,26 @@ export default class Register extends Component {
         confirmPassword: '',
         errorConfirmPassword: '',
         phone: '',
-        errorPhone: ''
+        errorPhone: '',
+        cityId: '',
+        cityName: '',
+        errorCityId: '#fff',
+        dataCidades: []
     }
+
+    componentDidMount = () => {
+        cidadeService.getCidades()
+            .then((res) => {
+                let data = res.data.map((item) => {
+                    return { key: item.id, label: item.name }
+                })
+                this.setState({ dataCidades: data })
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
 
     signup = () => {
         let error = false
@@ -41,6 +62,10 @@ export default class Register extends Component {
         }
         if (this.state.confirmPassword != '' && this.state.password.length !== this.state.confirmPassword) {
             this.setState({ errorConfirmPassword: 'As senhas devem ser iguais!' })
+            error = true
+        }
+        if (this.state.cityId.length <= 0) {
+            this.setState({ errorCityId: '#fa9191' })
             error = true
         }
         if (!error)
@@ -104,6 +129,40 @@ export default class Register extends Component {
                                 onChangeText={phone => { this.setState({ phone, errorPhone: '' }) }}
                                 error={this.state.errorPhone}
                             />
+                            <ModalSelector
+                                data={this.state.dataCidades}
+                                initValue="Selecione uma Cidade"
+                                supportedOrientations={['landscape']}
+                                searchText="Procurar"
+                                cancelText="Cancelar"
+                                optionContainerStyle={{ backgroundColor: 'white' }}
+                                optionTextStyle={{ fontSize: 20 }}
+                                style={{ backgroundColor: this.state.errorCityId }}
+                                onChange={(option) => { this.setState({ cityName: option.label, cityId: option.key, errorCityId: '#fff' }) }}>
+                                <View style={{
+                                    width: '100%',
+                                    height: 50,
+                                    borderRadius: 2,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}>
+                                    <View style={styles.icon}>
+                                        <Icon name="city" size={20} color='#fff' />
+                                    </View>
+                                    <TextInput
+                                        style={{
+                                            fontFamily: commonStyle.fontFamily,
+                                            marginLeft: 5,
+                                            width: '85%',
+                                            fontSize: 20,
+                                            backgroundColor: this.state.errorCityId,
+                                            color: '#000'
+                                        }}
+                                        editable={false}
+                                        placeholder="Selecione uma Cidade"
+                                        value={this.state.cityName} />
+                                </View>
+                            </ModalSelector>
 
                             <TouchableOpacity onPress={this.signup}>
                                 <View style={[styles.button]}>
@@ -179,5 +238,15 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 50,
         resizeMode: 'contain'
-    }
+    },
+    icon: {
+        color: '#333',
+        flex: 1,
+        height: '100%',
+        backgroundColor: commonStyle.colors.secundary,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopLeftRadius: 2,
+        borderBottomLeftRadius: 2
+    },
 })

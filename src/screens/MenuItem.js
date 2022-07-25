@@ -16,7 +16,7 @@ class MenuItens extends Component {
     }
     filterStarred = (id) => {
         const res = this.props.starred.filter(item => {
-            return item == id
+            return item.id == id
         }, false)
         return res.length > 0 ? true : false
     }
@@ -35,6 +35,7 @@ class MenuItens extends Component {
     }
 
     getOptionsItem = ({ item: opt }) => {
+        console.log(opt);
         return (
             <ListItem
                 onPress={() => this.props.navigation.navigate(opt.type, opt)}
@@ -47,7 +48,7 @@ class MenuItens extends Component {
                 <ListItem.Content>
                     <ListItem.Title style={styles.titleItens}>{opt.name}</ListItem.Title>
                 </ListItem.Content>
-                <TouchableOpacity onPress={() => this.props.addStarred(opt.id)}>
+                <TouchableOpacity onPress={() => this.props.addStarred(opt)}>
 
                     {this.filterStarred(opt.id) ? <Icon name="star" color={'orange'} size={15}></Icon> : <Icon name="star-o" color={'black'} size={15}></Icon>}
 
