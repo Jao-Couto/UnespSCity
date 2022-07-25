@@ -8,14 +8,30 @@ import TouchableScale from 'react-native-touchable-scale';
 import Icon from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
 import { addStar } from "../storage/actions/starred";
+import subMenuService from "../services/subMenuService";
 
 class MenuItens extends Component {
-
+    state = {
+        itens: []
+    }
     filterStarred = (id) => {
         const res = this.props.starred.filter(item => {
             return item == id
         }, false)
         return res.length > 0 ? true : false
+    }
+
+    componentDidMount = () => {
+        subMenuService.subMenuCidade(this.props.route.params.id)
+            .then((res) => {
+                console.log(res.data);
+                this.setState({
+                    itens: res.data
+                })
+            }).catch(err => {
+                console.log("erro SubMenu");
+                console.log(err);
+            })
     }
 
     getOptionsItem = ({ item: opt }) => {
@@ -41,14 +57,13 @@ class MenuItens extends Component {
     }
 
     render() {
-        const itens = this.props.route.params.itens
         return (
 
             <SafeAreaView style={styles.container}>
                 <Text style={styles.title}>{this.props.route.params.name}</Text>
                 <FlatList
                     keyExtractor={iten => iten.id.toString()}
-                    data={itens}
+                    data={this.state.itens}
                     renderItem={this.getOptionsItem}
                     style={styles.list} />
                 <StatusBar style="auto" />

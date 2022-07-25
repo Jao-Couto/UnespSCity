@@ -1,17 +1,37 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, View, FlatList, Dimensions } from 'react-native'
+import { StyleSheet, View, FlatList, Dimensions, Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import { Avatar, ListItem } from "react-native-elements";
 import options from "../data/options";
 import Header from "../components/Header";
 import TouchableScale from 'react-native-touchable-scale';
+import cidadeMenuService from "../services/cidadeMenuService";
+import { connect } from "react-redux";
 
 class Menu extends Component {
+    state = {
+        options: []
+    }
+
+    componentDidMount = () => {
+        console.log(this.props.cityId)
+        cidadeMenuService.menuCidade(this.props.cityId)
+            .then((res) => {
+                this.setState({
+                    options: res.data
+                })
+            }).catch(err => {
+                console.log("erro Menu");
+                console.log(err);
+            })
+    }
+
 
     getOptionsItem = ({ item: opt }) => {
         const spaceRight = opt.id % 3 !== 0 ? { marginRight: 5 } : {}
+        const logo = '../../assets/Icones/home_remocao_detritos.png'
         return (
             <ListItem
                 onPress={() => this.props.navigation.navigate('MenuItens', opt)}
@@ -20,7 +40,7 @@ class Menu extends Component {
                 friction={90} //
                 tension={100} // These props are passed to the parent component (here TouchableScale)
                 activeScale={0.95} >
-                <Avatar title={opt.name} source={opt.logo} avatarStyle={styles.logo} />
+                <Avatar title={opt.name} source={require(logo)} avatarStyle={styles.logo} />
                 <ListItem.Content style={styles.itemContent}>
                     <ListItem.Title style={styles.title}>{opt.name}</ListItem.Title>
                     <ListItem.Subtitle style={styles.subTitle}>{opt.subTitle}</ListItem.Subtitle>
@@ -34,11 +54,10 @@ class Menu extends Component {
         return (
             <SafeAreaView style={styles.containerLogo} >
                 <Header {...this.props}></Header>
-
                 <View style={styles.container}>
                     <FlatList
                         keyExtractor={option => option.id.toString()}
-                        data={options}
+                        data={this.state.options}
                         numColumns={3}
                         renderItem={this.getOptionsItem}
                         contentContainerStyle={styles.list} />
@@ -128,4 +147,11 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Menu
+
+const mapStateToProps = ({ user }) => {
+    return {
+        ...user
+    }
+}
+
+export default connect(mapStateToProps)(Menu)

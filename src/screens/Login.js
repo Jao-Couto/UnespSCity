@@ -7,18 +7,21 @@ import commonStyle from "../commonStyle";
 import AuthInput from '../components/AuthInput'
 import LogoUnesp from '../../assets/UnespLogo.png'
 import { connect } from 'react-redux'
-import { userLogged } from '../storage/actions/user'
+import { login } from '../storage/actions/user'
+import cidadaoService from "../services/cidadaoService";
 
 class Login extends Component {
     state = {
-        name: 'Temporario',
-        email: '',
+        email: 'jose@gmail.com',
         errorEmail: '',
-        password: '',
+        password: 'senha123',
         errorPassword: '',
-        phone: '18999999999'
     }
 
+    loginCidadao = async () => {
+
+        this.props.navigation.navigate('Register')
+    }
 
 
     signin = async () => {
@@ -34,7 +37,7 @@ class Login extends Component {
 
         if (!error)
             try {
-                const user = { name: this.state.name, email: this.state.email, phone: this.state.phone }
+                const user = { email: this.state.email, password: this.state.password }
                 this.props.onLogin({ ...user })
             } catch (e) {
                 showError(e)
@@ -76,7 +79,7 @@ class Login extends Component {
                         </TouchableOpacity>
                     </KeyboardAvoidingView>
                     <TouchableOpacity style={{ padding: 10 }}
-                        onPress={() => { this.props.navigation.navigate('Register') }}>
+                        onPress={this.loginCidadao}>
                         <Text style={styles.subTitle}>Ainda não possui conta?</Text>
                     </TouchableOpacity>
                     <StatusBar style="auto" />
@@ -144,7 +147,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLogin: user => dispatch(userLogged(user))
+        onLogin: user => dispatch(login(user))
     }
 }
 
