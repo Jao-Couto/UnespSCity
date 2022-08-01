@@ -9,6 +9,7 @@ import Camera from "../components/AddPhoto";
 import Map from "../components/Map";
 import { addMarker } from "../storage/actions/marker";
 import { StackActions } from '@react-navigation/native';
+import pracaService from "../services/pracaService";
 
 
 class Solicitacao extends Component {
@@ -33,6 +34,26 @@ class Solicitacao extends Component {
 
     }
 
+    solicitPraca = () => {
+        const data = {
+            "name": "Praça Teste",
+            "street": "Rua kenji Sato Miura",
+            "number": 324,
+            "cityId": 1,
+            "latitude": "-22.1201",
+            "longitude": "-51.4265",
+            "description": "Essa é uma Praça",
+            "images": [this.state.photo.base64]
+        }
+        pracaService.addPracaSolicit(data)
+            .then(res => {
+                console.log(res);
+                return true;
+            }).catch(err => {
+                console.log(err);
+                return false
+            })
+    }
 
     getReverseGeocode = async () => {
         const { latitude, longitude } = this.state.location;
@@ -100,7 +121,9 @@ class Solicitacao extends Component {
             error = true
         }
 
+        this.solicitPraca()
         if (!error) {
+
             console.log('Sucesso enviar');
             this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name })
             this.props.navigation.dispatch(StackActions.popToTop());
@@ -132,7 +155,7 @@ class Solicitacao extends Component {
                         </Text>
                     </TouchableOpacity>
                     {this.state.photo.uri && <View style={styles.imageContainer}>
-                        <Image source={{ uri: this.state.photo.uri }} style={styles.image} />
+                        <Image source={{ uri: "data:image/png;base64," + this.state.photo.base64.toString('base64') }} style={styles.image} />
                     </View>}
 
                     <Modal visible={this.state.modalMap}>
