@@ -57,6 +57,7 @@ class Map extends Component {
                     longitudeDelta: LONGITUDE_DELTA,
                 },
             })
+            console.log(e.nativeEvent.coordinate);
             this.props.setLocation({ latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
         }
     }

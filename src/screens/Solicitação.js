@@ -43,13 +43,15 @@ class Solicitacao extends Component {
             "latitude": "-22.1201",
             "longitude": "-51.4265",
             "description": "Essa é uma Praça",
-            "images": [this.state.photo.base64]
+            "images": this.state.photo.base64
         }
         pracaService.addPracaSolicit(data)
             .then(res => {
-                console.log(res);
+                console.log("oi");
+                console.log(res.data);
                 return true;
             }).catch(err => {
+                console.log("tchau");
                 console.log(err);
                 return false
             })

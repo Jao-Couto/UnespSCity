@@ -14,7 +14,7 @@ class MapMenu extends Component {
             <SafeAreaView style={styles.containerLogo} >
                 <StatusBar style="auto" />
                 <Header {...this.props}></Header>
-                <Map marker={this.props.marker}></Map>
+                <Map marker={this.props.marker} showAutoComplte></Map>
             </SafeAreaView >
 
         )

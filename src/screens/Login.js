@@ -8,7 +8,6 @@ import AuthInput from '../components/AuthInput'
 import LogoUnesp from '../../assets/UnespLogo.png'
 import { connect } from 'react-redux'
 import { login } from '../storage/actions/user'
-import cidadaoService from "../services/cidadaoService";
 
 class Login extends Component {
     state = {
