@@ -4,8 +4,10 @@ import React from 'react';
 import { registerRootComponent } from 'expo';
 import { Provider } from 'react-redux';
 
+
 import storeConfig from './src/storage/storeConfig'
 import Navigator from './src/Navigator'
+
 
 
 const store = storeConfig()

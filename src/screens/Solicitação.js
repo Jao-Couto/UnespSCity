@@ -10,7 +10,11 @@ import Map from "../components/Map";
 import { addMarker } from "../storage/actions/marker";
 import { StackActions } from '@react-navigation/native';
 import pracaService from "../services/pracaService";
-
+import imageService from "../services/imageService";
+import mime from 'mime-types';
+import { API, graphqlOperation, Storage } from 'aws-amplify'
+import uuid from 'react-native-uuid';
+import { Buffer } from 'buffer'
 
 class Solicitacao extends Component {
     state = {
@@ -34,6 +38,26 @@ class Solicitacao extends Component {
 
     }
 
+    uploadImage = async () => {
+        try {
+            const imageName = this.state.photo.uri.replace(/^.*[\\\/]/, '');
+            const photo = await fetch(this.state.photo.uri)
+            const photoBlob = await photo.blob();
+            const fileType = mime.lookup(this.state.photo.uri);
+            const access = { level: "public", contentType: fileType, };
+            const filename = uuid.v4() + "_foto." + fileType.split("/")[1]
+            console.log("salvar");
+            await Storage.put(filename, photoBlob, access).then(data => { console.log(data) }).catch(err => console.log(err))
+            console.log("divisao");
+            await API.graphql(graphqlOperation(createTodo, { input: { name: imageName, image: filename } })).then(data => { console.log(data) }).catch(err => console.log(err))
+        }
+        catch (err) {
+            console.log('error: ', err);
+        }
+
+    }
+
+
     solicitPraca = () => {
         const data = {
             "name": "Praça Teste",
@@ -43,15 +67,18 @@ class Solicitacao extends Component {
             "latitude": "-22.1201",
             "longitude": "-51.4265",
             "description": "Essa é uma Praça",
-            "images": this.state.photo.base64
         }
+
         pracaService.addPracaSolicit(data)
             .then(res => {
-                console.log("oi");
                 console.log(res.data);
+                const dataImg = { idObj: res.data._id, images: this.state.photo.base64 }
+
+                imageService.addImage(dataImg)
+                    .then(res => console.log(res))
+                    .catch(err => console.log(err))
                 return true;
             }).catch(err => {
-                console.log("tchau");
                 console.log(err);
                 return false
             })
@@ -125,7 +152,6 @@ class Solicitacao extends Component {
 
         this.solicitPraca()
         if (!error) {
-
             console.log('Sucesso enviar');
             this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name })
             this.props.navigation.dispatch(StackActions.popToTop());
@@ -157,7 +183,7 @@ class Solicitacao extends Component {
                         </Text>
                     </TouchableOpacity>
                     {this.state.photo.uri && <View style={styles.imageContainer}>
-                        <Image source={{ uri: "data:image/png;base64," + this.state.photo.base64.toString('base64') }} style={styles.image} />
+                        <Image source={{ uri: this.state.photo.uri }} style={styles.image} />
                     </View>}
 
                     <Modal visible={this.state.modalMap}>
@@ -214,7 +240,7 @@ class Solicitacao extends Component {
                         error={this.state.errorDescription}
                     />
 
-                    <TouchableOpacity style={[styles.button]} onPress={this.solicit}>
+                    <TouchableOpacity style={[styles.button]} onPress={this.solicitPraca}>
                         <Text style={styles.buttonText}>
                             Solicitar
                         </Text>

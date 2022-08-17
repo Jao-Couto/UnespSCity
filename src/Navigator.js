@@ -32,6 +32,16 @@ import SolicitAnimals from "./components/SolicitAnimals";
 import InfoAnimal from "./components/InfoAnimal";
 import Radar from "./screens/Radar";
 import Dedetizacao from "./screens/Dedetizacao";
+import Amplify from 'aws-amplify';
+import config from "./aws-exports"
+import { withAuthenticator } from 'aws-amplify-react-native';
+
+Amplify.configure({
+    ...config,
+    Analytics: {
+        disabled: true,
+    },
+});
 
 function App(props) {
 

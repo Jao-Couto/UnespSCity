@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 import commonStyle from '../commonStyle'
 import * as ImagePicker from 'expo-image-picker';
-import { Buffer } from 'buffer';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { compose } from 'redux';
 
@@ -30,13 +29,13 @@ class AddPhoto extends Component {
 
         if (!res.cancelled) {
             this.setState({ image: { uri: res.uri } });
-            this.props.setPhoto({ uri: res.uri, base64: Buffer.from(res.base64, "base64") })
+            this.props.setPhoto({ uri: res.uri, base64: res.base64 })
         }
     }
 
     pickCameraImage = async () => {
         let res = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [1, 1],
             quality: 1,
@@ -45,7 +44,8 @@ class AddPhoto extends Component {
 
         if (!res.cancelled) {
             this.setState({ image: { uri: res.uri } });
-            this.props.setPhoto({ uri: res.uri, base64: Buffer.from(res.base64, "base64") })
+            this.props.setPhoto({ uri: res.uri, base64: res.base64 })
+
         }
     }
 
