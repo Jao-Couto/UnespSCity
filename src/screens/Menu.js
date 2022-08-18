@@ -31,7 +31,6 @@ class Menu extends Component {
 
     getOptionsItem = ({ item: opt }) => {
         const spaceRight = opt.id % 3 !== 0 ? { marginRight: 5 } : {}
-        const logo = '../../assets/Icones/home_remocao_detritos.png'
         return (
             <ListItem
                 onPress={() => this.props.navigation.navigate('MenuItens', opt)}
@@ -40,7 +39,7 @@ class Menu extends Component {
                 friction={90} //
                 tension={100} // These props are passed to the parent component (here TouchableScale)
                 activeScale={0.95} >
-                <Avatar title={opt.name} source={require(logo)} avatarStyle={styles.logo} />
+                <Avatar title={opt.name} source={{ uri: opt.logo }} avatarStyle={styles.logo} />
                 <ListItem.Content style={styles.itemContent}>
                     <ListItem.Title style={styles.title}>{opt.name}</ListItem.Title>
                     <ListItem.Subtitle style={styles.subTitle}>{opt.subTitle}</ListItem.Subtitle>

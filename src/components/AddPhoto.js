@@ -12,10 +12,26 @@ import commonStyle from '../commonStyle'
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { compose } from 'redux';
+import { PERMISSIONS, check, request } from 'react-native-permissions'
 
 class AddPhoto extends Component {
     state = {
         image: { uri: null, base64: null }
+    };
+
+    componentDidMount = () => {
+        this.handleCameraPermission()
+    }
+
+    handleCameraPermission = async () => {
+        const res = await check(PERMISSIONS.IOS.CAMERA);
+
+        if (res === RESULTS.GRANTED) {
+            console.log("camera true");
+        } else if (res === RESULTS.DENIED) {
+            const res2 = await request(PERMISSIONS.IOS.CAMERA);
+            res2 === RESULTS.GRANTED ? console.log("camera true") : console.log("camera false");
+        }
     };
 
     pickLocalImage = async () => {

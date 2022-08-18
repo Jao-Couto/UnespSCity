@@ -18,10 +18,11 @@ export const login = user => {
     return dispatch => {
         cidadaoService.loginCidadao(user)
             .then(res => {
-                console.log("aqui", res.data.status == 200 && res.data.user.name);
-                if (res.data.status == 200 && res.data.user.name) {
+                console.log(res.data.data);
+                console.log("aqui", res.data.status == 200 && res.data.data.name);
+                if (res.data.status == 200 && res.data.data.name) {
                     delete user.password
-                    user = { ...res.data.user }
+                    user = { ...res.data.data }
                     dispatch(userLogged(user))
                 }
             })

@@ -14,7 +14,6 @@ import options from "../data/options";
 class Starred extends Component {
 
     getOptionsItem = ({ item: opt }) => {
-        console.log(opt);
         return (
             <ListItem
                 onPress={() => this.props.navigation.navigate(opt.type, opt)}
@@ -23,7 +22,7 @@ class Starred extends Component {
                 friction={90} //
                 tension={100} // These props are passed to the parent component (here TouchableScale)
                 activeScale={0.95}  >
-                <Avatar title={opt.name} source={opt.logo} avatarStyle={styles.logo} />
+                <Avatar title={opt.name} source={{ uri: opt.logo }} avatarStyle={styles.logo} />
                 <ListItem.Content>
                     <ListItem.Title style={styles.titleItens}>{opt.name}</ListItem.Title>
                 </ListItem.Content>

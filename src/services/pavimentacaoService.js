@@ -1,11 +1,11 @@
 import axios from "axios";
 import { ServerMYSQL } from "../config"
 
-class PracaService {
+class PavimentacaoService {
 
     async create(data) {
         return axios({
-            url: ServerMYSQL + "/api/praca",
+            url: ServerMYSQL + "/api/create_paviment",
             method: "POST",
             timeout: 10000,
             data: data,
@@ -22,5 +22,5 @@ class PracaService {
 
 }
 
-const pracaService = new PracaService()
-export default pracaService
+const pavimentacaoService = new PavimentacaoService()
+export default pavimentacaoService

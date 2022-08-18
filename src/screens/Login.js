@@ -46,11 +46,12 @@ class Login extends Component {
     render() {
         return (
             <SafeAreaView style={styles.containerLogo} >
-                <Image source={LogoUnesp} style={styles.image} />
+
 
                 <View style={styles.container}>
+                    <Image source={LogoUnesp} style={styles.image} />
                     <Text style={styles.title}>UnespSCity</Text>
-                    <KeyboardAvoidingView style={styles.formContainer} behavior={Platform.OS === 'ios' ? "padding" : "height"}>
+                    <View style={styles.formContainer} >
                         <Text style={styles.subTitle}>Informe seu login</Text>
                         <AuthInput
                             icon='at'
@@ -76,11 +77,12 @@ class Login extends Component {
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                    </KeyboardAvoidingView>
-                    <TouchableOpacity style={{ padding: 10 }}
-                        onPress={this.loginCidadao}>
-                        <Text style={styles.subTitle}>Ainda não possui conta?</Text>
-                    </TouchableOpacity>
+
+                        <TouchableOpacity style={{ padding: 10 }}
+                            onPress={this.loginCidadao}>
+                            <Text style={styles.subTitle}>Ainda não possui conta?</Text>
+                        </TouchableOpacity>
+                    </View>
                     <StatusBar style="auto" />
                 </View>
             </SafeAreaView>

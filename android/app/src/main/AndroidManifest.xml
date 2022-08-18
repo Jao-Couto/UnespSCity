@@ -28,7 +28,7 @@
     <meta-data android:name="expo.modules.updates.EXPO_SDK_VERSION" android:value="YOUR-APP-SDK-VERSION-HERE"/>
     <activity android:name=".MainActivity" android:label="@string/app_name" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize" android:theme="@style/Theme.App.SplashScreen">
     <meta-data
-     android:name="com.google.android.geo.AIzaSyBQ7EzutsOQVslr8TE5Zh2s5XKK50Q4Oo8"
+     android:name="com.google.android.geo.AIzaSyC7Zc1da8dP_fsm1bmg6Hz_NHPr0MbBiAc"
      android:value="Your Google maps API Key Here"/>
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>

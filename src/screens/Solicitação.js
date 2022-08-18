@@ -9,9 +9,9 @@ import Camera from "../components/AddPhoto";
 import Map from "../components/Map";
 import { addMarker } from "../storage/actions/marker";
 import { StackActions } from '@react-navigation/native';
-import pracaService from "../services/pracaService";
-import mime from 'mime-types';
 import saveImage from '../services/saveImage'
+import { showError, showSuccess } from "../common";
+import { typeService } from "../services/solicitacaoService";
 
 class Solicitacao extends Component {
     state = {
@@ -20,12 +20,14 @@ class Solicitacao extends Component {
         description: '',
         errorDescription: '',
 
+        referencePoint: '',
+        errorReferencePoint: '',
+
         cep: '',
         street: '',
         number: '',
         district: '',
         city: '',
-        uf: '',
 
         photo: {},
 
@@ -36,30 +38,7 @@ class Solicitacao extends Component {
     }
 
 
-    solicitPraca = () => {
-        const data = {
-            "name": "Praça Teste",
-            "street": "Rua kenji Sato Miura",
-            "number": 324,
-            "cityId": 1,
-            "latitude": "-22.1201",
-            "longitude": "-51.4265",
-            "description": "Essa é uma Praça",
-        }
-        console.log(mime.lookup(this.state.photo.uri));
-        saveImage(this.state.photo.uri)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
 
-        pracaService.addPracaSolicit(data)
-            .then(res => {
-
-                return true;
-            }).catch(err => {
-                console.log(err);
-                return false
-            })
-    }
 
     getReverseGeocode = async () => {
         const { latitude, longitude } = this.state.location;
@@ -75,7 +54,7 @@ class Solicitacao extends Component {
                 street: item.street,
                 number: item.streetNumber,
                 district: item.district,
-                city: item.subregion,
+                city: item.city,
                 uf: item.region,
             })
         }
@@ -90,6 +69,7 @@ class Solicitacao extends Component {
         }
 
         let { coords } = await Location.getCurrentPositionAsync({});
+        console.log(coords);
         if (coords) {
             const { latitude, longitude } = coords;
             this.setState({ location: { latitude, longitude } }, this.getReverseGeocode)
@@ -126,8 +106,38 @@ class Solicitacao extends Component {
             this.setState({ errorDescription: 'Descrição Obrigatória' })
             error = true
         }
-
-        this.solicitPraca()
+        // const data = {
+        //     userId: this.props.userId,
+        //     street: "Rua kenji Sato Miura",
+        //     streetNumber: 324,
+        //     referencePoint: this.state.referencePoint,
+        //     cityId: this.props.cityId,
+        //     latitude: "-22.1201",
+        //     longitude: "-51.4265",
+        //     description: this.state.description,
+        // }
+        const data = {
+            "userId": 2,
+            "cityId": 1,
+            "street": "Rua kenji Sato Miura",
+            "streetNumber": 324,
+            "referencePoint": "teste",
+            "latitude": "-22.1201",
+            "longitude": "-51.4265",
+            "description": "teste",
+            "images": [""]
+        }
+        typeService(this.props.route.params.name)
+            .create(data)
+            .then(res => {
+                console.log(res.data);
+                showSuccess('Solicitação feita com sucesso')
+                return true;
+            }).catch(err => {
+                console.log(err);
+                showError(err)
+                return false
+            })
         if (!error) {
             console.log('Sucesso enviar');
             this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name })
@@ -217,7 +227,17 @@ class Solicitacao extends Component {
                         error={this.state.errorDescription}
                     />
 
-                    <TouchableOpacity style={[styles.button]} onPress={this.solicitPraca}>
+                    <AuthInput
+                        icon='tree'
+                        placeholder='Ponto de Referência'
+                        value={this.state.referencePoint}
+                        style={[styles.input]}
+                        editable
+                        onChangeText={referencePoint => { this.setState({ referencePoint, errorReferencePoint: '' }) }}
+                        error={this.state.errorReferencePoint}
+                    />
+
+                    <TouchableOpacity style={[styles.button]} onPress={this.solicit}>
                         <Text style={styles.buttonText}>
                             Solicitar
                         </Text>
@@ -306,8 +326,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ user }) => {
     return {
+        userId: user.userId,
         email: user.email,
         name: user.name,
+        cityId: user.cityId
     }
 }
 

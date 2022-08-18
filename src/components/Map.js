@@ -86,7 +86,7 @@ class Map extends Component {
 
         return (
             <View style={styles.container}>
-                {this.props.showAutoComplte &&
+                {this.props.showAutoComplte && false &&
                     <AutoCompleteAdress
                         setRegion={(region) => this.setState({ region })}
                         setMarker={(marker) => this.setState({ marker })}
@@ -98,7 +98,7 @@ class Map extends Component {
                         region={this.state.region}
                         style={[styles.map, this.props.size]}
                         onPress={(e) => this.addMarker(e)}
-                        showsUserLocation
+                        showsUserLocation={true}
                         provider="google">
                         {Object.keys(this.state.marker).length !== 0 ?
                             <MapView.Marker coordinate={this.state.marker.latlng}>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     },
     map: {
         height: '100%',
-        width: '100%'
+        width: '100%',
     },
 })
 

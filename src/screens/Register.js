@@ -9,6 +9,8 @@ import LogoUnesp from '../../assets/UnespLogo.png'
 import ModalSelector from "react-native-modal-selector-searchable";
 import cidadeService from "../services/cidadeService";
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import cidadaoService from "../services/cidadaoService";
+import { CheckBox } from "react-native-elements";
 
 export default class Register extends Component {
     state = {
@@ -25,7 +27,8 @@ export default class Register extends Component {
         cityId: '',
         cityName: '',
         errorCityId: '#fff',
-        dataCidades: []
+        dataCidades: [],
+        panicButton: false
     }
 
     componentDidMount = () => {
@@ -60,7 +63,7 @@ export default class Register extends Component {
             this.setState({ errorConfirmPassword: 'Confirme a Senha!' })
             error = true
         }
-        if (this.state.confirmPassword != '' && this.state.password.length !== this.state.confirmPassword) {
+        if (this.state.confirmPassword == '' || this.state.password !== this.state.confirmPassword) {
             this.setState({ errorConfirmPassword: 'As senhas devem ser iguais!' })
             error = true
         }
@@ -68,8 +71,27 @@ export default class Register extends Component {
             this.setState({ errorCityId: '#fa9191' })
             error = true
         }
-        if (!error)
-            showSuccess('Usuário cadastrado')
+        if (!error) {
+            const data = {
+                name: this.state.name,
+                password: this.state.password,
+                email: this.state.email,
+                mobilePhone: this.state.phone,
+                cityId: this.state.cityId,
+                panicButton: this.state.panicButton
+            }
+            cidadaoService.cadastroCidadao(data)
+                .then(res => {
+                    console.log(res);
+                    showSuccess('Usuário cadastrado')
+                })
+                .catch(err => {
+                    console.log(err);
+                    showError(err)
+                })
+            this.props.navigation.pop();
+        }
+
     }
 
 
@@ -125,7 +147,6 @@ export default class Register extends Component {
                                 placeholder='Celular'
                                 value={this.state.phone}
                                 style={styles.input}
-                                secureTextEntry={true}
                                 onChangeText={phone => { this.setState({ phone, errorPhone: '' }) }}
                                 error={this.state.errorPhone}
                             />
@@ -164,6 +185,14 @@ export default class Register extends Component {
                                 </View>
                             </ModalSelector>
 
+                            <CheckBox
+                                center
+                                title="Botão de Pânico"
+                                checked={this.state.panicButton}
+                                onPress={() => this.setState({ panicButton: !this.state.panicButton })}
+                                containerStyle={{ marginVertical: 40 }}
+                            />
+
                             <TouchableOpacity onPress={this.signup}>
                                 <View style={[styles.button]}>
                                     <Text style={styles.buttonText}>
@@ -173,7 +202,7 @@ export default class Register extends Component {
                             </TouchableOpacity>
                         </View>
                         <TouchableOpacity style={{ padding: 10 }}
-                            onPress={() => { this.props.navigation.navigate('Login'); }}>
+                            onPress={() => { this.props.navigation.pop(); }}>
                             <Text style={styles.subTitle}>Já possui conta?</Text>
                         </TouchableOpacity>
                         <StatusBar style="auto" />
