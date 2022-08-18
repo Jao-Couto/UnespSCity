@@ -15,6 +15,7 @@ import mime from 'mime-types';
 import { API, graphqlOperation, Storage } from 'aws-amplify'
 import uuid from 'react-native-uuid';
 import { Buffer } from 'buffer'
+import saveImage from '../services/saveImage'
 
 class Solicitacao extends Component {
     state = {
@@ -37,6 +38,7 @@ class Solicitacao extends Component {
 
 
     }
+
 
     uploadImage = async () => {
         try {
@@ -74,7 +76,7 @@ class Solicitacao extends Component {
                 console.log(res.data);
                 const dataImg = { idObj: res.data._id, images: this.state.photo.base64 }
 
-                imageService.addImage(dataImg)
+                saveImage(dataImg)
                     .then(res => console.log(res))
                     .catch(err => console.log(err))
                 return true;
