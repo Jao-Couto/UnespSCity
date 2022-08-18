@@ -1,29 +1,32 @@
 const aws = require("aws-sdk");
 const { accessKeyId, secretAccessKey } = require("../config");
+import uuid from 'react-native-uuid';
+import { Buffer } from 'buffer' // import buffer
 
-aws.config.update({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
-    region: "sa-east-1",
-    ACL: "public-read"
-})
-
-const s3 = new aws.S3({ params: { Bucket: 'unesp-s-city' } });
 
 export default async function uploadToS3(file) {
-    const buffer = new Buffer.from(file, "base64");
-    const name = "teste3123"
+    aws.config.update({
+        accessKeyId: accessKeyId,
+        secretAccessKey: secretAccessKey,
+        region: "sa-east-1"
+    })
+    const s3 = new aws.S3({ params: { Bucket: 'unesp-s-city' } });
+    const photo = await fetch(file)
+    const photoBlob = await photo.blob();
+    const filename = uuid.v4() + "_foto.jpeg"
     const params = {
-        Key: name,
-        Body: buffer,
+        Key: filename,
+        Body: photoBlob,
         ContentEncoding: 'base64',
-        ContentType: 'image/jpeg'
+        ContentType: 'image/jpeg',
+        ACL: 'public-read'
     };
+
     return await new Promise(function (resolve, reject) {
         s3.putObject(params, function (err, data) {
             if (err) {
                 console.log(err);
-                console.log('Error uploading data: ', params);
+                console.log('Error uploading data: ', err);
             } else {
                 console.log('successfully uploaded the image!');
                 resolve(JSON.stringify(data))
