@@ -3,9 +3,23 @@ import { StyleSheet, FlatList, Text, TouchableOpacity, View, Image } from 'react
 import commonStyle from "../commonStyle";
 import { ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
-import animals from "../data/animals";
+import { typeService } from "../services/solicitacaoService";
 
 class ListAnimals extends Component {
+    state = {
+        animals: []
+    }
+    componentDidMount = () => {
+        typeService(this.props.route.params.name)
+            .getAll()
+            .then(res => {
+                console.log(res);
+                this.setState({ animal: res.data })
+            }).catch(err => {
+                console.log(err);
+                showError(err)
+            })
+    }
 
     getOptionsItem = ({ item: animal }) => {
         const breed = animal.breed == '' ? '' : animal.breed + " - "
@@ -32,7 +46,7 @@ class ListAnimals extends Component {
             <View style={styles.container}>
                 <FlatList
                     keyExtractor={animal => animal.id.toString()}
-                    data={animals}
+                    data={this.state.animals}
                     renderItem={this.getOptionsItem}
                     style={styles.list} />
             </View>

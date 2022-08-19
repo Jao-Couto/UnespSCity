@@ -83,7 +83,7 @@ class Login extends Component {
                             <Text style={styles.subTitle}>Ainda não possui conta?</Text>
                         </TouchableOpacity>
                     </View>
-                    <StatusBar style="auto" />
+
                 </View>
             </SafeAreaView>
 

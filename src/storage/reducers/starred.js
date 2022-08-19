@@ -1,7 +1,7 @@
 import {
     STARRED
 } from '../actions/actionType'
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
     starred: [],
 }
@@ -17,6 +17,9 @@ const reducer = (state = initialState, action) => {
             } else {
                 star.push(action.payload);
             }
+            const stringifiedArray = JSON.stringify(star)
+            AsyncStorage.removeItem('STARRED')
+            AsyncStorage.setItem('STARRED', stringifiedArray)
             return {
                 ...state,
                 starred: star

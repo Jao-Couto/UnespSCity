@@ -57,7 +57,6 @@ class Map extends Component {
                     longitudeDelta: LONGITUDE_DELTA,
                 },
             })
-            console.log(e.nativeEvent.coordinate);
             this.props.setLocation({ latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
         }
     }
@@ -83,10 +82,9 @@ class Map extends Component {
     }
 
     render() {
-
         return (
             <View style={styles.container}>
-                {this.props.showAutoComplte && false &&
+                {this.props.showAutoComplte &&
                     <AutoCompleteAdress
                         setRegion={(region) => this.setState({ region })}
                         setMarker={(marker) => this.setState({ marker })}
@@ -99,22 +97,28 @@ class Map extends Component {
                         style={[styles.map, this.props.size]}
                         onPress={(e) => this.addMarker(e)}
                         showsUserLocation={true}
+                        showsMyLocationButton={true}
                         provider="google">
                         {Object.keys(this.state.marker).length !== 0 ?
-                            <MapView.Marker coordinate={this.state.marker.latlng}>
+                            <MapView.Marker coordinate={this.state.marker.latlng} >
                             </MapView.Marker> : null
                         }
                         {this.props.marker &&
                             this.props.marker.map((mark, i) => {
-                                console.log(mark.latlng);
-                                return <MapView.Marker key={i} coordinate={mark.latlng} title={mark.name}>
+                                console.log("ola", mark);
+
+                                return <MapView.Marker key={i} coordinate={mark.latlng} title={mark.name} description={mark.date}>
                                 </MapView.Marker>
                             })
                         }
                         {this.routeTruck()}
                         {this.props.area &&
-                            <MapView.Circle center={{ latitude: this.state.region.latitude, longitude: this.state.region.longitude }} radius={900} strokeColor="#f00" fillColor={"rgba(150,0,0,0.1)"}>
-                            </MapView.Circle>}
+                            this.props.area.map((area, i) => {
+                                console.log("entrou aqui", area);
+                                return <MapView.Circle key={i} center={area.latlng} radius={200} strokeColor="rgba(150,0,0,0.1)" fillColor={"rgba(150,0,0,0.1)"}>
+                                </MapView.Circle>
+                            })
+                        }
 
                     </MapView>
                     :
@@ -129,11 +133,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
+        height: '100%',
         backgroundColor: commonStyle.colors.primary,
         alignItems: 'center'
     },
     map: {
-        height: '100%',
+        height: '105%',
         width: '100%',
     },
 })

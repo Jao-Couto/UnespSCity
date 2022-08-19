@@ -1,19 +1,38 @@
 import React, { Component } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Dimensions, ScrollView, Modal, Image } from 'react-native'
+import { Text, StyleSheet, Dimensions, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
-import { connect } from 'react-redux'
-import * as Location from 'expo-location';
-import ListAnimals from "../components/ListAnimals";
 import Map from "../components/Map";
+import { loadMarkers } from "../storage/actions/marker";
+import { connect } from "react-redux";
+import Icon from "react-native-vector-icons/Ionicons";
+import { StackActions } from "@react-navigation/native";
+
 
 
 class Radar extends Component {
+    state = {
+        markerRadar: []
+    }
+    componentDidMount = () => {
+        this.setState({ markerRadar: this.props.marker.filter(item => item.name == this.props.route.params.name) })
+    }
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
-                <Map area></Map>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.dispatch(StackActions.pop())}>
+                        <Icon name="arrow-back" size={30} color="black" ></Icon>
+                    </TouchableOpacity>
+                    <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                </View>
+                <Map area={this.state.markerRadar}></Map>
+                <TouchableOpacity style={styles.addAnimal}
+                    onPress={() => this.props.navigation.navigate('Solicitacao', { ...this.props.route.params })}
+                >
+                    <Text style={styles.addAnimalText}>+</Text>
+                </TouchableOpacity>
             </SafeAreaView>
 
         )
@@ -32,8 +51,7 @@ const styles = StyleSheet.create({
         fontFamily: commonStyle.fontFamily,
         fontSize: 30,
         color: commonStyle.colors.title,
-        textAlign: 'center',
-        marginBottom: 10
+
     },
     text: {
         fontFamily: commonStyle.fontFamily,
@@ -92,7 +110,7 @@ const styles = StyleSheet.create({
     addAnimal: {
         position: 'absolute',
         bottom: 20,
-        right: 10,
+        left: 10,
         width: 50,
         height: 50,
         borderRadius: 25,
@@ -107,4 +125,16 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Radar
+const mapStateToProps = ({ marker }) => {
+    return {
+        marker: marker.markers
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLoadMarkers: () => dispatch(loadMarkers())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Radar)

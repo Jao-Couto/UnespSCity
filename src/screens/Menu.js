@@ -1,10 +1,9 @@
-import { StatusBar } from "expo-status-bar";
+
 import React, { Component } from "react";
 import { StyleSheet, View, FlatList, Dimensions, Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import { Avatar, ListItem } from "react-native-elements";
-import options from "../data/options";
 import Header from "../components/Header";
 import TouchableScale from 'react-native-touchable-scale';
 import cidadeMenuService from "../services/cidadeMenuService";
@@ -29,8 +28,8 @@ class Menu extends Component {
     }
 
 
-    getOptionsItem = ({ item: opt }) => {
-        const spaceRight = opt.id % 3 !== 0 ? { marginRight: 5 } : {}
+    getOptionsItem = ({ item: opt, index }) => {
+        const spaceRight = (index + 1) % 3 !== 0 ? { marginRight: 5 } : {}
         return (
             <ListItem
                 onPress={() => this.props.navigation.navigate('MenuItens', opt)}
@@ -60,7 +59,6 @@ class Menu extends Component {
                         numColumns={3}
                         renderItem={this.getOptionsItem}
                         contentContainerStyle={styles.list} />
-                    <StatusBar style="auto" />
                 </View>
             </SafeAreaView>
 
@@ -93,10 +91,12 @@ const styles = StyleSheet.create({
         backgroundColor: commonStyle.colors.primary,
         shadowOffset: {
             width: 10,
-            height: -10
+            height: -1
         },
         elevation: 15,
-        borderRadius: 10
+        borderRadius: 10,
+        shadowColor: '#470000',
+        shadowOpacity: 0.2,
     },
     itemContent: {
         width: '100%',

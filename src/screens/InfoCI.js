@@ -1,4 +1,4 @@
-import { StatusBar } from "expo-status-bar";
+
 import React, { Component } from "react";
 import { StyleSheet, Text, Image, ScrollView } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,7 +12,6 @@ class InfoCI extends Component {
     render() {
         return (
             <SafeAreaView style={styles.containerLogo} >
-                <StatusBar style="auto" />
                 <Header {...this.props}></Header>
                 <Text style={styles.title}>Cidades Inteligentes</Text>
                 <ScrollView style={styles.container}>

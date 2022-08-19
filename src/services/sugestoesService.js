@@ -1,11 +1,11 @@
 import axios from "axios";
 import { ServerMYSQL } from "../config"
 
-class RadarDengueService {
+class SugestoesService {
 
     async create(data) {
         return axios({
-            url: ServerMYSQL + "/api/radar_dengue",
+            url: ServerMYSQL + "/api/sugestoes",
             method: "POST",
             timeout: 10000,
             data: data,
@@ -22,7 +22,7 @@ class RadarDengueService {
 
     async getAll() {
         return axios({
-            url: ServerMYSQL + "/api/radar_dengue",
+            url: ServerMYSQL + "/api/sugestoes",
             method: "GET",
             timeout: 10000,
             headers: {
@@ -36,7 +36,22 @@ class RadarDengueService {
         })
     }
 
+    async getMarkers() {
+        return axios({
+            url: ServerMYSQL + "/api/sugestoes/markers",
+            method: "GET",
+            timeout: 10000,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*',
+            }
+        }).then((res) => {
+            return Promise.resolve(res)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
+    }
 }
 
-const radarDengueService = new RadarDengueService()
-export default radarDengueService
+const sugestoesService = new SugestoesService()
+export default sugestoesService

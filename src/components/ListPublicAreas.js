@@ -3,11 +3,26 @@ import { StyleSheet, FlatList, Text, TouchableOpacity, View, Image } from 'react
 import commonStyle from "../commonStyle";
 import { ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
-import areas from "../data/areas";
+import { typeService } from "../services/solicitacaoService";
+import * as Location from 'expo-location';
 
 class ListPublicAreas extends Component {
+    state = {
+        areas: []
+    }
 
-    getOptionsItem = ({ item: area }) => {
+    componentDidMount = () => {
+        typeService(this.props.route.params.name)
+            .getAll()
+            .then(res => {
+                this.setState({ areas: res.data })
+            }).catch(err => {
+                console.log(err);
+                showError(err)
+            })
+    }
+
+    getOptionsItem = ({ item: area, index }) => {
         return (
             <ListItem
                 onPress={() => this.props.navigation.navigate('InfoAnimal', area)}
@@ -15,12 +30,13 @@ class ListPublicAreas extends Component {
                 Component={TouchableScale}
                 friction={90} //
                 tension={100} // These props are passed to the parent component (here TouchableScale)
-                activeScale={0.95}  >
+                activeScale={0.95}
+                key={index} >
                 <Image source={{ uri: area.image }} style={styles.logo} ></Image>
                 <ListItem.Content style={styles.content}>
-                    <ListItem.Title style={styles.titleItens}>{area.adotada ? "Adotada" : "Disponível"}</ListItem.Title>
-                    <ListItem.Subtitle style={styles.subtitleItens}>{area.rua + ", " + area.numero + ", " + area.bairro}</ListItem.Subtitle>
-                    <ListItem.Subtitle style={styles.subtitleItens}>{area.cidade + " - " + area.uf}</ListItem.Subtitle>
+                    <ListItem.Title style={styles.titleItens}>{area.isAdopted ? "Adotada" : "Disponível"}</ListItem.Title>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.street + ", " + area.streetNumber}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.cityId + " - " + area.uf}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.subtitleItens}>{area.description}</ListItem.Subtitle>
                 </ListItem.Content>
             </ListItem >
@@ -31,8 +47,7 @@ class ListPublicAreas extends Component {
         return (
             <View style={styles.container}>
                 <FlatList
-                    keyExtractor={area => area.id.toString()}
-                    data={areas}
+                    data={this.state.areas}
                     renderItem={this.getOptionsItem}
                     style={styles.list} />
             </View>

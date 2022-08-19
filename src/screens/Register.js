@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { StatusBar } from "expo-status-bar";
 import { Text, StyleSheet, View, TouchableOpacity, Image, ScrollView, TextInput } from 'react-native'
 import { showError, showSuccess } from "../common";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -205,7 +204,6 @@ export default class Register extends Component {
                             onPress={() => { this.props.navigation.pop(); }}>
                             <Text style={styles.subTitle}>Já possui conta?</Text>
                         </TouchableOpacity>
-                        <StatusBar style="auto" />
                     </View>
 
                 </SafeAreaView>

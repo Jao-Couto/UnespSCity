@@ -5,6 +5,8 @@ import { ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
 import areas from "../data/areas";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Icon from "react-native-vector-icons/Ionicons";
+import { StackActions } from "@react-navigation/native";
 
 class Dedetizacao extends Component {
 
@@ -31,7 +33,12 @@ class Dedetizacao extends Component {
     render() {
         return (
             <SafeAreaView style={styles.containerLogo} >
-                <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.dispatch(StackActions.pop())}>
+                        <Icon name="arrow-back" size={30} color="black" ></Icon>
+                    </TouchableOpacity>
+                    <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                </View>
                 <FlatList
                     keyExtractor={area => area.id.toString()}
                     data={areas}
@@ -62,8 +69,6 @@ const styles = StyleSheet.create({
         fontFamily: commonStyle.fontFamily,
         fontSize: 30,
         color: commonStyle.colors.title,
-        textAlign: 'center',
-        marginBottom: 10
     },
     list: {
         width: '100%'

@@ -10,25 +10,23 @@ import { connect } from 'react-redux'
 class InfoAnimal extends Component {
 
     render() {
-        const animal = this.props.route.params
-        const breed = animal.breed == '' ? '' : animal.breed + " - "
-        console.log(this.props);
+        const item = this.props.route.params
         return (
             <SafeAreaView style={styles.container}>
-                <Text style={styles.subTitle}>Informações do Animal</Text>
+                <Text style={styles.subTitle}>Informações Adicionais</Text>
                 <ScrollView style={{ width: '95%' }}>
-                    <Map size={{ height: 250 }} coords={animal.coords} markerName="Localização do animal"></Map>
+                    <Map size={{ height: 250 }} coords={{ latitude: item.latitude, longitude: item.longitude }} markerName="Localização do animal"></Map>
                     <ListItem
                         containerStyle={styles.item} >
-                        <Image source={{ uri: animal.image }} style={styles.logo} ></Image>
+                        <Image source={{ uri: item.image }} style={styles.logo} ></Image>
                         <ListItem.Content style={styles.content}>
-                            <ListItem.Title style={styles.titleItens}>{animal.name}</ListItem.Title>
-                            <ListItem.Subtitle style={styles.subtitleItens}>{breed + animal.gender}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={styles.subtitleItens}>{animal.celphone}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={styles.subtitleItens}>{animal.description}</ListItem.Subtitle>
+                            <ListItem.Title style={styles.titleItens}>{item.isAdopted ? "Adotada" : "Disponível"}</ListItem.Title>
+                            <ListItem.Subtitle style={styles.subtitleItens}>{item.street + ", " + item.streetNumber}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.subtitleItens}>{item.cityId + " - " + item.uf}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.subtitleItens}>{item.description}</ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem >
-                    {this.props.email == animal.email ?
+                    {this.props.email == item.email ?
                         <TouchableOpacity style={[styles.button]} onPress={() => console.log("adotado")}>
                             <Text style={styles.buttonText}>
                                 Adotado

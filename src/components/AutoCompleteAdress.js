@@ -17,7 +17,13 @@ class AutoCompleteAdress extends Component {
             <GooglePlacesAutocomplete
                 styles={style}
                 placeholder='Endereço'
+                textInputProps={{
+                    placeholderTextColor: '#aaa',
+                    returnKeyType: "search"
+                }}
+
                 onPress={(data, details = null) => {
+                    console.log("ola");
                     console.log(details.geometry.location);
                     this.props.setRegion({
                         latitude: details.geometry.location.lat,

@@ -1,7 +1,6 @@
 const aws = require("aws-sdk");
 const { accessKeyId, secretAccessKey } = require("../config");
 import uuid from 'react-native-uuid';
-import { Buffer } from 'buffer' // import buffer
 
 
 export default async function uploadToS3(file) {
@@ -15,9 +14,8 @@ export default async function uploadToS3(file) {
     const photoBlob = await photo.blob();
     const filename = uuid.v4() + "_foto.jpeg"
     const params = {
-        Key: filename,
+        Key: 'images/' + filename,
         Body: photoBlob,
-        ContentEncoding: 'base64',
         ContentType: 'image/jpeg',
         ACL: 'public-read'
     };
@@ -29,10 +27,8 @@ export default async function uploadToS3(file) {
                 console.log('Error uploading data: ', err);
             } else {
                 console.log('successfully uploaded the image!');
-                resolve(JSON.stringify(data))
-
+                resolve({ ...data, filename })
             }
         });
     });
 }
-

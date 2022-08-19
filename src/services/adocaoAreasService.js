@@ -20,6 +20,21 @@ class AdocaoAreasService {
         })
     }
 
+    async getAll() {
+        return axios({
+            url: ServerMYSQL + "/api/public_area_adoption",
+            method: "GET",
+            timeout: 10000,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*',
+            }
+        }).then((res) => {
+            return Promise.resolve(res)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
+    }
 }
 
 const adocaoAreasService = new AdocaoAreasService()

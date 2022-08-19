@@ -1,105 +1,29 @@
 import React, { Component } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Dimensions, ScrollView, Modal, Image } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import { connect } from 'react-redux'
-import * as Location from 'expo-location';
+
 import ListPublicAreas from "../components/ListPublicAreas";
+import Icon from "react-native-vector-icons/Ionicons";
 
 
 class PublicAreas extends Component {
-    state = {
-        location: {},
-        errorLocation: '',
-        description: '',
-        errorDescription: '',
 
-        cep: '',
-        street: '',
-        number: '',
-        district: '',
-        city: '',
-        uf: '',
-
-        photo: {},
-
-        modalMap: false,
-        modalCamera: false
-
-
-    }
-
-
-    getReverseGeocode = async () => {
-        const { latitude, longitude } = this.state.location;
-        let response = await Location.reverseGeocodeAsync({
-            latitude,
-            longitude
-        });
-
-        for (let item of response) {
-            this.setState({
-                cep: item.postalCode,
-                street: item.street,
-                number: item.streetNumber,
-                district: item.district,
-                city: item.subregion,
-                uf: item.region,
-            })
-        }
-
-    }
-
-    getCurrentLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-            this.setState({ errorLocation: 'Permission to access location was denied' })
-            return;
-        }
-
-        let { coords } = await Location.getCurrentPositionAsync({});
-        if (coords) {
-            const { latitude, longitude } = coords;
-            this.setState({ location: { latitude, longitude } }, this.getReverseGeocode)
-        }
-        this.toggleModalMap()
-    }
-
-    toggleModalMap = () => {
-        this.setState({ modalMap: !this.state.modalMap, errorLocation: '' })
-        if (Object.keys(this.state.location).length > 0)
-            this.getReverseGeocode()
-    }
-
-    toggleModalCamera = () => {
-        this.setState({ modalCamera: !this.state.modalCamera })
-    }
-
-    solicit = () => {
-        const { description, cep } = this.state
-        let error = false
-        if (cep == '') {
-            this.setState({ errorLocation: 'Localização Obrigatória' })
-            error = true
-        }
-        if (description == '') {
-            this.setState({ errorDescription: 'Descrição Obrigatória' })
-            error = true
-        }
-
-        if (!error)
-            console.log('Sucesso enviar');
-        else
-            console.log('Erro enviar');
-    }
 
     render() {
+        console.log(this.props.params);
         return (
             <SafeAreaView style={styles.container}>
-                <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.dispatch(StackActions.pop())}>
+                        <Icon name="arrow-back" size={30} color="black" ></Icon>
+                    </TouchableOpacity>
+                    <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                </View>
                 <ListPublicAreas {...this.props}></ListPublicAreas>
                 <TouchableOpacity style={styles.addAnimal}
-                    onPress={() => this.props.navigation.navigate('SolicitAnimals')}
+                    onPress={() => this.props.navigation.navigate('Solicitacao', { ...this.props.route.params })}
                 >
                     <Text style={styles.addAnimalText}>+</Text>
                 </TouchableOpacity>
@@ -122,8 +46,6 @@ const styles = StyleSheet.create({
         fontFamily: commonStyle.fontFamily,
         fontSize: 30,
         color: commonStyle.colors.title,
-        textAlign: 'center',
-        marginBottom: 10
     },
     text: {
         fontFamily: commonStyle.fontFamily,

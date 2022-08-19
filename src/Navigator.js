@@ -1,5 +1,5 @@
 import React from "react";
-
+import { StatusBar } from "expo-status-bar";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import { createStackNavigator } from '@react-navigation/stack';
@@ -32,7 +32,6 @@ import SolicitAnimals from "./components/SolicitAnimals";
 import InfoAnimal from "./components/InfoAnimal";
 import Radar from "./screens/Radar";
 import Dedetizacao from "./screens/Dedetizacao";
-import Amplify from 'aws-amplify';
 
 
 function App(props) {
@@ -149,6 +148,7 @@ function App(props) {
 
     return (
         <NavigationContainer>
+            <StatusBar style="inverted" />
             <MyStack />
         </NavigationContainer>
     );

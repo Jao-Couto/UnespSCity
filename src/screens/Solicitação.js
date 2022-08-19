@@ -12,6 +12,9 @@ import { StackActions } from '@react-navigation/native';
 import saveImage from '../services/saveImage'
 import { showError, showSuccess } from "../common";
 import { typeService } from "../services/solicitacaoService";
+import uploadToFirebase from "../services/saveImage";
+import uploadToS3 from "../services/saveImage";
+import Icon from "react-native-vector-icons/Ionicons";
 
 class Solicitacao extends Component {
     state = {
@@ -95,7 +98,7 @@ class Solicitacao extends Component {
         this.setState({ modalCamera: !this.state.modalCamera, photo: {} })
     }
 
-    solicit = () => {
+    solicit = async () => {
         const { description, cep } = this.state
         let error = false
         if (cep == '') {
@@ -106,52 +109,55 @@ class Solicitacao extends Component {
             this.setState({ errorDescription: 'Descrição Obrigatória' })
             error = true
         }
-        // const data = {
-        //     userId: this.props.userId,
-        //     street: "Rua kenji Sato Miura",
-        //     streetNumber: 324,
-        //     referencePoint: this.state.referencePoint,
-        //     cityId: this.props.cityId,
-        //     latitude: "-22.1201",
-        //     longitude: "-51.4265",
-        //     description: this.state.description,
-        // }
-        const data = {
-            "userId": 2,
-            "cityId": 1,
-            "street": "Rua kenji Sato Miura",
-            "streetNumber": 324,
-            "referencePoint": "teste",
-            "latitude": "-22.1201",
-            "longitude": "-51.4265",
-            "description": "teste",
-            "images": [""]
-        }
-        typeService(this.props.route.params.name)
-            .create(data)
-            .then(res => {
-                console.log(res.data);
-                showSuccess('Solicitação feita com sucesso')
-                return true;
-            }).catch(err => {
-                console.log(err);
-                showError(err)
-                return false
-            })
+
         if (!error) {
-            console.log('Sucesso enviar');
-            this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name })
-            this.props.navigation.dispatch(StackActions.popToTop());
-            this.props.navigation.navigate('Mapa')
+            let localImage = ""
+            // if (this.state.photo != {})
+            //     await uploadToS3(this.state.photo.uri)
+            //         .then(res => {
+            //             localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/" + res.filename
+
+            //         })
+            const data = {
+                userId: this.props.userId,
+                street: this.state.street,
+                streetNumber: parseInt(this.state.number, 10),
+                referencePoint: this.state.referencePoint.trim() == "" ? "Não Informado" : this.state.referencePoint,
+                cityId: this.props.cityId,
+                latitude: this.state.location.latitude,
+                longitude: this.state.location.longitude,
+                description: this.state.description,
+                images: localImage
+            }
+            typeService(this.props.route.params.name)
+                .create(data)
+                .then(res => {
+                    showSuccess('Solicitação feita com sucesso')
+
+
+                    if (this.props.route.params.type == "Solicitacao")
+                        this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name })
+                    this.props.navigation.dispatch(StackActions.popToTop());
+                    this.props.navigation.navigate('Mapa')
+                    return true;
+                }).catch(err => {
+                    console.log(err);
+                    showError(err)
+                    return false
+                })
+
         }
-        else
-            console.log('Erro enviar');
     }
 
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.dispatch(StackActions.pop())}>
+                        <Icon name="arrow-back" size={30} color="black" ></Icon>
+                    </TouchableOpacity>
+                    <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                </View>
                 <ScrollView style={{ width: '95%' }}>
 
                     <TouchableOpacity style={[styles.button]} onPress={this.toggleModalMap}>
@@ -174,7 +180,7 @@ class Solicitacao extends Component {
                     </View>}
 
                     <Modal visible={this.state.modalMap}>
-                        <Map setLocation={(location) => this.setState({ location })} enableAddMarker></Map>
+                        <Map setLocation={(location) => this.setState({ location })} enableAddMarker showAutoComplte></Map>
                         <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.getCurrentLocation}>
                             <Text style={styles.buttonText}>
                                 Usar localização atual
@@ -261,8 +267,6 @@ const styles = StyleSheet.create({
         fontFamily: commonStyle.fontFamily,
         fontSize: 30,
         color: commonStyle.colors.title,
-        textAlign: 'center',
-        marginBottom: 10
     },
     text: {
         fontFamily: commonStyle.fontFamily,

@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,9 +8,21 @@ import TouchableScale from 'react-native-touchable-scale';
 import Icon from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
 import { addStar } from "../storage/actions/starred";
-import options from "../data/options";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class Starred extends Component {
+    componentDidMount = async () => {
+        try {
+            const res = await AsyncStorage.getItem("STARRED");
+            const restoredArray = JSON.parse(res);
+            console.log("res", restoredArray);
+            restoredArray.map(item => this.props.addStarred(item))
+        } catch (error) {
+            console.log(error);
+        }
+
+
+    }
 
     getOptionsItem = ({ item: opt }) => {
         return (
@@ -21,7 +32,8 @@ class Starred extends Component {
                 Component={TouchableScale}
                 friction={90} //
                 tension={100} // These props are passed to the parent component (here TouchableScale)
-                activeScale={0.95}  >
+                activeScale={0.95}
+                key={opt.id}>
                 <Avatar title={opt.name} source={{ uri: opt.logo }} avatarStyle={styles.logo} />
                 <ListItem.Content>
                     <ListItem.Title style={styles.titleItens}>{opt.name}</ListItem.Title>
@@ -36,16 +48,13 @@ class Starred extends Component {
     render() {
         return (
             <SafeAreaView style={styles.containerLogo} >
-                <StatusBar style="auto" />
                 <Header {...this.props}></Header>
                 <Text style={styles.title}>Favoritos</Text>
                 <View style={styles.container}>
                     <FlatList
-                        keyExtractor={iten => { iten.id.toString() }}
                         data={this.props.starred}
                         renderItem={this.getOptionsItem}
                         style={styles.list} />
-
                 </View>
             </SafeAreaView >
 

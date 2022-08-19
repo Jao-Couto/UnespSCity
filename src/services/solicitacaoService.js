@@ -20,6 +20,17 @@ import adocaoAreasService from "./adocaoAreasService";
 import locaisUteisService from "./locaisUteisService";
 import telefonesUteisService from "./telefonesUteisService";
 import tumulosService from "./tumulosService";
+import parquesService from "./parquesService";
+import ruriasService from "./ruraisService";
+import ruraisService from "./ruraisService";
+import ambientesService from "./ambientesService";
+import programacaoService from "./programacaoService";
+import gestoresService from "./gestoresService";
+import propostasService from "./propostasService";
+import anticorrupcaoService from "./anticorrupcaoService";
+import noticiasService from "./noticiasService";
+import sugestoesService from "./sugestoesService";
+import ofertasService from "./ofertasService";
 
 
 const typeService = (type) => {
@@ -35,11 +46,11 @@ const typeService = (type) => {
         case "Vias Públicas":
             return viasPublicasService
         case "Pontes em Estradas Rurais":
-            return
+            return ruraisService
         case "Parques":
-            return pracaService
+            return parquesService
         case "Praças":
-            return
+            return pracaService
         case "Resíduos Sólidos":
             return
         case "Animais Mortos":
@@ -49,7 +60,7 @@ const typeService = (type) => {
         case "Limpeza de Piscina":
             return limpezaPiscinaService
         case "Restaurantes e Ambientes":
-            return
+            return ambientesService
         case "Radar da Dengue":
             return radarDengueService
         case "Foco de Escorpião":
@@ -87,7 +98,7 @@ const typeService = (type) => {
         case "Telefones Úteis":
             return telefonesUteisService
         case "Programação Cultural":
-            return
+            return programacaoService
         case "Túmulos de falecidos":
             return tumulosService
         case "Feiras Livres":
@@ -111,15 +122,15 @@ const typeService = (type) => {
         case "Idosos":
             return
         case "Conheça os Gestores":
-            return
+            return gestoresService
         case "Consultar Propostas":
-            return
+            return propostasService
         case "Central Anticorrupção":
-            return
+            return anticorrupcaoService
         case "Notícias":
-            return
+            return noticiasService
         case "Sugestões":
-            return
+            return sugestoesService
         case "Rotas dos guardas":
             return
         case "Trânsito":
@@ -129,7 +140,7 @@ const typeService = (type) => {
         case "Cartão fidelidade":
             return
         case "Ofertas Locais":
-            return
+            return ofertasService
 
 
     }

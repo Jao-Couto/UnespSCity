@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -67,7 +66,6 @@ class MenuItens extends Component {
                     data={this.state.itens}
                     renderItem={this.getOptionsItem}
                     style={styles.list} />
-                <StatusBar style="auto" />
             </SafeAreaView>
 
         )

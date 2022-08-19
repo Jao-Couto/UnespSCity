@@ -10,7 +10,7 @@ export default props => {
                 <View style={styles.icon}>
                     <Icon name={props.icon} size={20} color='#fff' />
                 </View>
-                <TextInput {...props} style={[styles.input]} />
+                <TextInput {...props} placeholderTextColor="#aaa" style={[styles.input]} />
             </View>
             <Text style={styles.error}>{props.error}</Text>
 
@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
         fontFamily: commonStyle.fontFamily,
         marginLeft: 5,
         width: '85%',
-        fontSize: 20
+        fontSize: 20,
+        color: 'black'
     },
     error: {
         fontFamily: commonStyle.fontFamily,

@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -124,7 +123,6 @@ class Profile extends Component {
                             <Text style={styles.subTitle}> Nascimento: {this.props.phone}</Text>
 
                         </View>}
-                    <StatusBar style="auto" />
                 </View>
             </SafeAreaView >
 

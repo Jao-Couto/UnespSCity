@@ -1,18 +1,20 @@
-import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 import commonStyle from "../commonStyle";
 import Header from "../components/Header";
 import Map from "../components/Map";
+import { loadMarkers } from "../storage/actions/marker";
 
 class MapMenu extends Component {
+    componentDidMount = () => {
+        this.props.onLoadMarkers()
+    }
 
     render() {
         return (
             <SafeAreaView style={styles.containerLogo} >
-                <StatusBar style="auto" />
                 <Header {...this.props}></Header>
                 <Map marker={this.props.marker} showAutoComplte></Map>
             </SafeAreaView >
@@ -26,25 +28,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: commonStyle.colors.primary,
-    },
-    container: {
-        flex: 1,
-        width: '100%',
-        backgroundColor: commonStyle.colors.primary,
-        alignItems: 'center'
-    },
-    title: {
-        fontFamily: commonStyle.fontFamily,
-        color: '#000',
-        fontWeight: 'bold',
-        fontSize: 30,
-        width: '100%',
-        textAlign: 'center',
-        marginBottom: 10
-    },
-    map: {
-        height: '100%',
-        width: '100%'
+        height: '100%'
     },
 })
 
@@ -55,4 +39,10 @@ const mapStateToProps = ({ marker }) => {
     }
 }
 
-export default connect(mapStateToProps)(MapMenu)
+const mapDispatchToProps = dispatch => {
+    return {
+        onLoadMarkers: () => dispatch(loadMarkers())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapMenu)
