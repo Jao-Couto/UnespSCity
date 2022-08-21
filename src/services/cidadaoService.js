@@ -33,6 +33,21 @@ class CidadaoService {
         })
     }
 
+    async updateCidadao(data) {
+        return axios({
+            url: ServerMYSQL + "/api/updateOne_cidadao",
+            method: "PUT",
+            timeout: 10000,
+            data: data,
+        }).then((res) => {
+            return Promise.resolve(res)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
+    }
+
+
+
 }
 
 const cidadaoService = new CidadaoService()

@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ user }) => {
     return {
-        email: user.email,
-        name: user.name,
+        ...user
+
     }
 }
 

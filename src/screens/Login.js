@@ -11,7 +11,7 @@ import { login } from '../storage/actions/user'
 
 class Login extends Component {
     state = {
-        email: 'jose@gmail.com',
+        email: 'maria@gmail.com',
         errorEmail: '',
         password: 'senha123',
         errorPassword: '',
@@ -60,6 +60,7 @@ class Login extends Component {
                             style={styles.input}
                             onChangeText={email => { this.setState({ email, errorEmail: '' }) }}
                             error={this.state.errorEmail}
+                            autoCapitalize="none"
                         />
                         <AuthInput
                             icon='lock'

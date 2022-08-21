@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: 50,
-        backgroundColor: '#eee',
         borderRadius: 2,
         flexDirection: 'row',
         alignItems: 'center',
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
     },
     icon: {
         color: '#333',
-        flex: 1,
+        width: "15%",
         height: '100%',
         backgroundColor: commonStyle.colors.secundary,
         justifyContent: 'center',

@@ -10,7 +10,6 @@ import cidadeService from "../services/cidadeService";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import cidadaoService from "../services/cidadaoService";
 import { CheckBox } from "react-native-elements";
-import { TextInputMask } from 'react-native-masked-text'
 import InputMasked from "../components/InputMasked";
 
 export default class Register extends Component {

@@ -6,44 +6,59 @@ import { ListItem } from "react-native-elements";
 import Map from "./Map";
 import { connect } from 'react-redux'
 import { typeService } from "../services/solicitacaoService";
-
+import 'intl';
+import "intl/locale-data/jsonp/pt";
 
 class CheckService extends Component {
+    state = {
+        ...this.props.route.params
+    }
+
     finalizar = () => {
-        typeService(this.props.route.params.nameService)
-            .updateResolved(this.props.route.params._id)
-            .then(res => { console.log(res.data); res.data.modifiedCount > 0 ? this.props.route.params.isResolved == true : console.log("erro"); })
+
+        typeService(this.state.nameService)
+            .updateResolved(this.state._id)
+            .then(res => {
+                this.setState({ isResolved: true })
+                this.props.route.params.updateAreas()
+            })
             .catch(err => { console.log(err); })
     }
 
     render() {
-        const item = this.props.route.params
         return (
             <SafeAreaView style={styles.container}>
                 <Text style={styles.subTitle}>Informações Adicionais</Text>
                 <ScrollView style={{ width: '95%' }}>
-                    <Map size={{ height: 250 }} coords={{ latitude: item.latitude, longitude: item.longitude }} markerName="Localização"></Map>
+                    <Map size={{ height: 250 }} coords={{ latitude: this.state.latitude, longitude: this.state.longitude }} markerName="Localização"></Map>
                     <ListItem
                         containerStyle={styles.item} >
-                        {item.images[0] != "" &&
-                            <Image source={{ uri: item.images[0] }} style={styles.logo} resizeMode="contain"></Image>
+                        {this.state.images[0] != "" &&
+                            <Image source={{ uri: this.state.images[0] }} style={styles.logo} resizeMode="contain"></Image>
                         }
                         <ListItem.Content style={styles.content}>
-                            <ListItem.Title style={styles.titleItens}>{item.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
+                            <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
 
-                            <ListItem.Subtitle style={[styles.subtitleItens, { marginTop: 10 }]}>{item.street + ", " + item.streetNumber}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={styles.subtitleItens}>{item.referencePoint + ", " + item.cityId}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={[styles.subtitleItens, { marginTop: 10 }]}>{this.state.street + ", " + this.state.streetNumber}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.subtitleItens}>Ponto de Referência: {this.state.referencePoint}</ListItem.Subtitle>
 
                             <ListItem.Title style={[styles.titleItens, { marginTop: 10 }]}>Descrição</ListItem.Title>
-                            <ListItem.Subtitle style={styles.subtitleItens}>{item.description}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.subtitleItens}>{this.state.description}</ListItem.Subtitle>
 
                             <ListItem.Title style={[styles.titleItens, { marginTop: 10 }]}>Solicitado</ListItem.Title>
-                            <ListItem.Subtitle style={styles.subtitleItens}>Em:{item.date}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={styles.subtitleItens}>Por: {item.userId}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.subtitleItens}>Em: {new Intl.DateTimeFormat('pt-BR', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit'
+                            }).format(new Date((this.state.date)))}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.subtitleItens}>Por: {this.state.userId}</ListItem.Subtitle>
 
                         </ListItem.Content>
                     </ListItem >
-                    {!item.isAdmin && !item.isResolved ?
+                    {this.state.isAdmin && !this.state.isResolved ?
                         <TouchableOpacity style={[styles.button]} onPress={this.finalizar}>
                             <Text style={styles.buttonText}>
                                 Finalizar

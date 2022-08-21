@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Dimensions, ScrollView, Modal, Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
@@ -13,6 +13,9 @@ import { showError, showSuccess } from "../common";
 import { typeService } from "../services/solicitacaoService";
 import uploadToS3 from "../services/saveImage";
 import Icon from "react-native-vector-icons/Ionicons";
+import 'intl';
+import "intl/locale-data/jsonp/pt";
+import InputMasked from "../components/InputMasked";
 
 class Solicitacao extends Component {
     state = {
@@ -30,6 +33,9 @@ class Solicitacao extends Component {
         guardian: 'pessoa',
         errorGuardian: '',
 
+        price: "",
+        errorPrice: '',
+
         cep: '19067-090',
         street: 'Rua Kenji Sato Miura',
         number: '324',
@@ -43,8 +49,6 @@ class Solicitacao extends Component {
 
 
     }
-
-
 
 
     getReverseGeocode = async () => {
@@ -112,14 +116,18 @@ class Solicitacao extends Component {
             error = true
         }
 
-        if (!error) {
-            let localImage = ""
-            // if (this.state.photo != {})
-            //     await uploadToS3(this.state.photo.uri)
-            //         .then(res => {
-            //             localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/" + res.filename
+        this.setState({ price: parseFloat(this.state.price.substring(2).replace(",", ".")) });
 
-            //         })
+        if (!error) {
+
+            let localImage = ""
+            if (this.state.photo != {})
+                await uploadToS3(this.state.photo.uri)
+                    .then(res => {
+                        localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/" + res.filename
+
+                    })
+            console.log(localImage);
             let data = {
                 userId: this.props.userId,
                 street: this.state.street,
@@ -256,6 +264,25 @@ class Solicitacao extends Component {
                         error={this.state.errorName}
                     />
 
+                    {this.props.route.params.name == "Ofertas Locais" &&
+                        <InputMasked
+                            icon='money'
+                            placeholder="Preço"
+                            placeholderTextColor={"#aaa"}
+                            type={'money'}
+                            options={{
+                                precision: 2,
+                                separator: ',',
+                                delimiter: '.',
+                                unit: 'R$',
+                                suffixUnit: ''
+                            }}
+                            value={this.state.price}
+                            onChangeText={(price) => { this.setState({ price, errorPrice: '' }) }}
+                            error={this.state.errorPrice}
+                        />
+                    }
+
                     <AuthInput
                         icon='tree'
                         placeholder='Ponto de Referência'
@@ -266,7 +293,7 @@ class Solicitacao extends Component {
                         error={this.state.errorReferencePoint}
                     />
 
-                    {this.props.route.params.type == "PublicAreas" &&
+                    {this.props.route.params.name == "Adoção de Áreas públicas" &&
                         <AuthInput
                             icon='user'
                             placeholder='Guardião'

@@ -99,6 +99,7 @@ function App(props) {
                 <Stack.Screen name="RadarLeishmaniose" component={Radar} />
                 <Stack.Screen name="RadarEscorpiao" component={Radar} />
                 <Stack.Screen name="Dedetizacao" component={Dedetizacao} />
+                <Stack.Screen name="CheckService" component={checkService} />
             </Stack.Navigator>
         )
     }

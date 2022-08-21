@@ -31,6 +31,17 @@ import anticorrupcaoService from "./anticorrupcaoService";
 import noticiasService from "./noticiasService";
 import sugestoesService from "./sugestoesService";
 import ofertasService from "./ofertasService";
+import animaisMortosService from "./animaisMortosService";
+import remocaoLixoService from "./remocaoLixoService";
+import feiraService from "./feiraService";
+import descarteSolidarioService from "./descarteSolidarioService";
+import arvoresService from "./arvoresService";
+import diaristasService from "./diaristasService";
+import violenciaDomesticaService from "./violenciaDomesticaService";
+import familiasCarentesService from "./familiasCarentesService";
+import roubosService from "./roubosService";
+import animaisSelvagensService from "./animaisSelvagensService";
+import moradoresRuaService from "./moradoresRuaService";
 
 
 const typeService = (type) => {
@@ -52,9 +63,9 @@ const typeService = (type) => {
         case "Praças":
             return pracaService
         case "Resíduos Sólidos":
-            return
+            return remocaoLixoService
         case "Animais Mortos":
-            return
+            return animaisMortosService
         case "Limpeza de Terreno":
             return limpezaTerrenoService
         case "Limpeza de Piscina":
@@ -88,11 +99,11 @@ const typeService = (type) => {
         case "Coleta de Lixo / Coleta seletiva":
             return
         case "Animais Silvestres":
-            return
+            return animaisSelvagensService
         case "Danos à Fauna":
             return
         case "Cadastro de árvores":
-            return
+            return arvoresService
         case "Locais úteis ao cidadão":
             return locaisUteisService
         case "Telefones Úteis":
@@ -102,21 +113,21 @@ const typeService = (type) => {
         case "Túmulos de falecidos":
             return tumulosService
         case "Feiras Livres":
-            return
+            return feiraService
         case "Cadastro de Diaristas":
-            return
+            return diaristasService
         case "Moradores de Rua":
-            return
+            return moradoresRuaService
         case "Cadastro":
-            return
+            return familiasCarentesService
         case "Descarte Solidário":
-            return
+            return descarteSolidarioService
         case "Denúncia de violência doméstica":
-            return
+            return violenciaDomesticaService
         case "Ocorrência de Acidentes":
             return
         case "Ocorrência de Furtos/Roubos":
-            return
+            return roubosService
         case "Mulheres":
             return
         case "Idosos":

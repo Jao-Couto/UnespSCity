@@ -1,5 +1,7 @@
 import pracaService from "../../services/pracaService"
 import { MARKERS } from "./actionType"
+import 'intl';
+import "intl/locale-data/jsonp/pt";
 
 export const addMarker = marker => {
     return {

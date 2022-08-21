@@ -1,11 +1,11 @@
 import axios from "axios";
 import { ServerMYSQL } from "../config"
 
-class IluminacaoService {
+class MoradoresRuaService {
 
     async create(data) {
         return axios({
-            url: ServerMYSQL + "/api/create_street_lighting",
+            url: ServerMYSQL + "/api/semTeto",
             method: "POST",
             timeout: 10000,
             data: data,
@@ -20,9 +20,10 @@ class IluminacaoService {
         })
     }
 
+
     async getAll() {
         return axios({
-            url: ServerMYSQL + "/api/get_all_street_lighting",
+            url: ServerMYSQL + "/api/semTeto",
             method: "GET",
             timeout: 10000,
             headers: {
@@ -38,7 +39,7 @@ class IluminacaoService {
 
     async getMarkers() {
         return axios({
-            url: ServerMYSQL + "/api/street_lighting/markers",
+            url: ServerMYSQL + "/api/semTeto/markers",
             method: "GET",
             timeout: 10000,
             headers: {
@@ -54,7 +55,7 @@ class IluminacaoService {
 
     async updateResolved(data) {
         return axios({
-            url: ServerMYSQL + "/api/street_lighting/update_resolved/" + data,
+            url: ServerMYSQL + "/api/semTeto/update_resolved/" + data,
             method: "PUT",
             timeout: 10000,
             headers: {
@@ -70,5 +71,5 @@ class IluminacaoService {
 
 }
 
-const iluminacaoService = new IluminacaoService()
-export default iluminacaoService
+const moradoresRuaService = new MoradoresRuaService()
+export default moradoresRuaService

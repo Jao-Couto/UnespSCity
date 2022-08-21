@@ -41,7 +41,6 @@ class About extends Component {
             error = true
         }
         if (!error) {
-            this.setState({ find: false })
             this.props.route.params = { name: this.state.type }
             this.setState({ find: true })
         }
