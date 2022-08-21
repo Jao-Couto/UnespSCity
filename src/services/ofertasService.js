@@ -51,6 +51,22 @@ class OfertasService {
             return Promise.reject(err)
         })
     }
+
+    async updateResolved(data) {
+        return axios({
+            url: ServerMYSQL + "/api/ofertas/update_resolved/" + data,
+            method: "PUT",
+            timeout: 10000,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*',
+            }
+        }).then((res) => {
+            return Promise.resolve(res)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
+    }
 }
 
 const ofertasService = new OfertasService()

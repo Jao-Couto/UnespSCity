@@ -20,7 +20,7 @@ export const loadMarkers = () => {
                         hour: '2-digit',
                         minute: '2-digit',
                         second: '2-digit'
-                    }).format(new Date(item.date))
+                    }).format(new Date((item.date)))
                     return { latlng: { latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) }, name: "Solicitação para Praça", date: date }
 
                 });
@@ -28,7 +28,6 @@ export const loadMarkers = () => {
                 dispatch(addMarker(data))
             })
             .catch(err => {
-                console.log("ola");
                 console.log(err);
             })
     }

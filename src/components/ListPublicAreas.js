@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet, FlatList, Text, TouchableOpacity, View, Image } from 'react-native'
+import { StyleSheet, FlatList, View, Image } from 'react-native'
 import commonStyle from "../commonStyle";
 import { ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
 import { typeService } from "../services/solicitacaoService";
-import * as Location from 'expo-location';
 
 class ListPublicAreas extends Component {
     state = {
@@ -23,21 +22,27 @@ class ListPublicAreas extends Component {
     }
 
     getOptionsItem = ({ item: area, index }) => {
+        console.log(this.props.nameService);
         return (
             <ListItem
-                onPress={() => this.props.navigation.navigate('InfoAnimal', area)}
+                onPress={() => this.props.navigation.navigate('CheckService', { nameService: this.props.nameService, ...area })}
                 containerStyle={styles.item}
                 Component={TouchableScale}
                 friction={90} //
                 tension={100} // These props are passed to the parent component (here TouchableScale)
                 activeScale={0.95}
                 key={index} >
-                <Image source={{ uri: area.image }} style={styles.logo} ></Image>
+                {area.images[0] != "" &&
+                    <Image source={{ uri: area.images[0] }} style={styles.logo} ></Image>
+                }
                 <ListItem.Content style={styles.content}>
-                    <ListItem.Title style={styles.titleItens}>{area.isAdopted ? "Adotada" : "Disponível"}</ListItem.Title>
+                    <ListItem.Title style={styles.titleItens}>{area.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
                     <ListItem.Subtitle style={styles.subtitleItens}>{area.street + ", " + area.streetNumber}</ListItem.Subtitle>
-                    <ListItem.Subtitle style={styles.subtitleItens}>{area.cityId + " - " + area.uf}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.referencePoint + ", " + area.cityId}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.subtitleItens}>{area.description}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.date}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.userId}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.guardian}</ListItem.Subtitle>
                 </ListItem.Content>
             </ListItem >
         )

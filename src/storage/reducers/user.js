@@ -9,7 +9,8 @@ const initialState = {
     email: null,
     mobilePhone: null,
     cityId: null,
-    token: null
+    token: null,
+    isAdmin: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -23,7 +24,7 @@ const reducer = (state = initialState, action) => {
                 mobilePhone: action.payload.mobilePhone,
                 cityId: action.payload.cityId,
                 token: action.payload.token,
-
+                isAdmin: action.payload.isAdmin
             }
         case USER_LOGGED_OUT:
             return {

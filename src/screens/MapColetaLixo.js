@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import Map from "../components/Map";
+import Icon from "react-native-vector-icons/Ionicons";
+import { StackActions } from "@react-navigation/native";
 
 class MapMenu extends Component {
 
@@ -17,7 +19,12 @@ class MapMenu extends Component {
         }
         return (
             <SafeAreaView style={styles.containerLogo} >
-                <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                    <TouchableOpacity onPress={() => this.props.navigation.dispatch(StackActions.pop())}>
+                        <Icon name="arrow-back" size={30} color="black" ></Icon>
+                    </TouchableOpacity>
+                    <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
+                </View>
                 <Map origin={origin} destination={destination} ></Map>
             </SafeAreaView >
 
@@ -50,8 +57,12 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%'
     },
-    GooglePlacesAutocomplete: {
-    }
+    subTitle: {
+        fontFamily: commonStyle.fontFamily,
+        fontSize: 30,
+        color: commonStyle.colors.title,
+
+    },
 })
 
 

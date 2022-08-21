@@ -32,6 +32,7 @@ import SolicitAnimals from "./components/SolicitAnimals";
 import InfoAnimal from "./components/InfoAnimal";
 import Radar from "./screens/Radar";
 import Dedetizacao from "./screens/Dedetizacao";
+import checkService from "./components/checkService";
 
 
 function App(props) {
@@ -141,9 +142,21 @@ function App(props) {
                 <Drawer.Screen name="Menu" component={MyTabs} />
                 <Drawer.Screen name="Perfil" component={Profile} />
                 <Drawer.Screen name="Cidades Inteligentes" component={InfoCI} />
-                <Drawer.Screen name="Sobre" component={About} />
+                <Drawer.Screen name="Solicitações" component={ServicosADM} />
             </Drawer.Navigator>
         );
+    }
+
+    function ServicosADM() {
+        return (
+            <Stack.Navigator initialRouteName="About" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="About" component={About} />
+                <Stack.Screen name="LostAnimals" component={LostAnimals} />
+                <Stack.Screen name="SolicitAnimals" component={SolicitAnimals} />
+                <Stack.Screen name="PublicAreas" component={PublicAreas} />
+                <Stack.Screen name="CheckService" component={checkService} />
+            </Stack.Navigator>
+        )
     }
 
     return (

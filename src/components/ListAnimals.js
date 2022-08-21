@@ -10,6 +10,7 @@ class ListAnimals extends Component {
         animals: []
     }
     componentDidMount = () => {
+        console.log("ola", this.props.route.params.name);
         typeService(this.props.route.params.name)
             .getAll()
             .then(res => {

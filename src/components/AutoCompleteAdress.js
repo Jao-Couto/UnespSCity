@@ -23,7 +23,6 @@ class AutoCompleteAdress extends Component {
                 }}
 
                 onPress={(data, details = null) => {
-                    console.log("ola");
                     console.log(details.geometry.location);
                     this.props.setRegion({
                         latitude: details.geometry.location.lat,

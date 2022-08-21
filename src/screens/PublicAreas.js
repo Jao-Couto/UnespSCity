@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 
 import ListPublicAreas from "../components/ListPublicAreas";
 import Icon from "react-native-vector-icons/Ionicons";
+import { StackActions } from "@react-navigation/native";
 
 
 class PublicAreas extends Component {

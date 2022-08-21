@@ -10,6 +10,8 @@ import cidadeService from "../services/cidadeService";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import cidadaoService from "../services/cidadaoService";
 import { CheckBox } from "react-native-elements";
+import { TextInputMask } from 'react-native-masked-text'
+import InputMasked from "../components/InputMasked";
 
 export default class Register extends Component {
     state = {
@@ -122,6 +124,7 @@ export default class Register extends Component {
                                 onChangeText={email => { this.setState({ email, errorEmail: '' }) }}
                                 error={this.state.errorEmail}
                             />
+
                             <AuthInput
                                 icon='lock'
                                 placeholder='Senha'
@@ -131,6 +134,7 @@ export default class Register extends Component {
                                 onChangeText={password => { this.setState({ password, errorPassword: '' }) }}
                                 error={this.state.errorPassword}
                             />
+
                             <AuthInput
                                 icon='asterisk'
                                 placeholder='Confirmar Senha'
@@ -141,22 +145,30 @@ export default class Register extends Component {
                                 error={this.state.errorConfirmPassword}
                             />
 
-                            <AuthInput
+                            <InputMasked
                                 icon='mobile'
-                                placeholder='Celular'
+                                placeholder="Celular"
+                                placeholderTextColor={"#aaa"}
+                                type={'cel-phone'}
+                                options={{
+                                    maskType: 'BRL',
+                                    withDDD: true,
+                                    dddMask: '(99) '
+                                }}
                                 value={this.state.phone}
-                                style={styles.input}
                                 onChangeText={phone => { this.setState({ phone, errorPhone: '' }) }}
                                 error={this.state.errorPhone}
                             />
+
                             <ModalSelector
                                 data={this.state.dataCidades}
                                 initValue="Selecione uma Cidade"
-                                supportedOrientations={['landscape']}
+                                supportedOrientations={['portrait']}
                                 searchText="Procurar"
                                 cancelText="Cancelar"
-                                optionContainerStyle={{ backgroundColor: 'white' }}
-                                optionTextStyle={{ fontSize: 20 }}
+                                optionContainerStyle={{ backgroundColor: 'white', marginVertical: 40 }}
+                                optionTextStyle={{ fontSize: 20, color: 'black' }}
+                                initValueTextStyle={{ fontSize: 20, color: 'black' }}
                                 style={{ backgroundColor: this.state.errorCityId }}
                                 onChange={(option) => { this.setState({ cityName: option.label, cityId: option.key, errorCityId: '#fff' }) }}>
                                 <View style={{
@@ -178,6 +190,7 @@ export default class Register extends Component {
                                             backgroundColor: this.state.errorCityId,
                                             color: '#000'
                                         }}
+                                        placeholderTextColor="#aaa"
                                         editable={false}
                                         placeholder="Selecione uma Cidade"
                                         value={this.state.cityName} />

@@ -1,49 +1,34 @@
 import React, { Component } from "react";
-import { StyleSheet, FlatList, Text, TouchableOpacity, View, Image } from 'react-native'
-import commonStyle from "../commonStyle";
-import { ListItem } from "react-native-elements";
-import TouchableScale from 'react-native-touchable-scale';
-import areas from "../data/areas";
+import { Text, StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
+import commonStyle from "../commonStyle";
+import { connect } from 'react-redux'
+
+import ListPublicAreas from "../components/ListPublicAreas";
 import Icon from "react-native-vector-icons/Ionicons";
 import { StackActions } from "@react-navigation/native";
 
+
 class Dedetizacao extends Component {
 
-    getOptionsItem = ({ item: area }) => {
-        return (
-            <ListItem
-                onPress={() => this.props.navigation.navigate('InfoAnimal', area)}
-                containerStyle={styles.item}
-                Component={TouchableScale}
-                friction={90} //
-                tension={100} // These props are passed to the parent component (here TouchableScale)
-                activeScale={0.95}  >
-                <Image source={{ uri: area.image }} style={styles.logo} ></Image>
-                <ListItem.Content style={styles.content}>
-                    <ListItem.Title style={styles.titleItens}>{area.adotada ? "Adotada" : "Disponível"}</ListItem.Title>
-                    <ListItem.Subtitle style={styles.subtitleItens}>{area.rua + ", " + area.numero + ", " + area.bairro}</ListItem.Subtitle>
-                    <ListItem.Subtitle style={styles.subtitleItens}>{area.cidade + " - " + area.uf}</ListItem.Subtitle>
-                    <ListItem.Subtitle style={styles.subtitleItens}>{area.description}</ListItem.Subtitle>
-                </ListItem.Content>
-            </ListItem >
-        )
-    }
 
     render() {
+        console.log(this.props.params);
         return (
-            <SafeAreaView style={styles.containerLogo} >
+            <SafeAreaView style={styles.container}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                     <TouchableOpacity onPress={() => this.props.navigation.dispatch(StackActions.pop())}>
                         <Icon name="arrow-back" size={30} color="black" ></Icon>
                     </TouchableOpacity>
                     <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
                 </View>
-                <FlatList
-                    keyExtractor={area => area.id.toString()}
-                    data={areas}
-                    renderItem={this.getOptionsItem}
-                    style={styles.list} />
+                <ListPublicAreas {...this.props}></ListPublicAreas>
+                <TouchableOpacity style={styles.addAnimal}
+                    onPress={() => this.props.navigation.navigate('Solicitacao', { ...this.props.route.params })}
+                >
+                    <Text style={styles.addAnimalText}>+</Text>
+                </TouchableOpacity>
+
             </SafeAreaView>
 
         )
@@ -58,49 +43,91 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: commonStyle.colors.primary
     },
-    containerLogo: {
-        flex: 1,
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: commonStyle.colors.primary
-    },
     subTitle: {
         fontFamily: commonStyle.fontFamily,
         fontSize: 30,
         color: commonStyle.colors.title,
     },
-    list: {
-        width: '100%'
-    },
-    item: {
-        flexDirection: 'column',
-        borderBottomWidth: 1,
-        borderColor: '#aaa',
-        backgroundColor: commonStyle.colors.itens,
+    text: {
+        fontFamily: commonStyle.fontFamily,
+        fontSize: 20,
+        color: commonStyle.colors.title,
+        textAlign: 'center',
         marginBottom: 10
     },
-    logo: {
-        resizeMode: 'contain',
+    formContainer: {
+        backgroundColor: commonStyle.colors.primary,
         width: '100%',
-        height: 200
+        margin: 0,
+        paddingBottom: 5
     },
-    titleItens: {
+    input: {
+        marginTop: 10,
+        backgroundColor: 'white'
+    },
+    button: {
+        backgroundColor: commonStyle.colors.secundary,
+        marginTop: 10,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonText: {
         fontFamily: commonStyle.fontFamily,
-        color: '#000',
+        color: '#fff',
         fontSize: 20
     },
-    subtitleItens: {
-        fontFamily: commonStyle.fontFamily,
-        color: '#555',
-        fontSize: 15
-    },
-    content: {
+    imageContainer: {
         width: '100%',
+        height: Dimensions.get('window').height / 2,
+        backgroundColor: '#eee',
+        marginTop: 10,
+        resizeMode: 'contain',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10
+    },
+    image: {
+        width: '100%',
+        height: Dimensions.get('window').height / 2,
+        resizeMode: 'contain',
+        backgroundColor: commonStyle.colors.primary
+    },
+    textError: {
+        width: '100%',
+        textAlign: 'center',
+        fontFamily: commonStyle.fontFamily,
+        color: '#f00',
+        fontSize: 15,
+        marginTop: 5,
+        padding: 2,
+        borderRadius: 5
+    },
+    addAnimal: {
+        position: 'absolute',
+        bottom: 20,
+        right: 10,
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: 'green',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    addAnimalText: {
+        fontFamily: commonStyle.fontFamily,
+        fontSize: 30,
+        color: 'white'
     }
 })
 
-export default Dedetizacao
+
+const mapStateToProps = ({ user }) => {
+    return {
+        email: user.email,
+        name: user.name,
+    }
+}
+
+
+// export default Profile
+export default connect(mapStateToProps)(Dedetizacao)

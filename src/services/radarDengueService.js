@@ -19,11 +19,42 @@ class RadarDengueService {
             return Promise.reject(err)
         })
     }
-
     async getAll() {
         return axios({
             url: ServerMYSQL + "/api/radar_dengue",
             method: "GET",
+            timeout: 10000,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*',
+            }
+        }).then((res) => {
+            return Promise.resolve(res)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
+    }
+
+    async getMarkers() {
+        return axios({
+            url: ServerMYSQL + "/api/radar_dengue/markers",
+            method: "GET",
+            timeout: 10000,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*',
+            }
+        }).then((res) => {
+            return Promise.resolve(res)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
+    }
+
+    async updateResolved(data) {
+        return axios({
+            url: ServerMYSQL + "/api/radar_dengue/update_resolved/" + data,
+            method: "PUT",
             timeout: 10000,
             headers: {
                 'Content-Type': 'application/json',

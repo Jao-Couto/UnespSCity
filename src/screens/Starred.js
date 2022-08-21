@@ -15,8 +15,8 @@ class Starred extends Component {
         try {
             const res = await AsyncStorage.getItem("STARRED");
             const restoredArray = JSON.parse(res);
-            console.log("res", restoredArray);
-            restoredArray.map(item => this.props.addStarred(item))
+            if (restoredArray != null)
+                restoredArray.map(item => this.props.addStarred(item))
         } catch (error) {
             console.log(error);
         }

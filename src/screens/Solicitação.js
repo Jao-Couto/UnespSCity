@@ -9,28 +9,32 @@ import Camera from "../components/AddPhoto";
 import Map from "../components/Map";
 import { addMarker } from "../storage/actions/marker";
 import { StackActions } from '@react-navigation/native';
-import saveImage from '../services/saveImage'
 import { showError, showSuccess } from "../common";
 import { typeService } from "../services/solicitacaoService";
-import uploadToFirebase from "../services/saveImage";
 import uploadToS3 from "../services/saveImage";
 import Icon from "react-native-vector-icons/Ionicons";
 
 class Solicitacao extends Component {
     state = {
-        location: {},
+        location: { latitude: -22.12008697952109, longitude: -51.42650122331375 },
         errorLocation: '',
-        description: '',
+        description: 'Testes',
         errorDescription: '',
 
-        referencePoint: '',
+        name: 'NOme',
+        errorName: '',
+
+        referencePoint: 'Perto',
         errorReferencePoint: '',
 
-        cep: '',
-        street: '',
-        number: '',
-        district: '',
-        city: '',
+        guardian: 'pessoa',
+        errorGuardian: '',
+
+        cep: '19067-090',
+        street: 'Rua Kenji Sato Miura',
+        number: '324',
+        district: 'Parque Cedral',
+        city: 'Presidente Prudente',
 
         photo: {},
 
@@ -50,7 +54,6 @@ class Solicitacao extends Component {
             longitude
         });
 
-        console.log(response);
         for (let item of response) {
             this.setState({
                 cep: item.postalCode,
@@ -72,7 +75,6 @@ class Solicitacao extends Component {
         }
 
         let { coords } = await Location.getCurrentPositionAsync({});
-        console.log(coords);
         if (coords) {
             const { latitude, longitude } = coords;
             this.setState({ location: { latitude, longitude } }, this.getReverseGeocode)
@@ -118,7 +120,7 @@ class Solicitacao extends Component {
             //             localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/" + res.filename
 
             //         })
-            const data = {
+            let data = {
                 userId: this.props.userId,
                 street: this.state.street,
                 streetNumber: parseInt(this.state.number, 10),
@@ -127,16 +129,27 @@ class Solicitacao extends Component {
                 latitude: this.state.location.latitude,
                 longitude: this.state.location.longitude,
                 description: this.state.description,
-                images: localImage
+                images: localImage,
+                name: this.state.name
             }
+            if (this.props.route.params.type == "PublicAreas") {
+                data.guardian = this.state.guardian
+            }
+            console.log(this.props.route.params.name);
             typeService(this.props.route.params.name)
                 .create(data)
                 .then(res => {
                     showSuccess('Solicitação feita com sucesso')
 
-
-                    if (this.props.route.params.type == "Solicitacao")
-                        this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name })
+                    const date = new Intl.DateTimeFormat('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }).format(new Date())
+                    this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name, date: date })
                     this.props.navigation.dispatch(StackActions.popToTop());
                     this.props.navigation.navigate('Mapa')
                     return true;
@@ -234,6 +247,16 @@ class Solicitacao extends Component {
                     />
 
                     <AuthInput
+                        icon='home'
+                        placeholder='Nome'
+                        value={this.state.name}
+                        style={[styles.input]}
+                        editable
+                        onChangeText={name => { this.setState({ name, errorName: '' }) }}
+                        error={this.state.errorName}
+                    />
+
+                    <AuthInput
                         icon='tree'
                         placeholder='Ponto de Referência'
                         value={this.state.referencePoint}
@@ -242,6 +265,17 @@ class Solicitacao extends Component {
                         onChangeText={referencePoint => { this.setState({ referencePoint, errorReferencePoint: '' }) }}
                         error={this.state.errorReferencePoint}
                     />
+
+                    {this.props.route.params.type == "PublicAreas" &&
+                        <AuthInput
+                            icon='user'
+                            placeholder='Guardião'
+                            value={this.state.guardian}
+                            style={[styles.input]}
+                            editable
+                            onChangeText={guardian => { this.setState({ guardian, errorGuardian: '' }) }}
+                            error={this.state.errorGuardian}
+                        />}
 
                     <TouchableOpacity style={[styles.button]} onPress={this.solicit}>
                         <Text style={styles.buttonText}>
@@ -267,6 +301,7 @@ const styles = StyleSheet.create({
         fontFamily: commonStyle.fontFamily,
         fontSize: 30,
         color: commonStyle.colors.title,
+        flexWrap: "wrap"
     },
     text: {
         fontFamily: commonStyle.fontFamily,

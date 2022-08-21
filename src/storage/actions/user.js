@@ -27,7 +27,6 @@ export const login = user => {
                 }
             })
             .catch(err => {
-                console.log("ola");
                 console.log(err);
             })
     }

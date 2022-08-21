@@ -105,17 +105,15 @@ class Map extends Component {
                         }
                         {this.props.marker &&
                             this.props.marker.map((mark, i) => {
-                                console.log("ola", mark);
-
                                 return <MapView.Marker key={i} coordinate={mark.latlng} title={mark.name} description={mark.date}>
                                 </MapView.Marker>
                             })
                         }
                         {this.routeTruck()}
                         {this.props.area &&
-                            this.props.area.map((area, i) => {
-                                console.log("entrou aqui", area);
-                                return <MapView.Circle key={i} center={area.latlng} radius={200} strokeColor="rgba(150,0,0,0.1)" fillColor={"rgba(150,0,0,0.1)"}>
+                            this.props.area.map((a, i) => {
+                                console.log("aqui", a)
+                                return <MapView.Circle key={i} center={a.latlng} radius={200} strokeColor="rgba(150,0,0,0.1)" fillColor={"rgba(150,0,0,0.1)"}>
                                 </MapView.Circle>
                             })
                         }

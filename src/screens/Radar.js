@@ -7,6 +7,7 @@ import { loadMarkers } from "../storage/actions/marker";
 import { connect } from "react-redux";
 import Icon from "react-native-vector-icons/Ionicons";
 import { StackActions } from "@react-navigation/native";
+import { typeService } from "../services/solicitacaoService";
 
 
 
@@ -15,7 +16,21 @@ class Radar extends Component {
         markerRadar: []
     }
     componentDidMount = () => {
-        this.setState({ markerRadar: this.props.marker.filter(item => item.name == this.props.route.params.name) })
+        typeService(this.props.route.params.name)
+            .getAll()
+            .then(res => {
+                console.log(res.data);
+                const data = res.data.map(item => {
+
+                    return { latlng: { latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) } }
+
+                });
+                this.setState({ markerRadar: data })
+            }).catch(err => {
+                console.log(err);
+                showError(err)
+            })
+
     }
 
     render() {
