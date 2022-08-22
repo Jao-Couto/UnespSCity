@@ -45,6 +45,7 @@ import moradoresRuaService from "./moradoresRuaService";
 
 
 const typeService = (type) => {
+    console.log(type);
     switch (type) {
         case "Iluminação pública":
             return iluminacaoService

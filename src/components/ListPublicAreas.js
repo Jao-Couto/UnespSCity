@@ -93,14 +93,46 @@ class ListPublicAreas extends Component {
         )
     }
 
+    getOptionsAllItem = ({ item: area, index }) => {
+
+        return (
+            <ListItem
+                onPress={() => this.props.navigation.navigate('CheckService', { nameService: this.props.nameService, ...area, updateAreas: this.updateAreas })}
+                containerStyle={styles.item}
+                Component={TouchableScale}
+                friction={90} //
+                tension={100} // These props are passed to the parent component (here TouchableScale)
+                activeScale={0.95}
+                key={index} >
+                {area.images[0] != "" &&
+                    <Image source={{ uri: area.images[0] }} style={styles.logo} ></Image>
+                }
+                <ListItem.Content style={styles.content}>
+                    <ListItem.Title style={styles.titleItens}>{area.name}</ListItem.Title>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.street + ", " + area.streetNumber}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>Ponto de referência: {area.referencePoint}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.description}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.date}</ListItem.Subtitle>
+                    <ListItem.Subtitle style={styles.subtitleItens}>{area.userId}</ListItem.Subtitle>
+                </ListItem.Content>
+            </ListItem >
+        )
+    }
+
     render() {
+        let render
+        if (this.state.type == "Ofertas Locais")
+            render = this.getOfertas
+        else if (this.state.type == "Ofertas Locais")
+            render = this.getOptionsItem
+        else render = this.getOptionsAllItem
         return (
             <View style={styles.container}>
                 {this.state.ready && this.state.areas.length > 0 &&
                     <FlatList
                         keyExtractor={option => option._id.toString()}
                         data={this.state.areas}
-                        renderItem={this.state.type == "Ofertas Locais" ? this.getOfertas : this.getOptionsItem}
+                        renderItem={render}
                         style={styles.list} />
                 }
                 {this.state.areas.length == 0 &&

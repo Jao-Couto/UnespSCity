@@ -33,6 +33,9 @@ class Solicitacao extends Component {
         guardian: 'pessoa',
         errorGuardian: '',
 
+        cargo: 'prefeito',
+        errorCargo: '',
+
         price: "",
         errorPrice: '',
 
@@ -105,7 +108,7 @@ class Solicitacao extends Component {
     }
 
     solicit = async () => {
-        const { description, cep } = this.state
+        const { description, cep, price } = this.state
         let error = false
         if (cep == '') {
             this.setState({ errorLocation: 'Localização Obrigatória' })
@@ -116,18 +119,19 @@ class Solicitacao extends Component {
             error = true
         }
 
-        this.setState({ price: parseFloat(this.state.price.substring(2).replace(",", ".")) });
+        if (price != "")
+            this.setState({ price: parseFloat(this.state.price.substring(2).replace(",", ".")) });
 
         if (!error) {
-
+            console.log("ola");
             let localImage = ""
+            /*
             if (this.state.photo != {})
                 await uploadToS3(this.state.photo.uri)
                     .then(res => {
                         localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/" + res.filename
 
-                    })
-            console.log(localImage);
+                    })*/
             let data = {
                 userId: this.props.userId,
                 street: this.state.street,
@@ -140,13 +144,20 @@ class Solicitacao extends Component {
                 images: localImage,
                 name: this.state.name
             }
-            if (this.props.route.params.type == "PublicAreas") {
+            if (this.props.route.params.name == "Adoção de Áreas públicas") {
                 data.guardian = this.state.guardian
             }
-            console.log(this.props.route.params.name);
+            if (this.props.route.params.name == "Conheça os Gestores") {
+                data.description += " - " + this.state.cargo
+            }
+            if (this.props.route.params.name == "Ofertas Locais") {
+                data.preco = this.state.price
+            }
+            console.log(data);
             typeService(this.props.route.params.name)
                 .create(data)
                 .then(res => {
+                    console.log(res.data);
                     showSuccess('Solicitação feita com sucesso')
 
                     const date = new Intl.DateTimeFormat('pt-BR', {
@@ -280,6 +291,18 @@ class Solicitacao extends Component {
                             value={this.state.price}
                             onChangeText={(price) => { this.setState({ price, errorPrice: '' }) }}
                             error={this.state.errorPrice}
+                        />
+                    }
+
+                    {this.props.route.params.name == "Conheça os Gestores" &&
+                        <AuthInput
+                            icon='tag'
+                            placeholder='Cargo'
+                            value={this.state.cargo}
+                            style={[styles.input]}
+                            editable
+                            onChangeText={cargo => { this.setState({ cargo, errorCargo: '' }) }}
+                            error={this.state.errorCargo}
                         />
                     }
 

@@ -26,6 +26,12 @@ class CheckService extends Component {
     }
 
     render() {
+        let render
+        if (this.state.type == "Adoção de Áreas públicas")
+            render = this.getOfertas
+        else if (this.state.type == "Ofertas Locais")
+            render = this.getOptionsItem
+        else render = this.getOptionsAllItem
         return (
             <SafeAreaView style={styles.container}>
                 <Text style={styles.subTitle}>Informações Adicionais</Text>
@@ -37,8 +43,10 @@ class CheckService extends Component {
                             <Image source={{ uri: this.state.images[0] }} style={styles.logo} resizeMode="contain"></Image>
                         }
                         <ListItem.Content style={styles.content}>
-                            <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
-
+                            {this.state.type == "Adoção de Áreas públicas" &&
+                                <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title> ||
+                                <ListItem.Title style={styles.titleItens}>{this.state.name}</ListItem.Title>
+                            }
                             <ListItem.Subtitle style={[styles.subtitleItens, { marginTop: 10 }]}>{this.state.street + ", " + this.state.streetNumber}</ListItem.Subtitle>
                             <ListItem.Subtitle style={styles.subtitleItens}>Ponto de Referência: {this.state.referencePoint}</ListItem.Subtitle>
 
@@ -46,14 +54,16 @@ class CheckService extends Component {
                             <ListItem.Subtitle style={styles.subtitleItens}>{this.state.description}</ListItem.Subtitle>
 
                             <ListItem.Title style={[styles.titleItens, { marginTop: 10 }]}>Solicitado</ListItem.Title>
-                            <ListItem.Subtitle style={styles.subtitleItens}>Em: {new Intl.DateTimeFormat('pt-BR', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                second: '2-digit'
-                            }).format(new Date((this.state.date)))}</ListItem.Subtitle>
+                            {this.state.date &&
+                                <ListItem.Subtitle style={styles.subtitleItens}>Em: {new Intl.DateTimeFormat('pt-BR', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: '2-digit'
+                                }).format(new Date((this.state.date)))}</ListItem.Subtitle>
+                            }
                             <ListItem.Subtitle style={styles.subtitleItens}>Por: {this.state.userId}</ListItem.Subtitle>
 
                         </ListItem.Content>
