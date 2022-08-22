@@ -46,6 +46,7 @@ class Solicitacao extends Component {
         city: 'Presidente Prudente',
 
         photo: {},
+        errorPhoto: "",
 
         modalMap: false,
         modalCamera: false
@@ -119,19 +120,25 @@ class Solicitacao extends Component {
             error = true
         }
 
+        if (this.state.photo != {}) {
+            this.setState({ errorPhoto: 'Foto Obrigatória' })
+            error = true
+        }
+
+
         if (price != "")
             this.setState({ price: parseFloat(this.state.price.substring(2).replace(",", ".")) });
 
         if (!error) {
             console.log("ola");
             let localImage = ""
-            /*
+
             if (this.state.photo != {})
                 await uploadToS3(this.state.photo.uri)
                     .then(res => {
                         localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/" + res.filename
 
-                    })*/
+                    })
             let data = {
                 userId: this.props.userId,
                 street: this.state.street,
@@ -209,7 +216,9 @@ class Solicitacao extends Component {
                     </TouchableOpacity>
                     {this.state.photo.uri && <View style={styles.imageContainer}>
                         <Image source={{ uri: this.state.photo.uri }} style={styles.image} />
-                    </View>}
+                    </View> ||
+                        <Text style={styles.textError}>{this.state.errorPhoto}</Text>
+                    }
 
                     <Modal visible={this.state.modalMap}>
                         <Map setLocation={(location) => this.setState({ location })} enableAddMarker showAutoComplte></Map>

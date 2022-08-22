@@ -1,4 +1,4 @@
-import { StatusBar } from "expo-status-bar";
+
 import React, { Component } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image, Platform, KeyboardAvoidingView } from 'react-native'
 import { showError, showSuccess } from "../common";
@@ -11,7 +11,7 @@ import { login } from '../storage/actions/user'
 
 class Login extends Component {
     state = {
-        email: 'maria@gmail.com',
+        email: 'jose@gmail.com',
         errorEmail: '',
         password: 'senha123',
         errorPassword: '',

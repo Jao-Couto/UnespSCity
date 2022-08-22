@@ -44,7 +44,10 @@ class CheckService extends Component {
                         }
                         <ListItem.Content style={styles.content}>
                             {this.state.type == "Adoção de Áreas públicas" &&
-                                <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title> ||
+                                <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Adotada" : "Dispon[ivel"}</ListItem.Title>
+                            }
+                            <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
+                            {this.state.name &&
                                 <ListItem.Title style={styles.titleItens}>{this.state.name}</ListItem.Title>
                             }
                             <ListItem.Subtitle style={[styles.subtitleItens, { marginTop: 10 }]}>{this.state.street + ", " + this.state.streetNumber}</ListItem.Subtitle>

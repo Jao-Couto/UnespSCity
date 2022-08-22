@@ -91,7 +91,7 @@ class About extends Component {
                     <TouchableOpacity onPress={this.listSolicits} style={[styles.button]}>
                         <Text style={styles.buttonText}>Procurar</Text>
                     </TouchableOpacity>
-                    {this.state.find && <ListPublicAreas {...this.props} nameService={this.state.type}></ListPublicAreas>}
+                    {this.state.find && <ListPublicAreas {...this.props} type={this.state.type} nameService={this.state.type}></ListPublicAreas>}
                 </View>
             </SafeAreaView >
 

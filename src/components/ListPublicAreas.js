@@ -11,16 +11,20 @@ import "intl/locale-data/jsonp/pt";
 class ListPublicAreas extends Component {
     state = {
         areas: [],
-        ready: false,
-        type: this.props.route.params.name
+        ready: false
     }
 
     updateAreas = () => {
-        typeService(this.state.type)
+        console.log("carregou");
+        typeService(this.props.type)
             .getAll()
             .then(res => {
                 const filtered = res.data.filter(item => {
-                    if (item.cityId == this.props.cityId)
+                    let verifica = item.cityId == this.props.cityId
+                    if (!this.props.isAdmin)
+                        verifica = verifica && item.userId == this.props.userId
+
+                    if (verifica)
                         return item
                 })
                 console.log("filtro", filtered);
@@ -34,6 +38,7 @@ class ListPublicAreas extends Component {
     componentDidMount = () => {
         this.updateAreas()
     }
+
 
     getOptionsItem = ({ item: area, index }) => {
 
@@ -108,7 +113,10 @@ class ListPublicAreas extends Component {
                     <Image source={{ uri: area.images[0] }} style={styles.logo} ></Image>
                 }
                 <ListItem.Content style={styles.content}>
-                    <ListItem.Title style={styles.titleItens}>{area.name}</ListItem.Title>
+                    <ListItem.Title style={styles.titleItens}>{area.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
+                    {area.name &&
+                        <ListItem.Title style={styles.titleItens}>{area.name}</ListItem.Title>
+                    }
                     <ListItem.Subtitle style={styles.subtitleItens}>{area.street + ", " + area.streetNumber}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.subtitleItens}>Ponto de referência: {area.referencePoint}</ListItem.Subtitle>
                     <ListItem.Subtitle style={styles.subtitleItens}>{area.description}</ListItem.Subtitle>
@@ -121,9 +129,9 @@ class ListPublicAreas extends Component {
 
     render() {
         let render
-        if (this.state.type == "Ofertas Locais")
+        if (this.props.type == "Ofertas Locais")
             render = this.getOfertas
-        else if (this.state.type == "Ofertas Locais")
+        else if (this.props.type == "Ofertas Locais")
             render = this.getOptionsItem
         else render = this.getOptionsAllItem
         return (
