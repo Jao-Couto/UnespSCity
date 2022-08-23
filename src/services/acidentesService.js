@@ -1,11 +1,11 @@
 import axios from "axios";
 import { ServerMYSQL } from "../config"
 
-class PracaService {
+class AcidentesService {
 
     async create(data) {
         return axios({
-            url: ServerMYSQL + "/api/praca",
+            url: ServerMYSQL + "/api/acidentes",
             method: "POST",
             timeout: 10000,
             data: data,
@@ -22,7 +22,7 @@ class PracaService {
 
     async getAll() {
         return axios({
-            url: ServerMYSQL + "/api/praca",
+            url: ServerMYSQL + "/api/acidentes",
             method: "GET",
             timeout: 10000,
             headers: {
@@ -36,9 +36,9 @@ class PracaService {
         })
     }
 
-    async getMarkers(data) {
+    async getMarkers() {
         return axios({
-            url: ServerMYSQL + "/api/praca/markers/" + data,
+            url: ServerMYSQL + "/api/acidentes/markers",
             method: "GET",
             timeout: 10000,
             headers: {
@@ -54,7 +54,7 @@ class PracaService {
 
     async updateResolved(data) {
         return axios({
-            url: ServerMYSQL + "/api/praca/update_resolved/" + data,
+            url: ServerMYSQL + "/api/acidentes/update_resolved/" + data,
             method: "PUT",
             timeout: 10000,
             headers: {
@@ -68,24 +68,7 @@ class PracaService {
         })
     }
 
-    async delete(data) {
-        return axios({
-            url: ServerMYSQL + "/api/praca/" + data,
-            method: "DELETE",
-            timeout: 10000,
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': '*/*',
-            }
-        }).then((res) => {
-            return Promise.resolve(res)
-        }).catch((err) => {
-            return Promise.reject(err)
-        })
-    }
-
-
 }
 
-const pracaService = new PracaService()
-export default pracaService
+const acidentesService = new AcidentesService()
+export default acidentesService

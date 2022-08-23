@@ -23,7 +23,12 @@ class PublicAreas extends Component {
                 </View>
                 <ListPublicAreas {...this.props} nameService={this.props.route.params.name}></ListPublicAreas>
                 <TouchableOpacity style={styles.addAnimal}
-                    onPress={() => this.props.navigation.navigate('Solicitacao', { ...this.props.route.params })}
+                    onPress={() => {
+                        if (this.props.route.params.name == "Telefones Úteis")
+                            this.props.navigation.navigate('SolicitacaoTelefones', { ...this.props.route.params })
+                        else
+                            this.props.navigation.navigate('Solicitacao', { ...this.props.route.params })
+                    }}
                 >
                     <Text style={styles.addAnimalText}>+</Text>
                 </TouchableOpacity>

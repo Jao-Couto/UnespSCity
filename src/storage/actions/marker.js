@@ -1,5 +1,5 @@
 import pracaService from "../../services/pracaService"
-import { MARKERS } from "./actionType"
+import { MARKERS, RESET_MARKERS } from "./actionType"
 import 'intl';
 import "intl/locale-data/jsonp/pt";
 
@@ -10,9 +10,15 @@ export const addMarker = marker => {
     }
 }
 
-export const loadMarkers = () => {
+export const resetMarkers = () => {
+    return {
+        type: RESET_MARKERS
+    }
+}
+
+export const loadMarkers = (cityId) => {
     return dispatch => {
-        pracaService.getMarkers()
+        pracaService.getMarkers(cityId)
             .then(res => {
                 const data = res.data.map(item => {
                     const date = new Intl.DateTimeFormat('pt-BR', {
@@ -24,6 +30,7 @@ export const loadMarkers = () => {
                         second: '2-digit'
                     }).format(new Date((item.date)))
                     return { latlng: { latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) }, name: "Solicitação para Praça", date: date }
+
 
                 });
 

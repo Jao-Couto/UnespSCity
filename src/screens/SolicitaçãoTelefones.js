@@ -7,7 +7,6 @@ import { connect } from 'react-redux'
 import * as Location from 'expo-location';
 import Camera from "../components/AddPhoto";
 import Map from "../components/Map";
-import { addMarker } from "../storage/actions/marker";
 import { StackActions } from '@react-navigation/native';
 import { showError, showSuccess } from "../common";
 import { typeService } from "../services/solicitacaoService";
@@ -17,89 +16,28 @@ import 'intl';
 import "intl/locale-data/jsonp/pt";
 import InputMasked from "../components/InputMasked";
 
-class Solicitacao extends Component {
+class SolicitacaoTelefones extends Component {
     state = {
         location: {},
         errorLocation: '',
         description: '',
         errorDescription: '',
 
+        phoneNumber: '',
+        errorPhoneNumber: '',
+
         name: '',
         errorName: '',
 
-        referencePoint: '',
-        errorReferencePoint: '',
-
-        guardian: '',
-        errorGuardian: '',
-
-        cargo: '',
-        errorCargo: '',
-
-        price: "",
-        errorPrice: '',
-
-        cep: '',
-        street: '',
-        number: '',
-        district: '',
-        city: '',
-
         photo: {},
         errorPhoto: "",
-
-        modalMap: false,
-        modalCamera: false,
-
         loading: false,
-        error: false
-    }
-
-
-    getReverseGeocode = async () => {
-        const { latitude, longitude } = this.state.location;
-        let response = await Location.reverseGeocodeAsync({
-            latitude,
-            longitude
-        });
-
-        for (let item of response) {
-            this.setState({
-                cep: item.postalCode,
-                street: item.street,
-                number: item.streetNumber,
-                district: item.district,
-                city: item.city,
-                uf: item.region,
-            })
-        }
+        modalCamera: false
 
     }
 
-    getCurrentLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-            this.setState({ errorLocation: 'Permission to access location was denied' })
-            return;
-        }
 
-        let { coords } = await Location.getCurrentPositionAsync({});
-        if (coords) {
-            const { latitude, longitude } = coords;
-            this.setState({ location: { latitude, longitude } }, this.getReverseGeocode)
-        }
-        this.toggleModalMap()
-    }
 
-    toggleModalMap = () => {
-        this.setState({ modalMap: !this.state.modalMap, errorLocation: '' })
-        if (Object.keys(this.state.location).length > 0)
-            this.getReverseGeocode()
-    }
-
-    toggleModalMapCancel = () => {
-        this.setState({ modalMap: !this.state.modalMap })
-    }
 
     toggleModalCamera = () => {
         this.setState({ modalCamera: !this.state.modalCamera })
@@ -111,12 +49,8 @@ class Solicitacao extends Component {
 
     solicit = async () => {
         this.setState({ loading: true })
-        const { description, cep, price } = this.state
+        const { description } = this.state
         let error = false
-        if (cep == '') {
-            this.setState({ errorLocation: 'Localização Obrigatória' })
-            error = true
-        }
         if (description == '') {
             this.setState({ errorDescription: 'Descrição Obrigatória' })
             error = true
@@ -126,15 +60,6 @@ class Solicitacao extends Component {
             this.setState({ errorPhoto: 'Foto Obrigatória' })
             error = true
         }
-
-
-        if (this.props.route.params.name == "Ofertas Locais")
-            if (price == "") {
-                this.setState({ errorPrice: 'Preço Obrigatória' })
-                error = true
-
-            } else
-                this.setState({ price: parseFloat(this.state.price.substring(2).replace(",", ".")) });
 
         if (!error) {
             let localImage = ""
@@ -147,46 +72,23 @@ class Solicitacao extends Component {
                     })
             let data = {
                 userId: this.props.userId,
-                street: this.state.street,
-                streetNumber: parseInt(this.state.number, 10),
-                referencePoint: this.state.referencePoint.trim() == "" ? "Não Informado" : this.state.referencePoint,
-                cityId: this.props.cityId,
-                latitude: this.state.location.latitude,
-                longitude: this.state.location.longitude,
                 description: this.state.description,
                 images: localImage,
-                name: this.state.name
-            }
-            if (this.props.route.params.name == "Adoção de Áreas públicas") {
-                data.guardian = this.state.guardian
-            }
-            if (this.props.route.params.name == "Conheça os Gestores") {
-                data.description += " - " + this.state.cargo
-            }
-            if (this.props.route.params.name == "Ofertas Locais") {
-                data.preco = this.state.price
+                name: this.state.name,
+                phoneNumber: this.state.phoneNumber
             }
             console.log(data);
             typeService(this.props.route.params.name)
                 .create(data)
                 .then(res => {
                     console.log(res.data);
-                    if (res.data == false)
-                        showSuccess("Erro false")
+                    if (res.data == false) {
+                        showSuccess("Campos não preenchidos")
+                        return
+                    }
                     showSuccess('Solicitação feita com sucesso')
-
-                    const date = new Intl.DateTimeFormat('pt-BR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                    }).format(new Date())
-                    this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name, date: date })
                     this.setState({ loading: false })
-                    this.props.navigation.dispatch(StackActions.popToTop());
-                    this.props.navigation.navigate('Mapa')
+                    this.props.navigation.dispatch(StackActions.pop());
                     return true;
                 }).catch(err => {
                     console.log(err);
@@ -214,16 +116,6 @@ class Solicitacao extends Component {
                     <ScrollView style={{ width: '95%' }}>
 
 
-                        <TouchableOpacity style={[styles.button]} onPress={this.toggleModalMap}>
-                            <Text style={styles.buttonText}>
-                                Adicionar Localização
-                            </Text>
-                        </TouchableOpacity>
-                        {this.state.errorLocation !== '' ? <Text style={styles.textError}>{this.state.errorLocation}</Text> : null}
-                        {this.state.cep != '' &&
-                            <Text style={styles.text}>{this.state.street}, {this.state.number} - {this.state.district}, {this.state.city} - {this.state.uf}</Text>
-                        }
-
                         <TouchableOpacity style={[styles.button]} onPress={this.toggleModalCamera}>
                             <Text style={styles.buttonText}>
                                 Adicionar Foto
@@ -235,29 +127,6 @@ class Solicitacao extends Component {
                             <Text style={styles.textError}>{this.state.errorPhoto}</Text>
                         }
 
-                        <Modal visible={this.state.modalMap}>
-                            <SafeAreaView style={styles.container}>
-                                <Map setLocation={(location) => this.setState({ location })} enableAddMarker></Map>
-                                <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.getCurrentLocation}>
-                                    <Text style={styles.buttonText}>
-                                        Usar localização atual
-                                    </Text>
-                                </TouchableOpacity>
-                                <View style={styles.buttonGroup}>
-                                    <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'red', flex: 1 }]} onPress={this.toggleModalMapCancel}>
-                                        <Text style={styles.buttonText}>
-                                            Cancelar
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'green', flex: 1 }]} onPress={this.toggleModalMap}>
-                                        <Text style={styles.buttonText}>
-                                            Confirmar
-                                        </Text>
-                                    </TouchableOpacity>
-
-                                </View>
-                            </SafeAreaView>
-                        </Modal>
 
                         <Modal visible={this.state.modalCamera}>
                             <Camera setPhoto={(photo) => this.setState({ photo })}></Camera>
@@ -299,59 +168,20 @@ class Solicitacao extends Component {
                             onChangeText={name => { this.setState({ name, errorName: '' }) }}
                             error={this.state.errorName}
                         />
-
-                        {this.props.route.params.name == "Ofertas Locais" &&
-                            <InputMasked
-                                icon='money'
-                                placeholder="Preço"
-                                placeholderTextColor={"#aaa"}
-                                type={'money'}
-                                options={{
-                                    precision: 2,
-                                    separator: ',',
-                                    delimiter: '.',
-                                    unit: 'R$',
-                                    suffixUnit: ''
-                                }}
-                                value={this.state.price}
-                                onChangeText={(price) => { this.setState({ price, errorPrice: '' }) }}
-                                error={this.state.errorPrice}
-                            />
-                        }
-
-                        {this.props.route.params.name == "Conheça os Gestores" &&
-                            <AuthInput
-                                icon='tag'
-                                placeholder='Cargo'
-                                value={this.state.cargo}
-                                style={[styles.input]}
-                                editable
-                                onChangeText={cargo => { this.setState({ cargo, errorCargo: '' }) }}
-                                error={this.state.errorCargo}
-                            />
-                        }
-
-                        <AuthInput
-                            icon='tree'
-                            placeholder='Ponto de Referência'
-                            value={this.state.referencePoint}
-                            style={[styles.input]}
-                            editable
-                            onChangeText={referencePoint => { this.setState({ referencePoint, errorReferencePoint: '' }) }}
-                            error={this.state.errorReferencePoint}
+                        <InputMasked
+                            icon='mobile'
+                            placeholder="Contato"
+                            placeholderTextColor={"#aaa"}
+                            type={'cel-phone'}
+                            options={{
+                                maskType: 'BRL',
+                                withDDD: true,
+                                dddMask: '(99) '
+                            }}
+                            value={this.state.phoneNumber}
+                            onChangeText={phoneNumber => { this.setState({ phoneNumber, errorPhoneNumber: '' }) }}
+                            error={this.state.errorPhoneNumber}
                         />
-
-                        {this.props.route.params.name == "Adoção de Áreas públicas" &&
-                            <AuthInput
-                                icon='user'
-                                placeholder='Guardião'
-                                value={this.state.guardian}
-                                style={[styles.input]}
-                                editable
-                                onChangeText={guardian => { this.setState({ guardian, errorGuardian: '' }) }}
-                                error={this.state.errorGuardian}
-                            />}
-
                         <TouchableOpacity style={[styles.button]} onPress={this.solicit} disabled={this.state.loading}>
                             {this.state.loading &&
                                 <ActivityIndicator size={"large"} color="white"></ActivityIndicator>
@@ -453,11 +283,4 @@ const mapStateToProps = ({ user }) => {
     }
 }
 
-
-const mapDispatchToProps = dispatch => {
-    return {
-        addMarker: marker => dispatch(addMarker(marker))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Solicitacao)
+export default connect(mapStateToProps)(SolicitacaoTelefones)

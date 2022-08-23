@@ -8,6 +8,7 @@ import Menu from "./screens/Menu";
 import { connect } from "react-redux";
 import MenuItens from "./screens/MenuItem";
 import Solicitacao from "./screens/Solicitação";
+import SolicitacaoTelefones from "./screens/SolicitaçãoTelefones";
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from "./screens/Profile";
@@ -34,6 +35,7 @@ import Radar from "./screens/Radar";
 import Dedetizacao from "./screens/Dedetizacao";
 import checkService from "./components/checkService";
 import InfoAnimal from "./components/InfoAnimal";
+import { resetMarkers } from "./storage/actions/marker";
 
 
 function App(props) {
@@ -43,6 +45,7 @@ function App(props) {
 
     const logout = () => {
         props.onLogout()
+        props.onResetMarkers()
     }
 
     function MyTabs() {
@@ -91,6 +94,7 @@ function App(props) {
                 <Stack.Screen name="Menu" component={Menu} />
                 <Stack.Screen name="MenuItens" component={MenuItens} />
                 <Stack.Screen name="Solicitacao" component={Solicitacao} />
+                <Stack.Screen name="SolicitacaoTelefones" component={SolicitacaoTelefones} />
                 <Stack.Screen name="LostAnimals" component={LostAnimals} />
                 <Stack.Screen name="SolicitAnimals" component={SolicitAnimals} />
                 <Stack.Screen name="PublicAreas" component={PublicAreas} />
@@ -133,7 +137,7 @@ function App(props) {
                 </View>
                 <DrawerContentScrollView {...opt}>
                     <DrawerItemList {...opt} />
-                    <DrawerItem label="Sair" onPress={logout}></DrawerItem>
+                    <DrawerItem label="Sair" onPress={logout} inactiveTintColor="red"></DrawerItem>
                 </DrawerContentScrollView>
             </SafeAreaView>
         );
@@ -158,6 +162,7 @@ function App(props) {
                 <Stack.Screen name="SolicitAnimals" component={SolicitAnimals} />
                 <Stack.Screen name="PublicAreas" component={PublicAreas} />
                 <Stack.Screen name="CheckService" component={checkService} />
+                <Stack.Screen name="Solicitacao" component={Solicitacao} />
             </Stack.Navigator>
         )
     }
@@ -205,7 +210,8 @@ const mapStateToProps = ({ user }) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLogout: () => dispatch(logout())
+        onLogout: () => dispatch(logout()),
+        onResetMarkers: () => dispatch(resetMarkers())
     }
 }
 

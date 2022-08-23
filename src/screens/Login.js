@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Image, Platform, KeyboardAvoidingView } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native'
 import { showError, showSuccess } from "../common";
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
@@ -11,9 +11,9 @@ import { login } from '../storage/actions/user'
 
 class Login extends Component {
     state = {
-        email: 'jose@gmail.com',
+        email: '',
         errorEmail: '',
-        password: 'senha123',
+        password: '',
         errorPassword: '',
     }
 
@@ -48,7 +48,8 @@ class Login extends Component {
             <SafeAreaView style={styles.containerLogo} >
 
 
-                <View style={styles.container}>
+                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    style={styles.container}>
                     <Image source={LogoUnesp} style={styles.image} />
                     <Text style={styles.title}>UnespSCity</Text>
                     <View style={styles.formContainer} >
@@ -85,7 +86,7 @@ class Login extends Component {
                         </TouchableOpacity>
                     </View>
 
-                </View>
+                </KeyboardAvoidingView>
             </SafeAreaView>
 
         )

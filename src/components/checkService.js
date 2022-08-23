@@ -8,6 +8,8 @@ import { connect } from 'react-redux'
 import { typeService } from "../services/solicitacaoService";
 import 'intl';
 import "intl/locale-data/jsonp/pt";
+import { StackActions } from "@react-navigation/native";
+import { loadMarkers } from "../storage/actions/marker";
 
 class CheckService extends Component {
     state = {
@@ -25,6 +27,19 @@ class CheckService extends Component {
             .catch(err => { console.log(err); })
     }
 
+    excluir = () => {
+        console.log(this.state._id);
+        typeService(this.state.nameService)
+            .delete(this.state._id)
+            .then(res => {
+                console.log(res.data);
+                this.props.onLoadMarkers(this.props.cityId)
+                this.props.route.params.updateAreas()
+                this.props.navigation.pop()
+            })
+            .catch(err => { console.log(err); })
+    }
+
     render() {
         console.log(this.props);
         return (
@@ -38,10 +53,12 @@ class CheckService extends Component {
                             <Image source={{ uri: this.state.images[0] }} style={styles.logo} resizeMode="contain"></Image>
                         }
                         <ListItem.Content style={styles.content}>
-                            {this.state.type == "Adoção de Áreas públicas" &&
+                            {this.state.nameService == "Adoção de Áreas públicas" &&
                                 <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Adotada" : "Disponível"}</ListItem.Title>
                             }
-                            <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
+                            {this.state.nameService == "Conheça os Gestores" &&
+                                <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Ex" : "Atual"}</ListItem.Title> || <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
+                            }
                             {this.state.name &&
                                 <ListItem.Title style={styles.titleItens}>{this.state.name}</ListItem.Title>
                             }
@@ -73,6 +90,16 @@ class CheckService extends Component {
                             </Text>
                         </TouchableOpacity>
                         : null}
+                    {this.props.isAdmin &&
+                        <>
+
+                            <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]} onPress={this.excluir}>
+                                <Text style={styles.buttonText}>
+                                    Excluir
+                                </Text>
+                            </TouchableOpacity>
+                        </>
+                    }
                 </ScrollView>
 
             </SafeAreaView >
@@ -144,12 +171,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ user }) => {
     return {
-        email: user.email,
-        name: user.name,
-        isAdmin: user.isAdmin
+        ...user
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        onLoadMarkers: (cityId) => dispatch(loadMarkers(cityId))
+    }
+}
 
 // export default Profile
-export default connect(mapStateToProps)(CheckService)
+export default connect(mapStateToProps, mapDispatchToProps)(CheckService)

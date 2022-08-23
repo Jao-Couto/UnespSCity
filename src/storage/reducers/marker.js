@@ -1,5 +1,6 @@
 import {
-    MARKERS
+    MARKERS,
+    RESET_MARKERS
 } from '../actions/actionType'
 
 const initialState = {
@@ -17,6 +18,10 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 markers: [...state.markers, ...action.payload]
+            }
+        case RESET_MARKERS:
+            return {
+                markers: []
             }
         default:
             return state

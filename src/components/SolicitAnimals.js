@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Dimensions, ScrollView, Modal, Image } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity, Dimensions, ScrollView, Modal, Image, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import AuthInput from './AuthInput'
@@ -53,9 +53,9 @@ class SolicitAnimals extends Component {
         errorPhoto: '',
 
         modalMap: false,
-        modalCamera: false
+        modalCamera: false,
 
-
+        loading: false
     }
 
 
@@ -113,6 +113,7 @@ class SolicitAnimals extends Component {
     }
 
     solicit = async () => {
+        this.setState({ loading: true })
         const { name, cep, especie, breed, color, gender, photo, celphone, lastTimeSeen } = this.state
         let error = false
         if (cep == '') {
@@ -153,14 +154,14 @@ class SolicitAnimals extends Component {
         }
 
         if (!error) {
-            let localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/9e9d234d-6608-44ec-9ffe-d53d94f7a363_foto.jpeg"
+            let localImage = ""
 
-            // if (this.state.photo != {})
-            //     await uploadToS3(this.state.photo.uri)
-            //         .then(res => {
-            //             localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/" + res.filename
+            if (this.state.photo != {})
+                await uploadToS3(this.state.photo.uri)
+                    .then(res => {
+                        localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/" + res.filename
 
-            //         })
+                    })
             let data = {
                 userId: this.props.userId,
                 street: this.state.street,
@@ -200,183 +201,197 @@ class SolicitAnimals extends Component {
                     return false
                 })
 
-        }
+
+        } else showError("Campos obrigatórios não preenchidos")
+
+        this.setState({ loading: false })
     }
 
     render() {
         return (
             <SafeAreaView style={styles.container}>
                 <Text style={styles.subTitle}>Cadastrar Animal</Text>
-                <ScrollView style={{ width: '95%' }}>
+                <KeyboardAvoidingView
+                    style={styles.container}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                    <ScrollView style={{ width: '95%' }}>
 
-                    <TouchableOpacity style={[styles.button]} onPress={this.toggleModalMap}>
-                        <Text style={styles.buttonText}>
-                            Adicionar Localização
-                        </Text>
-                    </TouchableOpacity>
-                    {this.state.errorLocation !== '' ? <Text style={styles.textError}>{this.state.errorLocation}</Text> : null}
-                    {this.state.cep != '' &&
-                        <Text style={styles.text}>{this.state.street}, {this.state.number} - {this.state.district}, {this.state.city} - {this.state.uf}</Text>
-                    }
-
-                    <TouchableOpacity style={[styles.button]} onPress={this.toggleModalCamera}>
-                        <Text style={styles.buttonText}>
-                            Adicionar Foto
-                        </Text>
-                    </TouchableOpacity>
-                    {this.state.errorPhoto !== '' ? <Text style={styles.textError}>{this.state.errorPhoto}</Text> : null}
-                    {this.state.photo.uri && <View style={styles.imageContainer}>
-                        <Image source={{ uri: this.state.photo.uri }} style={styles.image} />
-                    </View>}
-
-                    <Modal visible={this.state.modalMap}>
-                        <Map setLocation={(location) => this.setState({ location })} enableAddMarker showAutoComplte></Map>
-                        <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.getCurrentLocation}>
+                        <TouchableOpacity style={[styles.button]} onPress={this.toggleModalMap}>
                             <Text style={styles.buttonText}>
-                                Usar localização atual
+                                Adicionar Localização
                             </Text>
                         </TouchableOpacity>
-                        <View style={styles.buttonGroup}>
-                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'red', flex: 1 }]} onPress={this.toggleModalMapCancel}>
+                        {this.state.errorLocation !== '' ? <Text style={styles.textError}>{this.state.errorLocation}</Text> : null}
+                        {this.state.cep != '' &&
+                            <Text style={styles.text}>{this.state.street}, {this.state.number} - {this.state.district}, {this.state.city} - {this.state.uf}</Text>
+                        }
+
+                        <TouchableOpacity style={[styles.button]} onPress={this.toggleModalCamera}>
+                            <Text style={styles.buttonText}>
+                                Adicionar Foto
+                            </Text>
+                        </TouchableOpacity>
+                        {this.state.errorPhoto !== '' ? <Text style={styles.textError}>{this.state.errorPhoto}</Text> : null}
+                        {this.state.photo.uri && <View style={styles.imageContainer}>
+                            <Image source={{ uri: this.state.photo.uri }} style={styles.image} />
+                        </View>}
+
+                        <Modal visible={this.state.modalMap}>
+                            <SafeAreaView style={styles.container}>
+                                <Map setLocation={(location) => this.setState({ location })} enableAddMarker></Map>
+                                <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.getCurrentLocation}>
+                                    <Text style={styles.buttonText}>
+                                        Usar localização atual
+                                    </Text>
+                                </TouchableOpacity>
+                                <View style={styles.buttonGroup}>
+                                    <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'red', flex: 1 }]} onPress={this.toggleModalMapCancel}>
+                                        <Text style={styles.buttonText}>
+                                            Cancelar
+                                        </Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'green', flex: 1 }]} onPress={this.toggleModalMap}>
+                                        <Text style={styles.buttonText}>
+                                            Confirmar
+                                        </Text>
+                                    </TouchableOpacity>
+
+
+                                </View>
+                            </SafeAreaView>
+
+                        </Modal>
+
+                        <Modal visible={this.state.modalCamera}>
+                            <Camera setPhoto={(photo) => this.setState({ photo })}></Camera>
+
+                            <View style={styles.buttonGroup}>
+                                <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'red', flex: 1 }]} onPress={this.toggleModalCameraCancel}>
+                                    <Text style={styles.buttonText}>
+                                        Cancelar
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'green', flex: 1 }]} onPress={this.toggleModalCamera}>
+                                    <Text style={styles.buttonText}>
+                                        Confirmar
+                                    </Text>
+                                </TouchableOpacity>
+
+                            </View>
+                        </Modal>
+
+                        <AuthInput
+                            icon='tree'
+                            placeholder='Ponto de Referência'
+                            value={this.state.referencePoint}
+                            style={[styles.input]}
+                            editable
+                            onChangeText={referencePoint => { this.setState({ referencePoint, errorReferencePoint: '' }) }}
+                            error={this.state.errorReferencePoint}
+                        />
+
+                        <AuthInput
+                            icon='tag'
+                            placeholder='Nome'
+                            value={this.state.name}
+                            style={[styles.input]}
+                            editable
+                            onChangeText={name => { this.setState({ name, errorName: '' }) }}
+                            error={this.state.errorName}
+                        />
+
+                        <AuthInput
+                            icon='paw'
+                            placeholder='Espécie'
+                            value={this.state.especie}
+                            style={[styles.input]}
+                            editable
+                            onChangeText={especie => { this.setState({ especie, errorEspecie: '' }) }}
+                            error={this.state.errorEspecie}
+                        />
+
+                        <AuthInput
+                            icon='paw'
+                            placeholder='Raça'
+                            value={this.state.breed}
+                            style={[styles.input]}
+                            editable
+                            onChangeText={breed => { this.setState({ breed, errorBreed: '' }) }}
+                            error={this.state.errorBreed}
+                        />
+
+                        <AuthInput
+                            icon='eye'
+                            placeholder='Cor'
+                            value={this.state.color}
+                            style={[styles.input]}
+                            editable
+                            onChangeText={color => { this.setState({ color, errorColor: '' }) }}
+                            error={this.state.errorColor}
+                        />
+
+                        <AuthInput
+                            icon='venus-mars'
+                            placeholder='Sexo'
+                            value={this.state.gender}
+                            style={[styles.input]}
+                            editable
+                            onChangeText={gender => { this.setState({ gender, errorGender: '' }) }}
+                            error={this.state.errorGender}
+                        />
+
+                        <InputMasked
+                            icon='mobile'
+                            placeholder="Contato"
+                            placeholderTextColor={"#aaa"}
+                            type={'cel-phone'}
+                            options={{
+                                maskType: 'BRL',
+                                withDDD: true,
+                                dddMask: '(99) '
+                            }}
+                            value={this.state.celphone}
+                            onChangeText={celphone => { this.setState({ celphone, errorCelphone: '' }) }}
+                            error={this.state.errorCelphone}
+                        />
+
+                        <InputMasked
+                            icon='calendar'
+                            placeholder="Última vez visto"
+                            placeholderTextColor={"#aaa"}
+                            type={'datetime'}
+                            options={{
+                                format: 'DD/MM/YYYY HH:MM'
+                            }}
+                            value={this.state.lastTimeSeen}
+                            onChangeText={lastTimeSeen => { this.setState({ lastTimeSeen, errorLastTimeSeen: '' }) }}
+                            error={this.state.errorLastTimeSeen}
+                        />
+
+                        <AuthInput
+                            icon='file-text'
+                            placeholder='Descrição'
+                            value={this.state.description}
+                            style={[styles.input, { height: 200 }]}
+                            editable
+                            maxLength={200}
+                            multiline={true}
+                            numberOfLines={8}
+                            onChangeText={description => { this.setState({ description, errorDescription: '' }) }}
+                            error={this.state.errorDescription}
+                        />
+
+                        <TouchableOpacity style={[styles.button]} onPress={this.solicit} disabled={this.state.loading}>
+                            {this.state.loading &&
+                                <ActivityIndicator size={"large"} color="white"></ActivityIndicator>
+                                ||
                                 <Text style={styles.buttonText}>
-                                    Cancelar
+                                    Cadastrar
                                 </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'green', flex: 1 }]} onPress={this.toggleModalMap}>
-                                <Text style={styles.buttonText}>
-                                    Confirmar
-                                </Text>
-                            </TouchableOpacity>
-
-                        </View>
-
-                    </Modal>
-
-                    <Modal visible={this.state.modalCamera}>
-                        <Camera setPhoto={(photo) => this.setState({ photo })}></Camera>
-
-                        <View style={styles.buttonGroup}>
-                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'red', flex: 1 }]} onPress={this.toggleModalCameraCancel}>
-                                <Text style={styles.buttonText}>
-                                    Cancelar
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'green', flex: 1 }]} onPress={this.toggleModalCamera}>
-                                <Text style={styles.buttonText}>
-                                    Confirmar
-                                </Text>
-                            </TouchableOpacity>
-
-                        </View>
-                    </Modal>
-
-                    <AuthInput
-                        icon='tree'
-                        placeholder='Ponto de Referência'
-                        value={this.state.referencePoint}
-                        style={[styles.input]}
-                        editable
-                        onChangeText={referencePoint => { this.setState({ referencePoint, errorReferencePoint: '' }) }}
-                        error={this.state.errorReferencePoint}
-                    />
-
-                    <AuthInput
-                        icon='tag'
-                        placeholder='Nome'
-                        value={this.state.name}
-                        style={[styles.input]}
-                        editable
-                        onChangeText={name => { this.setState({ name, errorName: '' }) }}
-                        error={this.state.errorName}
-                    />
-
-                    <AuthInput
-                        icon='paw'
-                        placeholder='Espécie'
-                        value={this.state.especie}
-                        style={[styles.input]}
-                        editable
-                        onChangeText={especie => { this.setState({ especie, errorEspecie: '' }) }}
-                        error={this.state.errorEspecie}
-                    />
-
-                    <AuthInput
-                        icon='paw'
-                        placeholder='Raça'
-                        value={this.state.breed}
-                        style={[styles.input]}
-                        editable
-                        onChangeText={breed => { this.setState({ breed, errorBreed: '' }) }}
-                        error={this.state.errorBreed}
-                    />
-
-                    <AuthInput
-                        icon='eye'
-                        placeholder='Cor'
-                        value={this.state.color}
-                        style={[styles.input]}
-                        editable
-                        onChangeText={color => { this.setState({ color, errorColor: '' }) }}
-                        error={this.state.errorColor}
-                    />
-
-                    <AuthInput
-                        icon='venus-mars'
-                        placeholder='Sexo'
-                        value={this.state.gender}
-                        style={[styles.input]}
-                        editable
-                        onChangeText={gender => { this.setState({ gender, errorGender: '' }) }}
-                        error={this.state.errorGender}
-                    />
-
-                    <InputMasked
-                        icon='mobile'
-                        placeholder="Contato"
-                        placeholderTextColor={"#aaa"}
-                        type={'cel-phone'}
-                        options={{
-                            maskType: 'BRL',
-                            withDDD: true,
-                            dddMask: '(99) '
-                        }}
-                        value={this.state.celphone}
-                        onChangeText={celphone => { this.setState({ celphone, errorCelphone: '' }) }}
-                        error={this.state.errorCelphone}
-                    />
-
-                    <InputMasked
-                        icon='calendar'
-                        placeholder="Última vez visto"
-                        placeholderTextColor={"#aaa"}
-                        type={'datetime'}
-                        options={{
-                            format: 'DD/MM/YYYY HH:MM'
-                        }}
-                        value={this.state.lastTimeSeen}
-                        onChangeText={lastTimeSeen => { this.setState({ lastTimeSeen, errorLastTimeSeen: '' }) }}
-                        error={this.state.errorLastTimeSeen}
-                    />
-
-                    <AuthInput
-                        icon='file-text'
-                        placeholder='Descrição'
-                        value={this.state.description}
-                        style={[styles.input, { height: 200 }]}
-                        editable
-                        maxLength={200}
-                        multiline={true}
-                        numberOfLines={8}
-                        onChangeText={description => { this.setState({ description, errorDescription: '' }) }}
-                        error={this.state.errorDescription}
-                    />
-
-                    <TouchableOpacity style={[styles.button]} onPress={this.solicit}>
-                        <Text style={styles.buttonText}>
-                            Cadastrar
-                        </Text>
-                    </TouchableOpacity>
-                </ScrollView>
+                            }
+                        </TouchableOpacity>
+                    </ScrollView>
+                </KeyboardAvoidingView>
             </SafeAreaView>
 
         )

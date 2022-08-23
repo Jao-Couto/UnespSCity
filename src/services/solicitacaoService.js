@@ -21,7 +21,6 @@ import locaisUteisService from "./locaisUteisService";
 import telefonesUteisService from "./telefonesUteisService";
 import tumulosService from "./tumulosService";
 import parquesService from "./parquesService";
-import ruriasService from "./ruraisService";
 import ruraisService from "./ruraisService";
 import ambientesService from "./ambientesService";
 import programacaoService from "./programacaoService";
@@ -42,6 +41,7 @@ import familiasCarentesService from "./familiasCarentesService";
 import roubosService from "./roubosService";
 import animaisSelvagensService from "./animaisSelvagensService";
 import moradoresRuaService from "./moradoresRuaService";
+import acidentesService from './acidentesService'
 
 
 const typeService = (type) => {
@@ -126,7 +126,7 @@ const typeService = (type) => {
         case "Denúncia de violência doméstica":
             return violenciaDomesticaService
         case "Ocorrência de Acidentes":
-            return
+            return acidentesService
         case "Ocorrência de Furtos/Roubos":
             return roubosService
         case "Mulheres":

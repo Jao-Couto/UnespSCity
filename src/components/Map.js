@@ -39,6 +39,7 @@ class Map extends Component {
                 ready: true
             })
         }
+        console.log(coords);
         if (this.props.coords) {
             this.setState({
                 marker: { latlng: coords }

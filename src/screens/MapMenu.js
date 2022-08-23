@@ -9,14 +9,16 @@ import { loadMarkers } from "../storage/actions/marker";
 
 class MapMenu extends Component {
     componentDidMount = () => {
-        this.props.onLoadMarkers()
+        this.props.onLoadMarkers(this.props.cityId)
     }
 
     render() {
         return (
             <SafeAreaView style={styles.containerLogo} >
                 <Header {...this.props}></Header>
-                <Map marker={this.props.marker} showAutoComplte></Map>
+                {this.props.marker.length > 0 && <Map marker={this.props.marker} showAutoComplte></Map> || <Map showAutoComplte></Map>}
+
+
             </SafeAreaView >
 
         )
@@ -33,15 +35,16 @@ const styles = StyleSheet.create({
 })
 
 
-const mapStateToProps = ({ marker }) => {
+const mapStateToProps = ({ marker, user }) => {
     return {
-        marker: marker.markers
+        marker: marker.markers,
+        ...user
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLoadMarkers: () => dispatch(loadMarkers())
+        onLoadMarkers: (cityId) => dispatch(loadMarkers(cityId))
     }
 }
 
