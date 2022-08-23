@@ -23,7 +23,6 @@ class MenuItens extends Component {
     componentDidMount = () => {
         subMenuService.subMenuCidade(this.props.route.params.id)
             .then((res) => {
-                console.log(res.data);
                 this.setState({
                     itens: res.data
                 })

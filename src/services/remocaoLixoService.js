@@ -4,6 +4,7 @@ import { ServerMYSQL } from "../config"
 class RemocaoLixoService {
 
     async create(data) {
+        console.log(data);
         return axios({
             url: ServerMYSQL + "/api/remove-trash",
             method: "POST",

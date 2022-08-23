@@ -4,9 +4,9 @@ import { StyleSheet, Text, Image, ScrollView } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import Header from "../components/Header";
-import CI_1 from '../../assets/CI_1.png'
-import CI_2 from '../../assets/CI_2.png'
-import CI_3 from '../../assets/CI_3.png'
+import CI_1 from '../../assets/SmartCities/1.png'
+import CI_2 from '../../assets/SmartCities/2.png'
+import CI_3 from '../../assets/SmartCities/3.png'
 
 class InfoCI extends Component {
     render() {
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: 350,
+        height: 650,
         resizeMode: 'contain',
         margin: 0
     },

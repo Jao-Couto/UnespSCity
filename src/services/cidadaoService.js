@@ -46,6 +46,20 @@ class CidadaoService {
         })
     }
 
+    async getCidadao(data) {
+        return axios({
+            url: ServerMYSQL + "/api/cidadao/" + data,
+            method: "GET",
+            timeout: 10000,
+            data: data,
+        }).then((res) => {
+            return Promise.resolve(res)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
+    }
+
+
 
 
 }

@@ -26,12 +26,7 @@ class CheckService extends Component {
     }
 
     render() {
-        let render
-        if (this.state.type == "Adoção de Áreas públicas")
-            render = this.getOfertas
-        else if (this.state.type == "Ofertas Locais")
-            render = this.getOptionsItem
-        else render = this.getOptionsAllItem
+        console.log(this.props);
         return (
             <SafeAreaView style={styles.container}>
                 <Text style={styles.subTitle}>Informações Adicionais</Text>
@@ -44,7 +39,7 @@ class CheckService extends Component {
                         }
                         <ListItem.Content style={styles.content}>
                             {this.state.type == "Adoção de Áreas públicas" &&
-                                <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Adotada" : "Dispon[ivel"}</ListItem.Title>
+                                <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Adotada" : "Disponível"}</ListItem.Title>
                             }
                             <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
                             {this.state.name &&
@@ -67,11 +62,11 @@ class CheckService extends Component {
                                     second: '2-digit'
                                 }).format(new Date((this.state.date)))}</ListItem.Subtitle>
                             }
-                            <ListItem.Subtitle style={styles.subtitleItens}>Por: {this.state.userId}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.subtitleItens}>Por: {this.state.userName}</ListItem.Subtitle>
 
                         </ListItem.Content>
                     </ListItem >
-                    {this.state.isAdmin && !this.state.isResolved ?
+                    {this.props.isAdmin && !this.state.isResolved ?
                         <TouchableOpacity style={[styles.button]} onPress={this.finalizar}>
                             <Text style={styles.buttonText}>
                                 Finalizar

@@ -10,7 +10,6 @@ import cidadeMenuService from "../services/cidadeMenuService";
 import { connect } from "react-redux";
 import ListPublicAreas from "../components/ListPublicAreas";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import InputMasked from "../components/InputMasked";
 
 class About extends Component {
     state = {
@@ -18,7 +17,8 @@ class About extends Component {
         dataCidades: [],
         errorType: '#fff',
 
-        find: false
+        find: false,
+        clicked: 0
     }
 
     componentDidMount = () => {
@@ -42,7 +42,7 @@ class About extends Component {
         }
         if (!error) {
             this.props.route.params = { name: this.state.type }
-            this.setState({ find: true })
+            this.setState({ find: true, clicked: this.state.clicked + 1 })
         }
     }
 
@@ -91,7 +91,7 @@ class About extends Component {
                     <TouchableOpacity onPress={this.listSolicits} style={[styles.button]}>
                         <Text style={styles.buttonText}>Procurar</Text>
                     </TouchableOpacity>
-                    {this.state.find && <ListPublicAreas {...this.props} type={this.state.type} nameService={this.state.type}></ListPublicAreas>}
+                    {this.state.find && <ListPublicAreas {...this.props} nameService={this.state.type} clicked={this.state.clicked}></ListPublicAreas>}
                 </View>
             </SafeAreaView >
 

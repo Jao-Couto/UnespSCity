@@ -19,31 +19,31 @@ import InputMasked from "../components/InputMasked";
 
 class Solicitacao extends Component {
     state = {
-        location: { latitude: -22.12008697952109, longitude: -51.42650122331375 },
+        location: {},
         errorLocation: '',
-        description: 'Testes',
+        description: '',
         errorDescription: '',
 
-        name: 'NOme',
+        name: '',
         errorName: '',
 
-        referencePoint: 'Perto',
+        referencePoint: '',
         errorReferencePoint: '',
 
-        guardian: 'pessoa',
+        guardian: '',
         errorGuardian: '',
 
-        cargo: 'prefeito',
+        cargo: '',
         errorCargo: '',
 
         price: "",
         errorPrice: '',
 
-        cep: '19067-090',
-        street: 'Rua Kenji Sato Miura',
-        number: '324',
-        district: 'Parque Cedral',
-        city: 'Presidente Prudente',
+        cep: '',
+        street: '',
+        number: '',
+        district: '',
+        city: '',
 
         photo: {},
         errorPhoto: "",
@@ -120,14 +120,19 @@ class Solicitacao extends Component {
             error = true
         }
 
-        if (this.state.photo != {}) {
+        if (this.state.photo == {}) {
             this.setState({ errorPhoto: 'Foto Obrigatória' })
             error = true
         }
 
 
-        if (price != "")
-            this.setState({ price: parseFloat(this.state.price.substring(2).replace(",", ".")) });
+        if (this.props.route.params.name == "Ofertas Locais")
+            if (price == "") {
+                this.setState({ errorPrice: 'Preço Obrigatória' })
+                error = true
+
+            } else
+                this.setState({ price: parseFloat(this.state.price.substring(2).replace(",", ".")) });
 
         if (!error) {
             console.log("ola");

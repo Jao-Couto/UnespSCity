@@ -13,7 +13,6 @@ class PublicAreas extends Component {
 
 
     render() {
-        console.log(this.props.params);
         return (
             <SafeAreaView style={styles.container}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
@@ -22,7 +21,7 @@ class PublicAreas extends Component {
                     </TouchableOpacity>
                     <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
                 </View>
-                <ListPublicAreas {...this.props}></ListPublicAreas>
+                <ListPublicAreas {...this.props} nameService={this.props.route.params.name}></ListPublicAreas>
                 <TouchableOpacity style={styles.addAnimal}
                     onPress={() => this.props.navigation.navigate('Solicitacao', { ...this.props.route.params })}
                 >
@@ -124,7 +123,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ user }) => {
     return {
         ...user
-
     }
 }
 

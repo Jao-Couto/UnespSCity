@@ -5,58 +5,31 @@ import commonStyle from "../commonStyle";
 import { ListItem } from "react-native-elements";
 import Map from "./Map";
 import { connect } from 'react-redux'
-import { typeService } from "../services/solicitacaoService";
 
 
-class InfoAnimal extends Component {
-    state = {
-        ...this.props.route.params
-    }
-
-    finalizar = () => {
-
-        typeService(this.state.nameService)
-            .updateResolved(this.state._id)
-            .then(res => {
-                this.setState({ isResolved: true })
-                this.props.route.params.updateAreas()
-            })
-            .catch(err => { console.log(err); })
-    }
+class Informations extends Component {
 
     render() {
-        const items = this.state.description.split(" - ")
+        const item = this.props.route.params
         return (
             <SafeAreaView style={styles.container}>
                 <Text style={styles.subTitle}>Informações Adicionais</Text>
                 <ScrollView style={{ width: '95%' }}>
-                    <Map size={{ height: 250 }} coords={{ latitude: this.state.latitude, longitude: this.state.longitude }} markerName="Localização do animal"></Map>
+                    <Map size={{ height: 250 }} coords={{ latitude: item.latitude, longitude: item.longitude }} markerName="Localização do animal"></Map>
                     <ListItem
-                        containerStyle={styles.item}>
-                        {this.state.images[0] != "" &&
-                            <Image source={{ uri: this.state.images[0] }} style={styles.logo} ></Image>
-                        }
+                        containerStyle={styles.item} >
+                        <Image source={{ uri: item.image }} style={styles.logo} ></Image>
                         <ListItem.Content style={styles.content}>
-                            <ListItem.Title style={styles.titleItens}>{items[0]}</ListItem.Title>
-                            <ListItem.Title style={styles.titleItens}>{this.state.isResolved ? "Adotado" : "Não Encontrado"}</ListItem.Title>
-                            <ListItem.Subtitle style={styles.subtitleItens}>{items[2]} - {items[1]}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={styles.subtitleItens}>{items[4]} - {items[3]}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={styles.subtitleItens}>{this.state.userName}, {items[5]}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={styles.subtitleItens}>{items[6]}</ListItem.Subtitle>
-                            <ListItem.Subtitle style={styles.subtitleItens}>Última Vez Visto: {new Intl.DateTimeFormat('pt-BR', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                second: '2-digit'
-                            }).format(new Date(this.state.lastTimeSeen))}</ListItem.Subtitle>
+                            <ListItem.Title style={styles.titleItens}>{item.isAdopted ? "Adotada" : "Disponível"}</ListItem.Title>
+                            <ListItem.Subtitle style={styles.subtitleItens}>{item.street + ", " + item.streetNumber}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.subtitleItens}>{item.cityId + " - " + item.uf}</ListItem.Subtitle>
+                            <ListItem.Subtitle style={styles.subtitleItens}>{item.description}</ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem >
-                    {this.props.userId == this.state.userId && this.state.isResolved == false ?
-                        <TouchableOpacity style={[styles.button]} onPress={this.finalizar}>
+                    {this.props.email == item.email ?
+                        <TouchableOpacity style={[styles.button]} onPress={() => console.log("adotado")}>
                             <Text style={styles.buttonText}>
-                                Finalizar
+                                Adotado
                             </Text>
                         </TouchableOpacity>
                         : null}
@@ -131,10 +104,11 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ user }) => {
     return {
-        ...user
+        email: user.email,
+        name: user.name,
     }
 }
 
 
 // export default Profile
-export default connect(mapStateToProps)(InfoAnimal)
+export default connect(mapStateToProps)(Informations)

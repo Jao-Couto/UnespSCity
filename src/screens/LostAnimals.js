@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import { connect } from 'react-redux'
 
-import ListPublicAreas from "../components/ListPublicAreas";
+import ListAnimals from '../components/ListAnimals'
 import Icon from "react-native-vector-icons/Ionicons";
 import { StackActions } from "@react-navigation/native";
 
@@ -13,7 +13,6 @@ class LostAnimals extends Component {
 
 
     render() {
-        console.log(this.props.params);
         return (
             <SafeAreaView style={styles.container}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
@@ -22,9 +21,9 @@ class LostAnimals extends Component {
                     </TouchableOpacity>
                     <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
                 </View>
-                <ListPublicAreas {...this.props}></ListPublicAreas>
+                <ListAnimals {...this.props} nameService={this.props.route.params.name}></ListAnimals>
                 <TouchableOpacity style={styles.addAnimal}
-                    onPress={() => this.props.navigation.navigate('Solicitacao', { ...this.props.route.params })}
+                    onPress={() => this.props.navigation.navigate('SolicitAnimals', { ...this.props.route.params })}
                 >
                     <Text style={styles.addAnimalText}>+</Text>
                 </TouchableOpacity>
@@ -123,8 +122,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ user }) => {
     return {
-        email: user.email,
-        name: user.name,
+        ...user
     }
 }
 

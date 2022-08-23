@@ -7,6 +7,14 @@ import { connect } from 'react-redux'
 import * as Location from 'expo-location';
 import Camera from "./AddPhoto";
 import Map from "./Map";
+import uploadToS3 from "../services/saveImage";
+import InputMasked from "./InputMasked";
+import { StackActions } from "@react-navigation/native";
+import 'intl';
+import "intl/locale-data/jsonp/pt";
+import { showError, showSuccess } from "../common";
+import { addMarker } from "../storage/actions/marker";
+import { typeService } from "../services/solicitacaoService";
 
 
 class SolicitAnimals extends Component {
@@ -18,11 +26,21 @@ class SolicitAnimals extends Component {
         name: '',
         errorName: '',
         breed: '',
+        errorBreed: '',
         color: '',
         errorColor: '',
         gender: '',
         errorGender: '',
+
         celphone: '',
+        errorCelphone: '',
+        referencePoint: '',
+        errorReferencePoint: '',
+        especie: '',
+        errorEspecie: '',
+        lastTimeSeen: '',
+        errorLastTimeSeen: '',
+
 
         cep: '',
         street: '',
@@ -82,12 +100,20 @@ class SolicitAnimals extends Component {
             this.getReverseGeocode()
     }
 
+    toggleModalMapCancel = () => {
+        this.setState({ modalMap: !this.state.modalMap })
+    }
+
     toggleModalCamera = () => {
         this.setState({ modalCamera: !this.state.modalCamera })
     }
 
-    solicit = () => {
-        const { name, cep, breed, color, gender, photo } = this.state
+    toggleModalCameraCancel = () => {
+        this.setState({ modalCamera: !this.state.modalCamera, photo: {} })
+    }
+
+    solicit = async () => {
+        const { name, cep, especie, breed, color, gender, photo, celphone, lastTimeSeen } = this.state
         let error = false
         if (cep == '') {
             this.setState({ errorLocation: 'Localização Obrigatória' })
@@ -109,11 +135,72 @@ class SolicitAnimals extends Component {
             this.setState({ errorPhoto: 'Foto Obrigatória' })
             error = true
         }
+        if (celphone == '') {
+            this.setState({ errorCelphone: 'Contato Obrigatória' })
+            error = true
+        }
+        if (breed == '') {
+            this.setState({ errorBreed: 'Raça Obrigatória' })
+            error = true
+        }
+        if (lastTimeSeen == '') {
+            this.setState({ errorLastTimeSeen: 'Data Obrigatória' })
+            error = true
+        }
+        if (especie == '') {
+            this.setState({ errorEspecie: 'Espécie Obrigatória' })
+            error = true
+        }
 
-        if (!error)
-            console.log('Sucesso enviar');
-        else
-            console.log('Erro enviar');
+        if (!error) {
+            let localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/9e9d234d-6608-44ec-9ffe-d53d94f7a363_foto.jpeg"
+
+            // if (this.state.photo != {})
+            //     await uploadToS3(this.state.photo.uri)
+            //         .then(res => {
+            //             localImage = "https://unesp-s-city.s3.sa-east-1.amazonaws.com/images/" + res.filename
+
+            //         })
+            let data = {
+                userId: this.props.userId,
+                street: this.state.street,
+                streetNumber: parseInt(this.state.number, 10),
+                referencePoint: this.state.referencePoint.trim() == "" ? "Não Informado" : this.state.referencePoint,
+                cityId: this.props.cityId,
+                latitude: this.state.location.latitude,
+                longitude: this.state.location.longitude,
+                images: localImage,
+                description: this.state.name + " - " + this.state.especie + " - " + this.state.breed + " - " + this.state.color + " - " + this.state.gender + " - " + this.state.celphone + " - " + this.state.description,
+                images: localImage,
+                lastTimeSeen: new Date(this.state.lastTimeSeen.substring(6, 10), this.state.lastTimeSeen.substring(3, 5), this.state.lastTimeSeen.substring(0, 2), this.state.lastTimeSeen.substring(11, 13), this.state.lastTimeSeen.substring(14, 16), "00").toString()
+            }
+
+            console.log(data);
+            typeService(this.props.route.params.name)
+                .create(data)
+                .then(res => {
+                    console.log(res.data);
+                    showSuccess('Solicitação feita com sucesso')
+
+                    const date = new Intl.DateTimeFormat('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }).format(new Date(new Date(this.state.lastTimeSeen.substring(6, 10), this.state.lastTimeSeen.substring(3, 5), this.state.lastTimeSeen.substring(0, 2), this.state.lastTimeSeen.substring(11, 13), this.state.lastTimeSeen.substring(14, 16), "00")))
+                    this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name, date: date })
+                    this.props.navigation.dispatch(StackActions.popToTop());
+                    this.props.navigation.navigate('Mapa')
+                    return true;
+                }).catch(err => {
+                    console.log(err);
+                    showError(err)
+                    return false
+                })
+
+        }
     }
 
     render() {
@@ -143,37 +230,74 @@ class SolicitAnimals extends Component {
                     </View>}
 
                     <Modal visible={this.state.modalMap}>
-                        <Map setLocation={(location) => this.setState({ location })} enableAddMarker></Map>
+                        <Map setLocation={(location) => this.setState({ location })} enableAddMarker showAutoComplte></Map>
                         <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.getCurrentLocation}>
                             <Text style={styles.buttonText}>
                                 Usar localização atual
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0 }]} onPress={this.toggleModalMap}>
-                            <Text style={styles.buttonText}>
-                                Confirmar
-                            </Text>
-                        </TouchableOpacity>
+                        <View style={styles.buttonGroup}>
+                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'red', flex: 1 }]} onPress={this.toggleModalMapCancel}>
+                                <Text style={styles.buttonText}>
+                                    Cancelar
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'green', flex: 1 }]} onPress={this.toggleModalMap}>
+                                <Text style={styles.buttonText}>
+                                    Confirmar
+                                </Text>
+                            </TouchableOpacity>
+
+                        </View>
 
                     </Modal>
 
                     <Modal visible={this.state.modalCamera}>
                         <Camera setPhoto={(photo) => this.setState({ photo })}></Camera>
-                        <TouchableOpacity style={[styles.button, { marginTop: 0, borderRadius: 0 }]} onPress={this.toggleModalCamera}>
-                            <Text style={styles.buttonText}>
-                                Confirmar
-                            </Text>
-                        </TouchableOpacity>
+
+                        <View style={styles.buttonGroup}>
+                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'red', flex: 1 }]} onPress={this.toggleModalCameraCancel}>
+                                <Text style={styles.buttonText}>
+                                    Cancelar
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.button, { marginTop: 2, borderRadius: 0, backgroundColor: 'green', flex: 1 }]} onPress={this.toggleModalCamera}>
+                                <Text style={styles.buttonText}>
+                                    Confirmar
+                                </Text>
+                            </TouchableOpacity>
+
+                        </View>
                     </Modal>
 
                     <AuthInput
-                        icon='pencil'
+                        icon='tree'
+                        placeholder='Ponto de Referência'
+                        value={this.state.referencePoint}
+                        style={[styles.input]}
+                        editable
+                        onChangeText={referencePoint => { this.setState({ referencePoint, errorReferencePoint: '' }) }}
+                        error={this.state.errorReferencePoint}
+                    />
+
+                    <AuthInput
+                        icon='tag'
                         placeholder='Nome'
                         value={this.state.name}
-                        style={[styles.input, { marginTop: 40 }]}
+                        style={[styles.input]}
                         editable
                         onChangeText={name => { this.setState({ name, errorName: '' }) }}
                         error={this.state.errorName}
+                    />
+
+                    <AuthInput
+                        icon='paw'
+                        placeholder='Espécie'
+                        value={this.state.especie}
+                        style={[styles.input]}
+                        editable
+                        onChangeText={especie => { this.setState({ especie, errorEspecie: '' }) }}
+                        error={this.state.errorEspecie}
                     />
 
                     <AuthInput
@@ -182,7 +306,8 @@ class SolicitAnimals extends Component {
                         value={this.state.breed}
                         style={[styles.input]}
                         editable
-                        onChangeText={breed => { this.setState({ breed }) }}
+                        onChangeText={breed => { this.setState({ breed, errorBreed: '' }) }}
+                        error={this.state.errorBreed}
                     />
 
                     <AuthInput
@@ -205,13 +330,32 @@ class SolicitAnimals extends Component {
                         error={this.state.errorGender}
                     />
 
-                    <AuthInput
+                    <InputMasked
                         icon='mobile'
-                        placeholder='Contato'
+                        placeholder="Contato"
+                        placeholderTextColor={"#aaa"}
+                        type={'cel-phone'}
+                        options={{
+                            maskType: 'BRL',
+                            withDDD: true,
+                            dddMask: '(99) '
+                        }}
                         value={this.state.celphone}
-                        style={[styles.input]}
-                        editable
-                        onChangeText={celphone => { this.setState({ celphone }) }}
+                        onChangeText={celphone => { this.setState({ celphone, errorCelphone: '' }) }}
+                        error={this.state.errorCelphone}
+                    />
+
+                    <InputMasked
+                        icon='calendar'
+                        placeholder="Última vez visto"
+                        placeholderTextColor={"#aaa"}
+                        type={'datetime'}
+                        options={{
+                            format: 'DD/MM/YYYY HH:MM'
+                        }}
+                        value={this.state.lastTimeSeen}
+                        onChangeText={lastTimeSeen => { this.setState({ lastTimeSeen, errorLastTimeSeen: '' }) }}
+                        error={this.state.errorLastTimeSeen}
                     />
 
                     <AuthInput
@@ -307,17 +451,37 @@ const styles = StyleSheet.create({
         marginTop: 5,
         padding: 2,
         borderRadius: 5
-    }
+    },
+    button: {
+        backgroundColor: commonStyle.colors.secundary,
+        marginTop: 10,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonText: {
+        fontFamily: commonStyle.fontFamily,
+        color: '#fff',
+        fontSize: 20
+    },
+    buttonGroup: {
+        flexDirection: 'row'
+    },
 })
 
 
 const mapStateToProps = ({ user }) => {
     return {
-        email: user.email,
-        name: user.name,
+        ...user
     }
 }
 
 
-// export default Profile
-export default connect(mapStateToProps)(SolicitAnimals)
+const mapDispatchToProps = dispatch => {
+    return {
+        addMarker: marker => dispatch(addMarker(marker))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SolicitAnimals)
+

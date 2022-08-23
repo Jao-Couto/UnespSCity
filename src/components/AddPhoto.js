@@ -5,20 +5,23 @@ import {
     StyleSheet,
     TouchableOpacity,
     Image,
-    Dimensions,
-    ScrollView
+    Dimensions
 } from 'react-native'
 import commonStyle from '../commonStyle'
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { compose } from 'redux';
+
 
 class AddPhoto extends Component {
     state = {
         image: { uri: null, base64: null }
     };
 
+    componentDidMount = async () => {
 
+        const permission = await ImagePicker.requestCameraPermissionsAsync()
+        console.log(permission);
+    }
     pickLocalImage = async () => {
         let res = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -52,7 +55,6 @@ class AddPhoto extends Component {
 
 
     render() {
-
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>Adicione uma Foto</Text>

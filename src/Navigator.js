@@ -29,10 +29,11 @@ import { logout } from "./storage/actions/user";
 import LostAnimals from "./screens/LostAnimals";
 import MapColetaLixo from "./screens/MapColetaLixo";
 import SolicitAnimals from "./components/SolicitAnimals";
-import InfoAnimal from "./components/InfoAnimal";
+import Informations from "./components/informations";
 import Radar from "./screens/Radar";
 import Dedetizacao from "./screens/Dedetizacao";
 import checkService from "./components/checkService";
+import InfoAnimal from "./components/InfoAnimal";
 
 
 function App(props) {
@@ -93,6 +94,7 @@ function App(props) {
                 <Stack.Screen name="LostAnimals" component={LostAnimals} />
                 <Stack.Screen name="SolicitAnimals" component={SolicitAnimals} />
                 <Stack.Screen name="PublicAreas" component={PublicAreas} />
+                <Stack.Screen name="Informations" component={Informations} />
                 <Stack.Screen name="InfoAnimal" component={InfoAnimal} />
                 <Stack.Screen name="MapColetaLixo" component={MapColetaLixo} />
                 <Stack.Screen name="RadarDengue" component={Radar} />
@@ -162,7 +164,7 @@ function App(props) {
 
     return (
         <NavigationContainer>
-            <StatusBar style="inverted" />
+            <StatusBar style="dark" />
             <MyStack />
         </NavigationContainer>
     );

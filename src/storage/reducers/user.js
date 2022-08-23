@@ -18,13 +18,14 @@ const reducer = (state = initialState, action) => {
         case USER_LOGGED_IN:
             return {
                 ...state,
-                userId: action.payload.id,
+                userId: parseInt(action.payload.id, 10),
                 name: action.payload.name,
                 email: action.payload.email,
                 mobilePhone: action.payload.mobilePhone,
-                cityId: action.payload.cityId,
+                cityId: parseInt(action.payload.cityId, 10),
                 token: action.payload.token,
-                isAdmin: action.payload.isAdmin
+                isAdmin: action.payload.isAdmin,
+                panicButton: action.payload.panicButton
             }
         case USER_LOGGED_OUT:
             return {

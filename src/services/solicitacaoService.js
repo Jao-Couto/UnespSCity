@@ -86,7 +86,7 @@ const typeService = (type) => {
         case "Animais sinantrópicos":
             return animaisSinantropicosService
         case "Captura de animais de grande porte":
-            return animaisGrandesService //////
+            return animaisGrandesService
         case "Animais Perdidos":
             return animaisPerdidosService
         case "Adoção de animais":

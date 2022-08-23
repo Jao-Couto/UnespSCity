@@ -12,12 +12,13 @@ import ModalSelector from "react-native-modal-selector-searchable";
 import cidadeService from "../services/cidadeService";
 import { CheckBox } from "react-native-elements";
 import cidadaoService from "../services/cidadaoService";
-import { showSuccess } from "../common";
+import { showError, showSuccess } from "../common";
 import { userLogged } from "../storage/actions/user";
 
+
+
 class Profile extends Component {
-    state = {
-        edit: false,
+    initialState = {
         name: this.props.name,
         errorName: '',
         mobilePhone: this.props.mobilePhone,
@@ -28,16 +29,27 @@ class Profile extends Component {
         cityId: this.props.cityId,
         cityName: '',
         errorCityId: '#fff',
-        dataCidades: [],
         panicButton: this.props.panicButton
+
     }
+
+    state = {
+        edit: false,
+
+        dataCidades: [],
+        ...this.initialState
+    }
+
+
 
     componentDidMount = () => {
         cidadeService.getCidades()
             .then((res) => {
                 let data = res.data.map((item) => {
-                    if (item.id == this.props.cityId)
+                    if (item.id == this.props.cityId) {
                         this.setState({ cityName: item.name })
+                        this.initialState.cityName = item.name
+                    }
                     return { key: item.id, label: item.name }
                 })
 
@@ -50,6 +62,11 @@ class Profile extends Component {
 
     editToggle = () => {
         this.setState({ edit: !this.state.edit })
+        if (!this.state.edit == false) {
+            this.setState({
+                ...this.initialState
+            })
+        }
     }
 
     update = () => {

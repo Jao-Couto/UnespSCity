@@ -15,7 +15,6 @@ class Menu extends Component {
     }
 
     componentDidMount = () => {
-        console.log(this.props.cityId)
         cidadeMenuService.menuCidade(this.props.cityId)
             .then((res) => {
                 this.setState({

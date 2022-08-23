@@ -10,12 +10,12 @@ class MapMenu extends Component {
 
     render() {
         const origin = {
-            "latitude": -22.120774060358524,
-            "longitude": -51.42607357352972
+            "latitude": -22.0977,
+            "longitude": -51.4280
         }
         const destination = {
-            "latitude": -22.121274431519986,
-            "longitude": -51.425361447036266
+            "latitude": -22.1278,
+            "longitude": -51.4229
         }
         return (
             <SafeAreaView style={styles.containerLogo} >
