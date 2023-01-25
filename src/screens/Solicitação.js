@@ -166,11 +166,9 @@ class Solicitacao extends Component {
             if (this.props.route.params.name == "Ofertas Locais") {
                 data.preco = this.state.price
             }
-            console.log(data);
             typeService(this.props.route.params.name)
                 .create(data)
                 .then(res => {
-                    console.log(res.data);
                     if (res.data == false)
                         showSuccess("Erro false")
                     showSuccess('Solicitação feita com sucesso')
@@ -183,13 +181,13 @@ class Solicitacao extends Component {
                         minute: '2-digit',
                         second: '2-digit'
                     }).format(new Date())
-                    this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name, date: date })
+                    if (this.props.route.params.type != 'RadarDangue')
+                        this.props.addMarker({ latlng: this.state.location, name: this.props.route.params.name, date: date })
                     this.setState({ loading: false })
                     this.props.navigation.dispatch(StackActions.popToTop());
                     this.props.navigation.navigate('Mapa')
                     return true;
                 }).catch(err => {
-                    console.log(err);
                     showError(err)
                     return false
                 })

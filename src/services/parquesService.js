@@ -19,9 +19,26 @@ class ParquesService {
             return Promise.reject(err)
         })
     }
+
     async getAll() {
         return axios({
             url: ServerMYSQL + "/api/parques",
+            method: "GET",
+            timeout: 10000,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*',
+            }
+        }).then((res) => {
+            return Promise.resolve(res)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
+    }
+
+    async getOne(id) {
+        return axios({
+            url: ServerMYSQL + "/api/parques/getOne/" + id,
             method: "GET",
             timeout: 10000,
             headers: {
@@ -56,6 +73,23 @@ class ParquesService {
             url: ServerMYSQL + "/api/parques/update_resolved/" + data,
             method: "PUT",
             timeout: 10000,
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': '*/*',
+            }
+        }).then((res) => {
+            return Promise.resolve(res)
+        }).catch((err) => {
+            return Promise.reject(err)
+        })
+    }
+
+    async addHistory(data) {
+        return axios({
+            url: ServerMYSQL + "/api/parques/addHistory",
+            method: "PUT",
+            timeout: 10000,
+            data: data,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': '*/*',

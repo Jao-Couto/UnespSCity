@@ -1,85 +1,23 @@
 import React, { Component } from "react";
-import { StyleSheet, FlatList, View, Image, Text, ActivityIndicator } from 'react-native'
+import { StyleSheet, FlatList, View, Image, Text } from 'react-native'
 import commonStyle from "../commonStyle";
-import { showError } from '../common'
 import { ListItem } from "react-native-elements";
 import TouchableScale from 'react-native-touchable-scale';
-import { typeService } from "../services/solicitacaoService";
 import 'intl';
 import "intl/locale-data/jsonp/pt";
-import cidadaoService from "../services/cidadaoService";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { connect } from "react-redux";
 
 class ListPublicAreas extends Component {
     state = {
-        areas: [],
-        ready: false,
+        ready: false
     }
-
-    updateAreas = () => {
-
-        typeService(this.props.nameService)
-            .getAll()
-            .then(async res => {
-                console.log(res.data);
-                let filtered = []
-                if (this.props.nameService == "Adoção de Áreas públicas" || this.props.nameService == "Telefones Úteis")
-                    filtered = res.data.filter(item => {
-                        if (item.cityId == this.props.cityId)
-                            return item
-                    })
-                else
-                    await res.data.reduce((op, item) => {
-                        return op.then(filteredNs => {
-                            return new Promise(resolve => {
-                                if (item.cityId == this.props.cityId) {
-
-                                    if (this.props.isAdmin) {
-                                        cidadaoService.getCidadao(item.userId)
-                                            .then(res => {
-                                                item.userName = res.data.name
-                                                resolve(filteredNs.concat(item))
-                                            })
-                                            .catch(err => {
-                                                console.log(err);
-                                            })
-
-                                    }
-
-                                    if (item.userId == this.props.userId) {
-                                        item.userName = this.props.name
-                                        resolve(filteredNs.concat(item))
-                                    }
-
-                                }
-                            });
-                        });
-                    }, Promise.resolve([]))
-                        .then(filteredNs => filtered = filteredNs);
-                console.log("final", filtered);
-                this.setState({ areas: filtered }, () => this.setState({ ready: true }))
-            }).catch(err => {
-                console.log(err);
-                showError(err)
-            })
-    }
-
-    componentDidMount = () => {
-        this.updateAreas()
-    }
-
-    componentDidUpdate = (nextProps) => {
-        if (this.props.clicked == nextProps.clicked + 1)
-            this.updateAreas()
-    }
-
 
 
     getOptionsItem = ({ item: area, index }) => {
 
         return (
             <ListItem
-                onPress={() => this.props.navigation.navigate('CheckService', { nameService: this.props.nameService, ...area, updateAreas: this.updateAreas })}
+                onPress={() => this.props.navigation.navigate('CheckService', { type: this.props.type, ...area })}
                 containerStyle={styles.item}
                 Component={TouchableScale}
                 friction={90} //
@@ -113,7 +51,7 @@ class ListPublicAreas extends Component {
 
         return (
             <ListItem
-                onPress={() => this.props.navigation.navigate('CheckService', { nameService: this.props.nameService, ...area, updateAreas: this.updateAreas })}
+                onPress={() => this.props.navigation.navigate('CheckService', { type: this.props.type, ...area })}
                 containerStyle={styles.item}
                 Component={TouchableScale}
                 friction={90} //
@@ -150,7 +88,7 @@ class ListPublicAreas extends Component {
     getOptionsAllItem = ({ item: area, index }) => {
         return (
             <ListItem
-                onPress={() => this.props.navigation.navigate('CheckService', { nameService: this.props.nameService, ...area, updateAreas: this.updateAreas })}
+                onPress={() => this.props.navigation.navigate('CheckService', { type: this.props.type, ...area })}
                 containerStyle={styles.item}
                 Component={TouchableScale}
                 friction={90} //
@@ -163,7 +101,7 @@ class ListPublicAreas extends Component {
                 }
 
                 <ListItem.Content style={styles.content}>
-                    {this.props.nameService == "Conheça os Gestores" &&
+                    {this.props.type == "Conheça os Gestores" &&
                         <ListItem.Title style={styles.titleItens}>{area.isResolved ? "Ex" : "Atual"}</ListItem.Title> || <ListItem.Title style={styles.titleItens}>{area.isResolved ? "Finalizada" : "Pendente"}</ListItem.Title>
                     }
 
@@ -211,24 +149,25 @@ class ListPublicAreas extends Component {
     }
 
     render() {
+        console.log("areas", this.props.areas);
         let render
-        if (this.props.nameService == "Ofertas Locais")
+        if (this.props.type == "Ofertas Locais")
             render = this.getOfertas
-        else if (this.props.nameService == "Adoção de Áreas públicas")
+        else if (this.props.type == "Adoção de Áreas públicas")
             render = this.getOptionsItem
-        else if (this.props.nameService == "Telefones Úteis")
+        else if (this.props.type == "Telefones Úteis")
             render = this.getOptionsContactsItem
         else render = this.getOptionsAllItem
         return (
             <View style={styles.container}>
-                {this.state.ready && this.state.areas.length > 0 &&
+                {this.props.areas.length > 0 &&
                     <FlatList
                         keyExtractor={option => option._id.toString()}
-                        data={this.state.areas}
+                        data={this.props.areas}
                         renderItem={render}
                         style={styles.list} />
                 }
-                {this.state.areas.length == 0 && this.state.ready &&
+                {this.props.areas.length == 0 &&
                     <Text style={[styles.titleItens, { fontWeight: 'bold' }]}>Nada Encontrado</Text>}
             </View>
 
@@ -277,4 +216,11 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ListPublicAreas
+const mapStateToProps = ({ solicitado }) => {
+    return {
+        type: solicitado.type,
+        areas: solicitado.area
+    }
+}
+
+export default connect(mapStateToProps)(ListPublicAreas)

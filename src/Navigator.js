@@ -13,7 +13,7 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerI
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from "./screens/Profile";
 import InfoCI from './screens/InfoCI'
-import About from "./screens/About";
+import ListSolicitacoes from "./screens/ListSolicitacoes";
 import {
     View,
     Text,
@@ -36,6 +36,7 @@ import Dedetizacao from "./screens/Dedetizacao";
 import checkService from "./components/checkService";
 import InfoAnimal from "./components/InfoAnimal";
 import { resetMarkers } from "./storage/actions/marker";
+import AddInteracao from "./screens/AddInteracao";
 
 
 function App(props) {
@@ -156,12 +157,13 @@ function App(props) {
 
     function ServicosADM() {
         return (
-            <Stack.Navigator initialRouteName="About" screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="About" component={About} />
+            <Stack.Navigator initialRouteName="ListSolicitacoes" screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="ListSolicitacoes" component={ListSolicitacoes} />
                 <Stack.Screen name="LostAnimals" component={LostAnimals} />
                 <Stack.Screen name="SolicitAnimals" component={SolicitAnimals} />
                 <Stack.Screen name="PublicAreas" component={PublicAreas} />
                 <Stack.Screen name="CheckService" component={checkService} />
+                <Stack.Screen name="AddInteracao" component={AddInteracao} />
                 <Stack.Screen name="Solicitacao" component={Solicitacao} />
             </Stack.Navigator>
         )

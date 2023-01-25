@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import { StyleSheet, View, Text, TextInput } from 'react-native'
+import { StyleSheet, View, Text, TextInput, Alert, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import Header from "../components/Header";
@@ -10,15 +10,16 @@ import cidadeMenuService from "../services/cidadeMenuService";
 import { connect } from "react-redux";
 import ListPublicAreas from "../components/ListPublicAreas";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { setType, setArea } from "../storage/actions/solicitado";
+import { typeService } from "../services/solicitacaoService";
 
-class About extends Component {
+class ListSolicitacoes extends Component {
     state = {
         type: '',
         dataCidades: [],
         errorType: '#fff',
-
-        find: false,
-        clicked: 0
+        loading: false,
+        find: false
     }
 
     componentDidMount = () => {
@@ -34,22 +35,35 @@ class About extends Component {
             })
     }
 
-    listSolicits = () => {
+    listSolicits = async () => {
+        this.setState({ loading: true })
         let error = false
         if (this.state.type == "") {
             this.setState({ errorType: "#fa9191" })
             error = true
         }
         if (!error) {
-            this.props.route.params = { name: this.state.type }
-            this.setState({ find: true, clicked: this.state.clicked + 1 })
+            try {
+                let res = await typeService(this.state.type).getAll()
+                this.props.onSetArea(res.data)
+                this.props.onSetType(this.state.type)
+                this.setState({ find: true })
+            } catch (err) {
+                Alert.alert("Erro ao Listar itens", "Por favor, tente mais tarde")
+            }
+
         }
+        this.setState({ loading: false })
+
     }
 
     render() {
         return (
             <SafeAreaView style={styles.containerLogo} >
+
                 <Header {...this.props}></Header>
+                {this.state.loading &&
+                    <ActivityIndicator color="#010c70" size={"large"} />}
                 <View style={styles.container}>
                     <Text style={styles.title}>Solicitações</Text>
                     <ModalSelector
@@ -91,8 +105,8 @@ class About extends Component {
                     <TouchableOpacity onPress={this.listSolicits} style={[styles.button]}>
                         <Text style={styles.buttonText}>Procurar</Text>
                     </TouchableOpacity>
-                    {this.state.find && <ListPublicAreas {...this.props} nameService={this.state.type} clicked={this.state.clicked}></ListPublicAreas>}
-                </View>
+                    {this.state.find && <ListPublicAreas {...this.props}></ListPublicAreas>}
+                </View >
             </SafeAreaView >
 
         )
@@ -129,7 +143,7 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: commonStyle.colors.secundary,
-        marginTop: 10,
+        margin: 10,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -142,10 +156,18 @@ const styles = StyleSheet.create({
 })
 
 
-const mapStateToProps = ({ user }) => {
+const mapStateToProps = ({ user, solicitado }) => {
     return {
-        ...user
+        ...user,
+        type: solicitado.type
     }
 }
 
-export default connect(mapStateToProps)(About)
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetType: (type) => dispatch(setType(type)),
+        onSetArea: (area) => dispatch(setArea(area))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListSolicitacoes)

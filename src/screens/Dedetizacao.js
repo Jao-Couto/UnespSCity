@@ -13,7 +13,7 @@ class Dedetizacao extends Component {
 
 
     render() {
-        console.log(this.props.params);
+        console.log(this.props.route.params);
         return (
             <SafeAreaView style={styles.container}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
@@ -22,7 +22,7 @@ class Dedetizacao extends Component {
                     </TouchableOpacity>
                     <Text style={styles.subTitle}>{this.props.route.params.name}</Text>
                 </View>
-                <ListPublicAreas {...this.props}></ListPublicAreas>
+                <ListPublicAreas {...this.props} type={this.props.route.params.name}></ListPublicAreas>
                 <TouchableOpacity style={styles.addAnimal}
                     onPress={() => this.props.navigation.navigate('Solicitacao', { ...this.props.route.params })}
                 >

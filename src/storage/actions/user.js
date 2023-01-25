@@ -1,3 +1,4 @@
+import { Alert } from "react-native"
 import { showError } from "../../common"
 import cidadaoService from "../../services/cidadaoService"
 import { USER_LOGGED_IN, USER_LOGGED_OUT } from "./actionType"
@@ -19,8 +20,6 @@ export const login = user => {
     return dispatch => {
         cidadaoService.loginCidadao(user)
             .then(res => {
-                console.log(res.data.data);
-                console.log("aqui", res.data.status == 200 && res.data.data.name);
                 if (res.data.data == undefined)
                     showError("Email ou senha incorretos!")
                 if (res.data.status == 200 && res.data.data.name) {
@@ -30,7 +29,7 @@ export const login = user => {
                 }
             })
             .catch(err => {
-                console.log(err);
+                Alert.alert("Email/Senha incorreto!", "Verifique seu email ou senha e tente novamente")
             })
     }
 }

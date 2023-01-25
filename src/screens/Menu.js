@@ -21,7 +21,7 @@ class Menu extends Component {
                     options: res.data
                 })
             }).catch(err => {
-                console.log("erro Menu");
+                console.log("erro Menu ", this.props.cityId);
                 console.log(err);
             })
     }

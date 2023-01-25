@@ -8,6 +8,7 @@ import AuthInput from '../components/AuthInput'
 import LogoUnesp from '../../assets/UnespLogo.png'
 import { connect } from 'react-redux'
 import { login } from '../storage/actions/user'
+import { Alert } from "react-native";
 
 class Login extends Component {
     state = {
@@ -39,7 +40,7 @@ class Login extends Component {
                 const user = { email: this.state.email, password: this.state.password }
                 this.props.onLogin({ ...user })
             } catch (e) {
-                showError(e)
+                Alert.alert("Email/Senha incorreto!", "Verifique seu email ou senha e tente novamente")
             }
     }
 

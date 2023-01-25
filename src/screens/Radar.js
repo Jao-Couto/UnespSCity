@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import Icon from "react-native-vector-icons/Ionicons";
 import { StackActions } from "@react-navigation/native";
 import { typeService } from "../services/solicitacaoService";
+import { showError } from "../common";
 
 
 
@@ -19,16 +20,14 @@ class Radar extends Component {
         typeService(this.props.route.params.name)
             .getAll()
             .then(res => {
-                console.log(res.data);
                 const data = res.data.map(item => {
 
-                    return { latlng: { latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude) } }
+                    return { latitude: parseFloat(item.latitude), longitude: parseFloat(item.longitude), weight: 1 }
 
                 });
                 this.setState({ markerRadar: data })
             }).catch(err => {
-                console.log(err);
-                showError(err)
+                showError("Erro ao carregar os dados! Por favor tente mais tarde")
             })
 
     }

@@ -6,7 +6,7 @@ const server = Platform.OS === 'ios' ? 'http://localhost:3000' : 'http://10.0.2.
 function showError(err) {
     if (err.response && err.response.data)
         Alert.alert('Ops! Ocorreu um problema!', `${JSON.stringify(err.response.data)}`)
-    else Alert.alert('Ops! Ocorreu um problema!', err)
+    else Alert.alert('Ops! Ocorreu um problema!', JSON.stringify(err))
 }
 
 function showSuccess(msg) {

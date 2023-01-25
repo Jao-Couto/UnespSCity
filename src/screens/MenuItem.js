@@ -36,7 +36,7 @@ class MenuItens extends Component {
         opt.logo = this.props.route.params.logo
         return (
             <ListItem
-                onPress={() => this.props.navigation.navigate(opt.type, opt)}
+                onPress={() => { console.log(opt); this.props.navigation.navigate(opt.type, opt) }}
                 containerStyle={styles.item}
                 Component={TouchableScale}
                 friction={90} //

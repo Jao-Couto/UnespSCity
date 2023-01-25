@@ -39,7 +39,6 @@ class Map extends Component {
                 ready: true
             })
         }
-        console.log(coords);
         if (this.props.coords) {
             this.setState({
                 marker: { latlng: coords }
@@ -111,12 +110,9 @@ class Map extends Component {
                             })
                         }
                         {this.routeTruck()}
-                        {this.props.area &&
-                            this.props.area.map((a, i) => {
-                                console.log("aqui", a)
-                                return <MapView.Circle key={i} center={a.latlng} radius={200} strokeColor="rgba(150,0,0,0.1)" fillColor={"rgba(150,0,0,0.1)"}>
-                                </MapView.Circle>
-                            })
+                        {this.props.area && this.props.area.length > 0 &&
+                            <MapView.Heatmap points={this.props.area} opacity={0.7} radius={40}>
+                            </MapView.Heatmap>
                         }
 
                     </MapView>
