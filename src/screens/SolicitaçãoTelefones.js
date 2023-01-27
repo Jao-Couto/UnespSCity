@@ -4,9 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import commonStyle from "../commonStyle";
 import AuthInput from '../components/AuthInput'
 import { connect } from 'react-redux'
-import * as Location from 'expo-location';
 import Camera from "../components/AddPhoto";
-import Map from "../components/Map";
 import { StackActions } from '@react-navigation/native';
 import { showError, showSuccess } from "../common";
 import { typeService } from "../services/solicitacaoService";
@@ -18,8 +16,6 @@ import InputMasked from "../components/InputMasked";
 
 class SolicitacaoTelefones extends Component {
     state = {
-        location: {},
-        errorLocation: '',
         description: '',
         errorDescription: '',
 
@@ -172,12 +168,7 @@ class SolicitacaoTelefones extends Component {
                             icon='mobile'
                             placeholder="Contato"
                             placeholderTextColor={"#aaa"}
-                            type={'cel-phone'}
-                            options={{
-                                maskType: 'BRL',
-                                withDDD: true,
-                                dddMask: '(99) '
-                            }}
+                            type={'only-numbers'}
                             value={this.state.phoneNumber}
                             onChangeText={phoneNumber => { this.setState({ phoneNumber, errorPhoneNumber: '' }) }}
                             error={this.state.errorPhoneNumber}

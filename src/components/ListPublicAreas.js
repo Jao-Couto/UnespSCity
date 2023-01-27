@@ -6,12 +6,21 @@ import TouchableScale from 'react-native-touchable-scale';
 import 'intl';
 import "intl/locale-data/jsonp/pt";
 import { connect } from "react-redux";
+import { typeService } from "../services/solicitacaoService";
 
 class ListPublicAreas extends Component {
     state = {
-        ready: false
+        ready: false,
+        areas: this.props.areas
     }
 
+    componentDidMount = async () => {
+        if (this.props.areas.length == 0) {
+            let res = await typeService(this.props.nameService).getAll()
+            console.log(res.data);
+            this.setState({ areas: res.data })
+        }
+    }
 
     getOptionsItem = ({ item: area, index }) => {
 
@@ -149,25 +158,28 @@ class ListPublicAreas extends Component {
     }
 
     render() {
-        console.log("areas", this.props.areas);
+        //console.log("areas", this.props);
+
+        let tipo = this.props.nameService || this.props.type
+        console.log("tipo", tipo);
         let render
-        if (this.props.type == "Ofertas Locais")
+        if (tipo == "Ofertas Locais")
             render = this.getOfertas
-        else if (this.props.type == "Adoção de Áreas públicas")
+        else if (tipo == "Adoção de Áreas públicas")
             render = this.getOptionsItem
-        else if (this.props.type == "Telefones Úteis")
+        else if (tipo == "Telefones Úteis")
             render = this.getOptionsContactsItem
         else render = this.getOptionsAllItem
         return (
             <View style={styles.container}>
-                {this.props.areas.length > 0 &&
+                {this.state.areas.length > 0 &&
                     <FlatList
                         keyExtractor={option => option._id.toString()}
-                        data={this.props.areas}
+                        data={this.state.areas}
                         renderItem={render}
                         style={styles.list} />
                 }
-                {this.props.areas.length == 0 &&
+                {this.state.areas.length == 0 &&
                     <Text style={[styles.titleItens, { fontWeight: 'bold' }]}>Nada Encontrado</Text>}
             </View>
 

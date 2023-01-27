@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 class AddPhoto extends Component {
     state = {
-        image: { uri: null, base64: null }
+        image: { uri: null }
     };
 
     componentDidMount = async () => {
@@ -27,13 +27,12 @@ class AddPhoto extends Component {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [1, 1],
-            quality: 1,
-            base64: true
+            quality: 1
         });
 
         if (!res.cancelled) {
             this.setState({ image: { uri: res.uri } });
-            this.props.setPhoto({ uri: res.uri, base64: res.base64 })
+            this.props.setPhoto({ uri: res.uri })
         }
     }
 
@@ -42,13 +41,12 @@ class AddPhoto extends Component {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [1, 1],
-            quality: 1,
-            base64: true
+            quality: 1
         });
 
         if (!res.cancelled) {
             this.setState({ image: { uri: res.uri } });
-            this.props.setPhoto({ uri: res.uri, base64: res.base64 })
+            this.props.setPhoto({ uri: res.uri })
 
         }
     }
