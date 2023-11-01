@@ -54,8 +54,6 @@ buck-out/
 web-build/
 dist/
 
-# CONFIG
-/src/config.js
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
